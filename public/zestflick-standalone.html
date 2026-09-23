@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRIME VAULT ZONE | Official Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #080911;
+      --card-bg: rgba(16, 19, 38, 0.7);
+      --panel-bg: rgba(13, 15, 30, 0.85);
+      --cyan-neon: #00f2fe;
+      --purple-neon: #a855f7;
+      --pink-neon: #ec4899;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --cyan-glow: 0 0 15px rgba(0, 242, 254, 0.4);
+      --purple-glow: 0 0 15px rgba(168, 85, 247, 0.4);
+      --font-display: 'Syne', sans-serif;
+      --font-logo: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: var(--font-body);
+    }
+
+    h1, h2, h3, h4, h5, h6, .brand-text, .loading-logo, .hero-text h1 {
+      font-family: var(--font-display);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Ambient Glows */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-cyan {
+      width: 400px;
+      height: 400px;
+      background: rgba(0, 242, 254, 0.08);
+      top: 5%;
+      left: 10%;
+    }
+    .orb-purple {
+      width: 450px;
+      height: 450px;
+      background: rgba(168, 85, 247, 0.08);
+      bottom: 10%;
+      right: 5%;
+    }
+
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: #06070d;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    .spinner-box {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 24px;
+    }
+    .spin-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: var(--cyan-neon);
+      animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+    }
+    .spin-ring-inner {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-bottom-color: var(--purple-neon);
+      animation: spin-rev 1.5s linear infinite;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+    }
+    .loading-logo {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .neon-cyan {
+      color: var(--cyan-neon);
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(0, 242, 254, 0.4);
+    }
+    .neon-purple {
+      color: var(--purple-neon);
+      text-shadow: 0 0 15px rgba(168, 85, 247, 0.8), 0 0 30px rgba(168, 85, 247, 0.4);
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spin-rev { 100% { transform: rotate(-360deg); } }
+
+    /* Cyberpunk Vector Logo & Electric Shimmer Animations */
+    @keyframes electricShimmerLoop {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes neonHexPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.55)) drop-shadow(0 0 16px rgba(168, 85, 247, 0.35));
+        transform: scale(1);
+      }
+      50% {
+        filter: drop-shadow(0 0 16px rgba(0, 242, 254, 0.9)) drop-shadow(0 0 28px rgba(168, 85, 247, 0.75));
+        transform: scale(1.03);
+      }
+    }
+
+    .electric-brand-shimmer {
+      font-family: var(--font-logo) !important;
+      background: linear-gradient(135deg, #00f2fe 0%, #38bdf8 25%, #c084fc 50%, #f472b6 75%, #00f2fe 100%);
+      background-size: 250% 250%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: electricShimmerLoop 5s linear infinite;
+      filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.45)) drop-shadow(0 0 24px rgba(168, 85, 247, 0.35));
+    }
+
+    .cyber-hex-box {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .brand-logo:hover .cyber-hex-box {
+      transform: scale(1.08);
+    }
+
+    .brand-logo:hover .cyber-svg-icon {
+      filter: drop-shadow(0 0 16px rgba(0, 242, 254, 0.85)) drop-shadow(0 0 28px rgba(168, 85, 247, 0.75));
+    }
+
+    .cyber-svg-icon {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.45));
+      transition: all 0.3s ease;
+    }
+
+    .loading-cyber-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .loading-cyber-svg {
+      width: 80px;
+      height: 80px;
+      animation: neonHexPulse 2.4s ease-in-out infinite;
+    }
+
+    /* Layout & Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 9, 17, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .banner {
+      background: linear-gradient(90deg, rgba(88, 28, 135, 0.5), rgba(8, 145, 178, 0.5), rgba(88, 28, 135, 0.5));
+      border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+      text-align: center;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #bae6fd;
+    }
+    .banner span {
+      background: rgba(0, 242, 254, 0.15);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan-neon), var(--purple-neon));
+      padding: 2px;
+      box-shadow: var(--cyan-glow);
+    }
+    .brand-icon-inner {
+      width: 100%;
+      height: 100%;
+      background: #0d0f22;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .brand-text {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    .search-box {
+      flex: 1;
+      max-width: 450px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 16px 10px 38px;
+      border-radius: 12px;
+      background: rgba(15, 18, 36, 0.9);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-pill {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #d8b4fe;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-pill:hover {
+      background: rgba(168, 85, 247, 0.25);
+      border-color: var(--purple-neon);
+    }
+    .cart-btn {
+      position: relative;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(168, 85, 247, 0.2));
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      color: var(--cyan-neon);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: linear-gradient(135deg, var(--pink-neon), var(--purple-neon));
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px var(--pink-neon);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px 80px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero Section */
+    .hero-banner {
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(14, 23, 42, 0.9), rgba(30, 18, 56, 0.8));
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      padding: 36px 30px;
+      margin-bottom: 35px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 254, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-text h1 {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .hero-text p {
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 550px;
+    }
+    .hero-perks {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .perk-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Category Filters */
+    .category-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 25px;
+    }
+    .cat-btn {
+      background: rgba(18, 22, 44, 0.7);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(168, 85, 247, 0.2));
+      border-color: var(--cyan-neon);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+    }
+
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+    }
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 242, 254, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.2);
+    }
+    .product-img-wrap {
+      width: 100%;
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      background: #05060b;
+    }
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-img-wrap img {
+      transform: scale(1.06);
+    }
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: var(--cyan-neon);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .product-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+    .product-cat {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .product-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .product-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 12px;
+      margin-top: 8px;
+    }
+    .product-price {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--cyan-neon);
+      font-family: monospace;
+    }
+    .product-old-price {
+      font-size: 11px;
+      color: #64748b;
+      text-decoration: line-through;
+      margin-left: 4px;
+    }
+    .btn-add {
+      background: linear-gradient(135deg, var(--cyan-neon), var(--purple-neon));
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-add:hover {
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+      transform: scale(1.03);
+    }
+    .btn-add.added {
+      background: #10b981;
+    }
+
+    /* Cart Slide-Over Drawer */
+    #cart-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+    }
+    #cart-drawer.active {
+      display: block;
+    }
+    .drawer-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
+    }
+    .drawer-content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 420px;
+      background: #0d0f22;
+      border-left: 1px solid rgba(0, 242, 254, 0.25);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      animation: slideLeft 0.3s ease;
+    }
+    @keyframes slideLeft {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    .drawer-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(20, 24, 48, 0.6);
+    }
+    .drawer-title {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .cart-items-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .cart-item-img {
+      width: 65px;
+      height: 65px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #000;
+    }
+    .cart-item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cart-item-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .cart-item-price {
+      font-size: 14px;
+      color: var(--cyan-neon);
+      font-weight: 800;
+      font-family: monospace;
+    }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 6px;
+      padding: 2px 6px;
+      width: fit-content;
+    }
+    .qty-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 2px 6px;
+    }
+    .drawer-footer {
+      padding: 18px 20px;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(14, 17, 34, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .coupon-wrap {
+      display: flex;
+      gap: 8px;
+    }
+    .coupon-wrap input {
+      flex: 1;
+      background: #070914;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .coupon-wrap button {
+      background: var(--purple-neon);
+      border: none;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .wallet-box {
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .summary-row.total {
+      font-size: 17px;
+      font-weight: 900;
+      color: #fff;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 8px;
+    }
+    .btn-checkout {
+      width: 100%;
+      background: linear-gradient(135deg, var(--cyan-neon), var(--purple-neon));
+      border: none;
+      color: #fff;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: var(--cyan-glow);
+      transition: all 0.2s;
+    }
+    .btn-checkout:hover {
+      transform: scale(1.02);
+    }
+
+    /* Modal Styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+    .modal-card {
+      background: #0e1124;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      padding: 26px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #070914;
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--cyan-neon);
+    }
+    /* Auth Modal Tabs & OTP UI */
+    .auth-tab-bar {
+      display: flex;
+      background: rgba(10, 13, 29, 0.9);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+    .auth-tab-btn.active {
+      background: linear-gradient(135deg, var(--cyan-neon), var(--purple-neon));
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+    .otp-input-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .otp-digit {
+      width: 48px;
+      height: 54px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--cyan-neon);
+      background: #060814;
+      border: 2px solid rgba(0, 242, 254, 0.3);
+      border-radius: 12px;
+      outline: none;
+      font-family: monospace;
+      transition: all 0.2s;
+    }
+    .otp-digit:focus {
+      border-color: var(--cyan-neon);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.5);
+      background: #090e24;
+    }
+    .btn-secondary {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+      padding: 11px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .auth-alert-box {
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      display: none;
+      line-height: 1.45;
+    }
+    .auth-alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+    }
+    .auth-alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #6ee7b7;
+    }
+    .auth-alert-info {
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      color: #a5f3fc;
+    }
+    .pay-methods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .pay-btn {
+      padding: 10px 8px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+    .pay-btn.active {
+      background: rgba(0, 242, 254, 0.15);
+      border-color: var(--cyan-neon);
+      color: var(--cyan-neon);
+    }
+
+    /* Floating Support Stack */
+    .support-stack {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .social-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .social-btn i {
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+    }
+    .social-btn:hover {
+      transform: scale(1.12);
+    }
+    .btn-wa {
+      background: #25D366;
+      border: 1px solid rgba(37, 211, 102, 0.5);
+      box-shadow: 0 0 16px rgba(37, 211, 102, 0.6), 0 0 24px rgba(0, 242, 254, 0.3);
+    }
+    .btn-wa:hover {
+      border-color: #25D366;
+      box-shadow: 0 0 24px rgba(37, 211, 102, 0.85), 0 0 35px rgba(0, 242, 254, 0.5);
+    }
+    .btn-tg {
+      background: #0088cc;
+      border: 1px solid rgba(0, 136, 204, 0.5);
+      box-shadow: 0 0 16px rgba(0, 136, 204, 0.65), 0 0 24px rgba(0, 242, 254, 0.35);
+    }
+    .btn-tg:hover {
+      border-color: #00f2fe;
+      box-shadow: 0 0 24px rgba(0, 136, 204, 0.9), 0 0 35px rgba(0, 242, 254, 0.6);
+    }
+    .btn-ai-chat {
+      background: linear-gradient(135deg, var(--cyan-neon), var(--purple-neon));
+      padding: 12px 20px;
+      border-radius: 30px;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* AI Chat Modal */
+    #ai-modal {
+      position: fixed;
+      bottom: 85px;
+      right: 24px;
+      width: 350px;
+      height: 480px;
+      background: #0e1124;
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+      z-index: 160;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #ai-modal.active { display: flex; }
+    .chat-header {
+      padding: 12px 16px;
+      background: rgba(20, 25, 52, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-body {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #080913;
+    }
+    .chat-msg {
+      max-width: 85%;
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .chat-msg.bot {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      border: 1px solid var(--border-subtle);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+    .chat-msg.user {
+      background: linear-gradient(135deg, var(--cyan-neon), var(--purple-neon));
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+    .chat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .chip-btn {
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      color: var(--cyan-neon);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .chat-footer {
+      padding: 10px;
+      border-top: 1px solid var(--border-subtle);
+      background: #0e1124;
+      display: flex;
+      gap: 8px;
+    }
+    .chat-footer input {
+      flex: 1;
+      background: #070914;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 12px;
+    }
+    .chat-footer button {
+      background: var(--cyan-neon);
+      border: none;
+      color: #000;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient Neon Orbs -->
+  <div class="ambient-orb orb-cyan"></div>
+  <div class="ambient-orb orb-purple"></div>
+
+  <!-- Animated 2-Second Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-cyber-wrap">
+      <div class="spin-ring"></div>
+      <div class="spin-ring-inner"></div>
+      <div class="loading-cyber-svg">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="cyber-svg-icon">
+          <defs>
+            <linearGradient id="stHexGradLoad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f2fe" />
+              <stop offset="50%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+            <linearGradient id="stInnerHexLoad" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ec4899" />
+              <stop offset="50%" stop-color="#a855f7" />
+              <stop offset="100%" stop-color="#00f2fe" />
+            </linearGradient>
+            <linearGradient id="stBoltGradLoad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f2fe" />
+              <stop offset="40%" stop-color="#38bdf8" />
+              <stop offset="75%" stop-color="#a855f7" />
+              <stop offset="100%" stop-color="#e879f9" />
+            </linearGradient>
+            <linearGradient id="stCoreGradLoad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+              <stop offset="45%" stop-color="#e0f2fe" stop-opacity="0.8" />
+              <stop offset="100%" stop-color="#c084fc" stop-opacity="0.2" />
+            </linearGradient>
+            <filter id="stGlowFilterLoad" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <polygon points="50,6 88.1,28 88.1,72 50,94 11.9,72 11.9,28" fill="#090b17" fill-opacity="0.9" />
+          <polygon points="50,12 82.8,30.9 82.8,69.1 50,88 17.2,69.1 17.2,30.9" stroke="url(#stInnerHexLoad)" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4 3" fill="none" />
+          <polygon points="50,6 88.1,28 88.1,72 50,94 11.9,72 11.9,28" stroke="url(#stHexGradLoad)" stroke-width="3.2" stroke-linejoin="round" />
+          <circle cx="50" cy="6" r="2.2" fill="#00f2fe" />
+          <circle cx="88.1" cy="28" r="2.2" fill="#38bdf8" />
+          <circle cx="88.1" cy="72" r="2.2" fill="#a855f7" />
+          <circle cx="50" cy="94" r="2.2" fill="#e879f9" />
+          <circle cx="11.9" cy="72" r="2.2" fill="#c084fc" />
+          <circle cx="11.9" cy="28" r="2.2" fill="#00f2fe" />
+          <path d="M 24 25 L 76 25 L 63 38 L 46 38 L 66 51 L 50 51 L 76 75 L 24 75 L 37 62 L 54 62 L 34 49 L 50 49 Z" fill="url(#stBoltGradLoad)" filter="url(#stGlowFilterLoad)" />
+          <path d="M 30 28 L 70 28 L 61 36 L 49 39 L 61 49 L 51 51 L 71 72 L 30 72 L 39 63 L 51 61 L 39 51 L 49 49 Z" fill="url(#stCoreGradLoad)" opacity="0.75" />
+          <path d="M 83 23 L 80 29 L 85 28" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+          <path d="M 17 77 L 20 71 L 15 72" stroke="#ec4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+        </svg>
+      </div>
+    </div>
+    <div class="loading-logo electric-brand-shimmer">
+      <span>ZestFlick</span>
+    </div>
+    <p style="font-size: 12px; color: #94a3b8; letter-spacing: 3px; margin-top: 8px; text-transform: uppercase; font-weight: 600;">
+      Aesthetic Neon E-Commerce
+    </p>
+    <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.06); border-radius: 999px; margin-top: 20px; overflow: hidden; border: 1px solid rgba(0,242,254,0.2);">
+      <div style="width: 100%; height: 100%; background: linear-gradient(90deg, transparent, var(--cyan-neon), var(--purple-neon)); animation: spin 1.5s infinite;"></div>
+    </div>
+  </div>
+
+  <!-- Announcement Bar -->
+  <div class="banner">
+    🎁 নতুন একাউন্ট খুললেই পাচ্ছেন <strong>৳২০ ইনস্ট্যান্ট ওয়ালেট বোনাস!</strong> ব্যবহার করুন কুপন <span>ZEST20</span> (১০% ছাড়)
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand-logo">
+        <div class="cyber-hex-box">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="cyber-svg-icon">
+            <defs>
+              <linearGradient id="stHexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="50%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#a855f7" />
+              </linearGradient>
+              <linearGradient id="stInnerHex" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ec4899" />
+                <stop offset="50%" stop-color="#a855f7" />
+                <stop offset="100%" stop-color="#00f2fe" />
+              </linearGradient>
+              <linearGradient id="stBoltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="40%" stop-color="#38bdf8" />
+                <stop offset="75%" stop-color="#a855f7" />
+                <stop offset="100%" stop-color="#e879f9" />
+              </linearGradient>
+              <linearGradient id="stCoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                <stop offset="45%" stop-color="#e0f2fe" stop-opacity="0.8" />
+                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.2" />
+              </linearGradient>
+              <filter id="stGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <polygon points="50,6 88.1,28 88.1,72 50,94 11.9,72 11.9,28" fill="#090b17" fill-opacity="0.9" />
+            <polygon points="50,12 82.8,30.9 82.8,69.1 50,88 17.2,69.1 17.2,30.9" stroke="url(#stInnerHex)" stroke-width="1" stroke-opacity="0.45" stroke-dasharray="4 3" fill="none" />
+            <polygon points="50,6 88.1,28 88.1,72 50,94 11.9,72 11.9,28" stroke="url(#stHexGrad)" stroke-width="3.2" stroke-linejoin="round" />
+            <circle cx="50" cy="6" r="2.2" fill="#00f2fe" />
+            <circle cx="88.1" cy="28" r="2.2" fill="#38bdf8" />
+            <circle cx="88.1" cy="72" r="2.2" fill="#a855f7" />
+            <circle cx="50" cy="94" r="2.2" fill="#e879f9" />
+            <circle cx="11.9" cy="72" r="2.2" fill="#c084fc" />
+            <circle cx="11.9" cy="28" r="2.2" fill="#00f2fe" />
+            <path d="M 24 25 L 76 25 L 63 38 L 46 38 L 66 51 L 50 51 L 76 75 L 24 75 L 37 62 L 54 62 L 34 49 L 50 49 Z" fill="url(#stBoltGrad)" filter="url(#stGlowFilter)" />
+            <path d="M 30 28 L 70 28 L 61 36 L 49 39 L 61 49 L 51 51 L 71 72 L 30 72 L 39 63 L 51 61 L 39 51 L 49 49 Z" fill="url(#stCoreGrad)" opacity="0.75" />
+            <path d="M 83 23 L 80 29 L 85 28" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+            <path d="M 17 77 L 20 71 L 15 72" stroke="#ec4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+          </svg>
+        </div>
+        <div class="brand-text electric-brand-shimmer" style="font-size: 24px; font-weight: 800; letter-spacing: 1px;">
+          <span>ZestFlick</span>
+        </div>
+      </a>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search glow lamps, attars, journals, bricks..." oninput="handleSearch()">
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn-pill" onclick="openAdminModal()" id="adminHeaderBtn" style="border-color: rgba(0,242,254,0.4); color: var(--cyan-neon);">
+          🛡️ Admin
+        </button>
+        <button class="btn-pill" onclick="openAuthModal()" id="walletHeaderBtn">
+          👛 ৳<span id="walletHeaderVal">0</span>
+        </button>
+        <button class="btn-pill" onclick="openAuthModal()" id="profileHeaderBtn">
+          👤 <span id="profileHeaderName">Account</span>
+        </button>
+        <button class="cart-btn" onclick="openCart()">
+          🛒 Cart
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="hero-banner">
+      <div class="hero-text">
+        <h1>Glow Your Space with <br><span class="neon-cyan">Aesthetic</span> & <span class="neon-purple">Lifestyle</span></h1>
+        <p>Premium squishy silicone night lamps, authentic alcohol-free attars, cyberpunk journals, and micro-brick sets.</p>
+      </div>
+      <div class="hero-perks">
+        <div class="perk-chip">⚡ Fast Delivery Nationwide</div>
+        <div class="perk-chip">💳 Cash on Delivery & bKash</div>
+        <div class="perk-chip">🎁 ৳20 Welcome Bonus</div>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-bar">
+      <button class="cat-btn active" onclick="filterCategory('All', this)">All Products</button>
+      <button class="cat-btn" onclick="filterCategory('Glow Lights', this)">Glow Lights</button>
+      <button class="cat-btn" onclick="filterCategory('Attar Perfumes', this)">Attar Perfumes</button>
+      <button class="cat-btn" onclick="filterCategory('Notebooks', this)">Notebooks</button>
+      <button class="cat-btn" onclick="filterCategory('Bricks Toys', this)">Bricks Toys</button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" id="productsContainer"></div>
+  </main>
+
+  <!-- Modern Dark Footer with Cyberpunk Logo -->
+  <footer style="border-top: 1px solid var(--border-subtle); background: #06070d; padding: 40px 20px; text-align: center; margin-top: 40px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="cyber-hex-box" style="width: 32px; height: 32px;">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="cyber-svg-icon">
+            <polygon points="50,6 88.1,28 88.1,72 50,94 11.9,72 11.9,28" stroke="url(#stHexGrad)" stroke-width="3.2" stroke-linejoin="round" />
+            <path d="M 24 25 L 76 25 L 63 38 L 46 38 L 66 51 L 50 51 L 76 75 L 24 75 L 37 62 L 54 62 L 34 49 L 50 49 Z" fill="url(#stBoltGrad)" />
+          </svg>
+        </div>
+        <span class="electric-brand-shimmer" style="font-size: 20px; font-weight: 800; letter-spacing: 1px;">ZestFlick</span>
+      </div>
+      <p style="color: #64748b; font-size: 12px;">
+        © 2026 ZestFlick BD. Modern Aesthetic & Glow Lifestyle Store. • 
+        <a href="javascript:void(0)" onclick="openAdminModal()" style="color: var(--cyan-neon); text-decoration: none; font-weight: 600;">
+          🛡️ Admin Portal (wapp7272@gmail.com)
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Cart Slide-Over Drawer -->
+  <div id="cart-drawer">
+    <div class="drawer-overlay" onclick="closeCart()"></div>
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <div class="drawer-title">🛒 Your Shopping Cart</div>
+        <button class="btn-close" onclick="closeCart()">✕</button>
+      </div>
+      <div class="cart-items-list" id="cartItemsList"></div>
+      <div class="drawer-footer">
+        <div class="coupon-wrap">
+          <input type="text" id="couponInput" placeholder="Coupon Code (ZEST20)">
+          <button onclick="applyCoupon()">Apply</button>
+        </div>
+        <div id="couponMsg" style="font-size: 11px; display: none;"></div>
+
+        <div class="wallet-box">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="walletCheckbox" onchange="toggleWalletBonus()">
+            <span>Apply ৳20 Wallet Bonus (Bal: ৳<span id="drawerWalletBal">0</span>)</span>
+          </label>
+        </div>
+
+        <div class="summary-row"><span>Subtotal:</span><span>৳<span id="drawerSubtotal">0</span></span></div>
+        <div class="summary-row" id="discountRow" style="display:none; color:#10b981;">
+          <span>Coupon Discount (10%):</span><span>-৳<span id="drawerDiscount">0</span></span>
+        </div>
+        <div class="summary-row" id="walletRow" style="display:none; color:#c084fc;">
+          <span>Wallet Bonus:</span><span>-৳<span id="drawerWalletUsed">0</span></span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span><span class="neon-cyan">৳<span id="drawerTotal">0</span></span>
+        </div>
+        <button class="btn-checkout" onclick="openCheckout()">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth & Wallet Modal (Login, Registration, OTP, Profile) -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div class="modal-title" id="authModalTitle">ZestFlick Member Club</div>
+        <button class="btn-close" onclick="closeAuthModal()">✕</button>
+      </div>
+
+      <!-- Alert Box for Info/Success/Errors -->
+      <div id="authAlert" class="auth-alert-box"></div>
+
+      <!-- Tab Switcher (Visible when not logged in) -->
+      <div class="auth-tab-bar" id="authTabBar">
+        <button class="auth-tab-btn active" id="tabBtnRegister" onclick="switchAuthTab('register')">
+          ✨ Register (+৳20 Bonus)
+        </button>
+        <button class="auth-tab-btn" id="tabBtnLogin" onclick="switchAuthTab('login')">
+          🔑 Login
+        </button>
+      </div>
+
+      <!-- VIEW 1: REGISTRATION TAB -->
+      <div id="viewRegister">
+        <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.25); border-radius: 12px; padding: 12px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <div style="font-size: 24px;">🎁</div>
+          <div style="font-size: 12px; line-height: 1.4;">
+            <strong style="color: #d8b4fe;">৳২০ ওয়েলকাম বোনাস উপহার!</strong><br>
+            <span style="color: #cbd5e1;">সঠিক জিমেইল ও ১১ ডিজিটের মোবাইল নম্বর দিয়ে ভেরিফাই করলেই আপনার ওয়ালেটে ৳২০ যোগ হবে।</span>
+          </div>
+        </div>
+
+        <form id="registerForm" onsubmit="handleSendOtp(event)">
+          <div class="form-group">
+            <label>Full Name*</label>
+            <input type="text" id="regName" placeholder="e.g. Tanvir Ahmed" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label>Gmail Address (for OTP Verification)*</label>
+            <input type="email" id="regEmail" placeholder="yourname@gmail.com" required autocomplete="email">
+            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">
+              একটি সক্রিয় Gmail দিন যেখানে ৪-সংখ্যার OTP কোড পাঠানো হবে।
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Mobile Number (11 Digits)*</label>
+            <input type="tel" id="regPhone" placeholder="01XXXXXXXXX" maxlength="11" required autocomplete="tel" style="font-family: monospace;">
+            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">
+              অবশ্যই 01 দিয়ে শুরু হওয়া ১১ ডিজিটের বাংলাদেশি মোবাইল নম্বর দিন।
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Create Password (for Login)*</label>
+            <input type="password" id="regPassword" placeholder="Minimum 4 characters" minlength="4" required autocomplete="new-password">
+          </div>
+
+          <div class="form-group">
+            <label>Delivery Area</label>
+            <select id="regArea">
+              <option value="Inside Dhaka">Inside Dhaka (ঢাকার ভিতরে - ডেলিভারি ৳৬০)</option>
+              <option value="Outside Dhaka">Outside Dhaka (ঢাকার বাইরে - ডেলিভারি ৳১২০)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Full Delivery Address</label>
+            <textarea id="regAddress" rows="2" placeholder="House, Road, Area (LocalStorage-এ সেভ থাকবে)"></textarea>
+          </div>
+
+          <button type="submit" class="btn-checkout" id="btnSendOtp">
+            Send OTP & Claim ৳20 Bonus
+          </button>
+        </form>
+      </div>
+
+      <!-- VIEW 2: OTP VERIFICATION VIEW -->
+      <div id="viewOtp" style="display:none; text-align: center;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(0,242,254,0.15); border: 1px solid var(--cyan-neon); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 26px;">
+          ✉️
+        </div>
+
+        <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 6px;">Gmail OTP Verification</h3>
+        <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px;">
+          একটি ৪-ডিজিটের ভেরিফিকেশন কোড পাঠানো হয়েছে:<br>
+          <strong class="neon-cyan" id="otpTargetEmail">user@gmail.com</strong>
+        </p>
+
+        <!-- Simulated live email alert banner / EmailJS Ready banner -->
+        <div id="simulatedOtpBanner" style="background: rgba(0, 242, 254, 0.12); border: 1px dashed var(--cyan-neon); padding: 10px; border-radius: 12px; margin-bottom: 14px; text-align: center;">
+          <div style="font-size: 11px; color: #a5f3fc; margin-bottom: 4px;">⚡ Gmail OTP Notification (Live Local Testing):</div>
+          <div style="font-size: 20px; font-weight: 900; letter-spacing: 6px; color: var(--cyan-neon); font-family: monospace;" id="simulatedOtpDisplay">----</div>
+          <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">EmailJS integration ready structure enabled</div>
+        </div>
+
+        <div class="otp-input-group">
+          <input type="text" maxlength="1" class="otp-digit" id="otp1" oninput="handleOtpInput(1, event)" onkeydown="handleOtpKeydown(1, event)" autocomplete="off">
+          <input type="text" maxlength="1" class="otp-digit" id="otp2" oninput="handleOtpInput(2, event)" onkeydown="handleOtpKeydown(2, event)" autocomplete="off">
+          <input type="text" maxlength="1" class="otp-digit" id="otp3" oninput="handleOtpInput(3, event)" onkeydown="handleOtpKeydown(3, event)" autocomplete="off">
+          <input type="text" maxlength="1" class="otp-digit" id="otp4" oninput="handleOtpInput(4, event)" onkeydown="handleOtpKeydown(4, event)" autocomplete="off">
+        </div>
+
+        <button class="btn-checkout" onclick="handleVerifyOtp()" id="btnVerifyOtp">
+          Verify & Activate ৳20 Wallet Bonus
+        </button>
+
+        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <button type="button" class="btn-secondary" style="margin-top:0; width: auto; padding: 6px 14px; font-size: 11px;" onclick="resendOtp()">
+            🔄 Resend Code
+          </button>
+          <button type="button" class="btn-secondary" style="margin-top:0; width: auto; padding: 6px 14px; font-size: 11px;" onclick="backToRegister()">
+            ← Edit Details
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: LOGIN TAB -->
+      <div id="viewLogin" style="display:none;">
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label>Registered Phone Number*</label>
+            <input type="tel" id="loginPhone" placeholder="01XXXXXXXXX" maxlength="11" required autocomplete="username" style="font-family: monospace;">
+            <span style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">
+              রেজিস্ট্রেশনে ব্যবহৃত ১১ ডিজিটের মোবাইল নম্বরটি দিন।
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Password*</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn-checkout" id="btnLoginSubmit">
+            Log In to ZestFlick
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 16px; font-size: 12px; color: var(--text-muted);">
+          Don't have an account yet? 
+          <a href="javascript:void(0)" onclick="switchAuthTab('register')" style="color: var(--cyan-neon); font-weight: 700; text-decoration: none;">
+            Register & Claim ৳20 Bonus
+          </a>
+        </div>
+      </div>
+
+      <!-- VIEW 4: USER PROFILE & DASHBOARD (Logged-in view) -->
+      <div id="viewProfile" style="display:none;">
+        <!-- Wallet Card -->
+        <div style="background: linear-gradient(135deg, #1b1238, #0f172a, #092233); border: 1px solid rgba(0, 242, 254, 0.35); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #d8b4fe; font-weight: 800;">ZestFlick Member Wallet</span>
+              <h3 style="font-size: 18px; font-weight: 900; color: #fff;" id="profileCardName">-</h3>
+              <p style="font-size: 12px; color: #94a3b8; font-family: monospace;" id="profileCardPhone">-</p>
+              <p style="font-size: 11px; color: #a5f3fc;" id="profileCardEmail">-</p>
+            </div>
+            <div style="background: rgba(168,85,247,0.2); border: 1px solid rgba(168,85,247,0.4); padding: 8px 12px; border-radius: 12px; font-size: 20px;">
+              👛
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+              <span style="font-size: 11px; color: #94a3b8; display: block;">Available Balance</span>
+              <span style="font-size: 26px; font-weight: 900; color: var(--cyan-neon); font-family: monospace;">৳<span id="profileCardWallet">0</span></span>
+            </div>
+            <span style="font-size: 11px; background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 4px 10px; border-radius: 20px; font-weight: 700;">
+              ✓ ৳২০ ওয়েলকাম বোনাস সক্রিয়
+            </span>
+          </div>
+        </div>
+
+        <!-- Saved Address Update Form -->
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <span>📍 Saved Delivery Address (LocalStorage)</span>
+          </div>
+          <div class="form-group">
+            <label>Delivery Area</label>
+            <select id="profileArea">
+              <option value="Inside Dhaka">Inside Dhaka (ডেলিভারি ৳৬০)</option>
+              <option value="Outside Dhaka">Outside Dhaka (ডেলিভারি ৳১২০)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Full Delivery Address</label>
+            <textarea id="profileAddress" rows="2" placeholder="House, Road, Area..."></textarea>
+          </div>
+          <button type="button" class="btn-checkout" onclick="handleSaveProfileAddress()">
+            Save Updated Address
+          </button>
+        </div>
+
+        <button type="button" class="btn-secondary" onclick="handleUserLogout()" style="color: #f87171; border-color: rgba(239,68,68,0.3);">
+          🚪 Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div class="modal-title">Checkout & Payment</div>
+        <button class="btn-close" onclick="closeCheckout()">✕</button>
+      </div>
+
+      <div id="checkoutForm">
+        <div class="form-group">
+          <label>Recipient Name*</label>
+          <input type="text" id="chkName" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number*</label>
+          <input type="tel" id="chkPhone" required>
+        </div>
+        <div class="form-group">
+          <label>Delivery Area*</label>
+          <select id="chkArea" onchange="updateCheckoutTotal()">
+            <option value="Inside Dhaka">Inside Dhaka (ডেলিভারি ৳৬০)</option>
+            <option value="Outside Dhaka">Outside Dhaka (ডেলিভারি ৳১২০)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Delivery Address*</label>
+          <textarea id="chkAddress" rows="2" required></textarea>
+        </div>
+
+        <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:#cbd5e1;">Payment Method:</div>
+        <div class="pay-methods">
+          <div class="pay-btn active" id="payCod" onclick="selectPay('cod')">Cash On Delivery</div>
+          <div class="pay-btn" id="payBkash" onclick="selectPay('bkash')">bKash</div>
+          <div class="pay-btn" id="payNagad" onclick="selectPay('nagad')">Nagad</div>
+        </div>
+
+        <div id="trxIdBox" style="display:none; margin-bottom:14px; background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.3); padding:10px; border-radius:10px;">
+          <div style="font-size:11px; margin-bottom:6px; color:#fbcfe8;">
+            Send Money or Cash Out to <strong id="payNumberText">01883418309</strong> and enter TrxID below:
+          </div>
+          <input type="text" id="chkTrxId" placeholder="e.g. BL982JK4A" style="text-transform:uppercase; font-family:monospace;">
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:10px; margin-bottom:14px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span>Items Total:</span><span>৳<span id="chkSubtotal">0</span></span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span>Delivery Fee:</span><span>৳<span id="chkDeliveryFee">60</span></span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-weight:900; font-size:14px; color:var(--cyan-neon); border-top:1px solid rgba(255,255,255,0.1); padding-top:6px;">
+            <span>Payable Amount:</span><span>৳<span id="chkGrandTotal">0</span></span>
+          </div>
+        </div>
+
+        <button class="btn-checkout" onclick="confirmOrder()">Confirm Order</button>
+      </div>
+
+      <div id="orderSuccess" style="display:none; text-align:center; padding:10px 0;">
+        <div style="font-size:48px; margin-bottom:10px;">🎉</div>
+        <h3 style="font-size:20px; font-weight:900; color:#fff;">Order Confirmed!</h3>
+        <p style="font-size:13px; color:#94a3b8; margin:8px 0 16px;">
+          Order ID: <strong class="neon-cyan" id="successOrderId">ZF-10294</strong><br>
+          ধন্যবাদ! আপনার অর্ডারটি গ্রহণ করা হয়েছে।
+        </p>
+        <button class="btn-checkout" onclick="closeCheckout()">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Support Bar -->
+  <div class="support-stack">
+    <a href="https://wa.me/8801883418309" target="_blank" class="social-btn btn-wa" title="WhatsApp Support" aria-label="WhatsApp Support">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <a href="https://t.me/+8801883418309" target="_blank" class="social-btn btn-tg" title="Telegram Support" aria-label="Telegram Support">
+      <i class="fa-brands fa-telegram"></i>
+    </a>
+    <button class="btn-ai-chat" onclick="toggleAiChat()">🤖 AI চ্যাট সহকারী</button>
+  </div>
+
+  <!-- Bengali AI Chat Assistant Modal -->
+  <div id="ai-modal">
+    <div class="chat-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:16px;">⚡</span>
+        <div>
+          <div style="font-size:13px; font-weight:800; color:#fff;">ZestFlick AI সহকারী</div>
+          <div style="font-size:10px; color:#34d399;">● অনলাইন বাংলা শপ অ্যাসিস্ট্যান্ট</div>
+        </div>
+      </div>
+      <button class="btn-close" onclick="toggleAiChat()">✕</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msg bot">
+        আসসালামু আলাইকুম! ZestFlick-এ আপনাকে স্বাগতম। আমি আপনার AI শপিং সহকারী। কীভাবে সাহায্য করতে পারি?
+        <div class="chat-chips">
+          <button class="chip-btn" onclick="sendPrompt('ডেলিভারি চার্জ ও সময় কত?')">🚚 ডেলিভারি চার্জ</button>
+          <button class="chip-btn" onclick="sendPrompt('বিকাশ ও নগদে পেমেন্ট করার নিয়ম')">💳 পেমেন্ট নিয়ম</button>
+          <button class="chip-btn" onclick="sendPrompt('ZEST20 কুপন কোড কীভাবে কাজ করে?')">🎟️ ZEST20 কুপন</button>
+          <button class="chip-btn" onclick="sendPrompt('৳২০ সাইনআপ বোনাস কীভাবে কাজে লাগাব?')">🎁 ৳২০ বোনাস</button>
+          <button class="chip-btn" onclick="sendPrompt('রিটার্ন পলিসি কী?')">🔄 রিটার্ন পলিসি</button>
+        </div>
+      </div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="chatInput" placeholder="বাংলায় প্রশ্ন লিখুন..." onkeypress="if(event.key==='Enter') sendChatMsg()">
+      <button onclick="sendChatMsg()">Send</button>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard Protected Modal -->
+  <div class="modal-backdrop" id="adminModal">
+    <div class="modal-card" style="max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">🛡️</span>
+          <div>
+            <div class="modal-title" style="margin-bottom:0;">ZestFlick Admin Dashboard</div>
+            <div style="font-size:11px; color:#94a3b8;" id="adminHeaderSub">Restricted Access • wapp7272@gmail.com</div>
+          </div>
+        </div>
+        <button class="btn-close" onclick="closeAdminModal()">✕</button>
+      </div>
+
+      <!-- Unauthorized Access Alert -->
+      <div id="adminAuthAlert" style="display:none; padding:12px; border-radius:10px; margin-bottom:14px; font-size:12px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#fca5a5;">
+        <strong style="display:block; margin-bottom:2px;">⚠️ Unauthorized Access</strong>
+        <span id="adminAuthAlertMsg">This email does not have administrative privileges.</span>
+      </div>
+
+      <!-- VIEW 1: ADMIN LOGIN -->
+      <div id="adminLoginView" style="max-width: 420px; margin: 20px auto; text-align: center;">
+        <div style="font-size:42px; margin-bottom:12px;">🔒</div>
+        <h3 style="font-size:18px; font-weight:800; color:#fff; margin-bottom:6px;">Administrator Authentication</h3>
+        <p style="font-size:12px; color:#94a3b8; margin-bottom:20px;">
+          Please enter your authorized administrative email and security password to access live orders and inventory.
+        </p>
+
+        <form id="adminLoginForm" onsubmit="handleAdminLoginSubmit(event)">
+          <div class="form-group" style="text-align:left;">
+            <label>Admin Email*</label>
+            <input type="email" id="adminEmailInput" placeholder="wapp7272@gmail.com" required autocomplete="username">
+          </div>
+          <div class="form-group" style="text-align:left;">
+            <label>Admin Password*</label>
+            <input type="password" id="adminPassInput" placeholder="Enter admin password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn-checkout" style="margin-top:10px;">
+            Authorize & Enter Dashboard
+          </button>
+        </form>
+        <p style="font-size:11px; color:#64748b; margin-top:14px;">
+          Note: Only <strong style="color:#38bdf8;">wapp7272@gmail.com</strong> is granted access.
+        </p>
+      </div>
+
+      <!-- VIEW 2: LOGGED IN ADMIN DASHBOARD -->
+      <div id="adminPanelContent" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:rgba(255,255,255,0.03); padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:12px; color:#94a3b8;">
+            Logged in as: <strong class="neon-cyan" id="adminSessionEmail">wapp7272@gmail.com</strong>
+          </div>
+          <button class="btn-secondary" style="margin:0; padding:6px 14px; font-size:11px; width:auto;" onclick="handleAdminLogoutStandalone()">
+            🚪 Logout
+          </button>
+        </div>
+
+        <!-- Metric Cards -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:20px;">
+          <div style="background:rgba(15,23,42,0.8); border:1px solid #1e293b; padding:12px; border-radius:12px;">
+            <div style="font-size:11px; color:#94a3b8;">Total Revenue</div>
+            <div style="font-size:20px; font-weight:900; color:var(--cyan-neon); font-family:monospace;" id="admRev">৳0</div>
+          </div>
+          <div style="background:rgba(15,23,42,0.8); border:1px solid #1e293b; padding:12px; border-radius:12px;">
+            <div style="font-size:11px; color:#94a3b8;">Total Orders</div>
+            <div style="font-size:20px; font-weight:900; color:#fff; font-family:monospace;" id="admCount">0</div>
+          </div>
+          <div style="background:rgba(15,23,42,0.8); border:1px solid #1e293b; padding:12px; border-radius:12px;">
+            <div style="font-size:11px; color:#94a3b8;">Pending Review</div>
+            <div style="font-size:20px; font-weight:900; color:#f59e0b; font-family:monospace;" id="admPending">0</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px; font-size:14px; font-weight:800; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+          <span>📦 Customer Order Records</span>
+          <span style="font-size:11px; color:#94a3b8;">Auto-synchronized with LocalStorage</span>
+        </div>
+
+        <div id="adminOrdersTableContainer" style="overflow-x:auto;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    // Products Data
+    const PRODUCTS = [
+      { id: '1', title: 'Capybara Tap-Dim Silicone Lamp', category: 'Glow Lights', price: 950, old: 1250, img: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=600&q=80', desc: 'Soft BPA-free silicone, 2-level tap dimming, 20m sleep timer.' },
+      { id: '2', title: 'Lazy Duck Touch Lamp & Phone Stand', category: 'Glow Lights', price: 890, old: 1100, img: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80', desc: 'Cute duck night light with phone stand silicone feet.' },
+      { id: '3', title: 'Sleepy Cat RGB Mood Light', category: 'Glow Lights', price: 780, old: 990, img: 'https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80', desc: '7-color soothing RGB breathing light with tap sensor.' },
+      { id: '4', title: 'Royal White Musk Concentrated Attar (6ml)', category: 'Attar Perfumes', price: 450, old: 590, img: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80', desc: '100% alcohol-free creamy powdery white musk, 24hr longevity.' },
+      { id: '5', title: 'Golden Oudh Al-Amir Premium Attar (6ml)', category: 'Attar Perfumes', price: 750, old: 950, img: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=600&q=80', desc: 'Cambodian agarwood with warm amber and saffron notes.' },
+      { id: '6', title: 'Cyberpunk Neon Edge Dot-Grid Journal', category: 'Notebooks', price: 380, old: 480, img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', desc: 'Fluorescent sprayed edges, 120gsm bleedproof fountain-pen paper.' },
+      { id: '7', title: 'Astral Constellation Holographic Notebook', category: 'Notebooks', price: 350, old: 450, img: 'https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=600&q=80', desc: 'Celestial foil stamping, 180° lay-flat binding.' },
+      { id: '8', title: 'Cyber Mecha Battle Robot Bricks (580 Pcs)', category: 'Bricks Toys', price: 1450, old: 1850, img: 'https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?auto=format&fit=crop&w=600&q=80', desc: 'Articulated sci-fi robot with glowing neon weapons.' },
+      { id: '9', title: 'Cherry Blossom Bonsai Brick Kit', category: 'Bricks Toys', price: 1190, old: 1490, img: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80', desc: 'Japanese sakura bonsai model with interchangeable blooms.' }
+    ];
+
+    // State Variables
+    let cart = [];
+    let selectedCategory = 'All';
+    let user = JSON.parse(localStorage.getItem('zestflick_user')) || {
+      isLoggedIn: false,
+      name: '',
+      email: '',
+      phone: '',
+      area: 'Inside Dhaka',
+      address: '',
+      wallet: 0,
+      bonusReceived: false
+    };
+    let couponApplied = false;
+    let useWallet = false;
+    let selectedPayment = 'cod';
+
+    // Registration & OTP Temporary State
+    let pendingOtp = null;
+    let pendingRegistration = null;
+
+    // 2-Second Animated Loading Screen fade-out
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('loading-screen');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.style.display = 'none', 600);
+        }
+      }, 2000);
+    });
+
+    // Initialize UI
+    function init() {
+      updateUserHeader();
+      renderProducts();
+      updateCartUI();
+    }
+
+    function updateUserHeader() {
+      document.getElementById('walletHeaderVal').innerText = user.wallet || 0;
+      document.getElementById('drawerWalletBal').innerText = user.wallet || 0;
+      if (user.isLoggedIn && user.name) {
+        document.getElementById('profileHeaderName').innerText = user.name.split(' ')[0] || user.name;
+      } else {
+        document.getElementById('profileHeaderName').innerText = 'Account';
+      }
+    }
+
+    function renderProducts(items = PRODUCTS) {
+      const container = document.getElementById('productsContainer');
+      const filtered = selectedCategory === 'All' 
+        ? items 
+        : items.filter(p => p.category === selectedCategory);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:#94a3b8;">কোনো পণ্য খুঁজে পাওয়া যায়নি।</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="${p.img}" alt="${p.title}" loading="lazy">
+            <span class="product-badge">${p.category}</span>
+          </div>
+          <div class="product-info">
+            <div>
+              <div class="product-cat">${p.category}</div>
+              <div class="product-title">${p.title}</div>
+              <div class="product-desc">${p.desc}</div>
+            </div>
+            <div class="product-bottom">
+              <div>
+                <span class="product-price">৳${p.price}</span>
+                <span class="product-old-price">৳${p.old}</span>
+              </div>
+              <button class="btn-add" id="btn-add-${p.id}" onclick="addToCart('${p.id}')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCategory(cat, el) {
+      selectedCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      el.classList.add('active');
+      renderProducts();
+    }
+
+    function handleSearch() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = PRODUCTS.filter(p => 
+        p.title.toLowerCase().includes(q) || 
+        p.category.toLowerCase().includes(q) || 
+        p.desc.toLowerCase().includes(q)
+      );
+      renderProducts(filtered);
+    }
+
+    // Cart Handlers
+    function addToCart(id) {
+      const prod = PRODUCTS.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...prod, qty: 1 });
+      }
+      updateCartUI();
+
+      const btn = document.getElementById(`btn-add-${id}`);
+      if (btn) {
+        btn.innerText = 'Added! ✓';
+        btn.classList.add('added');
+        setTimeout(() => {
+          btn.innerText = 'Add to Cart';
+          btn.classList.remove('added');
+        }, 1400);
+      }
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartBadge').innerText = totalCount;
+
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const discount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+      const walletDiscount = (useWallet && user.wallet > 0) ? Math.min(user.wallet, 20) : 0;
+      const finalTotal = Math.max(0, subtotal - discount - walletDiscount);
+
+      document.getElementById('drawerSubtotal').innerText = subtotal;
+      document.getElementById('drawerDiscount').innerText = discount;
+      document.getElementById('drawerWalletUsed').innerText = walletDiscount;
+      document.getElementById('drawerTotal').innerText = finalTotal;
+
+      document.getElementById('discountRow').style.display = couponApplied ? 'flex' : 'none';
+      document.getElementById('walletRow').style.display = walletDiscount > 0 ? 'flex' : 'none';
+
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8; font-size:13px;">আপনার কার্ট বর্তমানে খালি।</div>`;
+      } else {
+        list.innerHTML = cart.map(item => `
+          <div class="cart-item">
+            <img src="${item.img}" class="cart-item-img">
+            <div class="cart-item-details">
+              <div class="cart-item-name">${item.title}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="cart-item-price">৳${item.price * item.qty}</span>
+                <div class="qty-controls">
+                  <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                  <span style="font-size:12px; font-weight:700;">${item.qty}</span>
+                  <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      }
+      updateCartUI();
+    }
+
+    function openCart() { document.getElementById('cart-drawer').classList.add('active'); }
+    function closeCart() { document.getElementById('cart-drawer').classList.remove('active'); }
+
+    function applyCoupon() {
+      const val = document.getElementById('couponInput').value.trim().toUpperCase();
+      const msg = document.getElementById('couponMsg');
+      msg.style.display = 'block';
+      if (val === 'ZEST20') {
+        couponApplied = true;
+        msg.style.color = '#34d399';
+        msg.innerText = '✓ কুপন কোড ZEST20 সফলভাবে প্রয়োগ হয়েছে (১০% ছাড়)!';
+      } else {
+        couponApplied = false;
+        msg.style.color = '#f87171';
+        msg.innerText = 'ভুল কুপন কোড। অনুগ্রহ করে ZEST20 ব্যবহার করুন।';
+      }
+      updateCartUI();
+    }
+
+    function toggleWalletBonus() {
+      useWallet = document.getElementById('walletCheckbox').checked;
+      updateCartUI();
+    }
+
+    // ==========================================
+    // AUTHENTICATION, OTP & UNIQUE REGISTRATION LOGIC
+    // ==========================================
+    
+    // Registry of permanently registered accounts in LocalStorage
+    function getRegisteredAccounts() {
+      try {
+        const stored = localStorage.getItem('zestflick_registered_accounts');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        console.error('Error reading registered accounts:', e);
+        return [];
+      }
+    }
+
+    function saveRegisteredAccounts(list) {
+      localStorage.setItem('zestflick_registered_accounts', JSON.stringify(list));
+    }
+
+    // Modal Display Functions
+    function openAuthModal() {
+      document.getElementById('authModal').classList.add('active');
+      clearAuthAlert();
+      if (user.isLoggedIn) {
+        showProfileDashboard();
+      } else {
+        switchAuthTab('register');
+      }
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('active');
+      clearAuthAlert();
+    }
+
+    function clearAuthAlert() {
+      const alertBox = document.getElementById('authAlert');
+      alertBox.style.display = 'none';
+      alertBox.className = 'auth-alert-box';
+      alertBox.innerHTML = '';
+    }
+
+    function showAuthAlert(msg, type = 'error') {
+      const alertBox = document.getElementById('authAlert');
+      alertBox.style.display = 'block';
+      alertBox.className = `auth-alert-box auth-alert-${type}`;
+      alertBox.innerHTML = msg;
+    }
+
+    function switchAuthTab(tab) {
+      clearAuthAlert();
+      const tabReg = document.getElementById('tabBtnRegister');
+      const tabLog = document.getElementById('tabBtnLogin');
+      const viewReg = document.getElementById('viewRegister');
+      const viewLog = document.getElementById('viewLogin');
+      const viewOtp = document.getElementById('viewOtp');
+      const viewProf = document.getElementById('viewProfile');
+      const tabBar = document.getElementById('authTabBar');
+
+      tabBar.style.display = 'flex';
+      viewOtp.style.display = 'none';
+      viewProf.style.display = 'none';
+
+      if (tab === 'register') {
+        tabReg.classList.add('active');
+        tabLog.classList.remove('active');
+        viewReg.style.display = 'block';
+        viewLog.style.display = 'none';
+        document.getElementById('authModalTitle').innerText = 'Register & Claim ৳20 Bonus';
+      } else if (tab === 'login') {
+        tabLog.classList.add('active');
+        tabReg.classList.remove('active');
+        viewLog.style.display = 'block';
+        viewReg.style.display = 'none';
+        document.getElementById('authModalTitle').innerText = 'Login to ZestFlick';
+      }
+    }
+
+    function showProfileDashboard() {
+      document.getElementById('authTabBar').style.display = 'none';
+      document.getElementById('viewRegister').style.display = 'none';
+      document.getElementById('viewLogin').style.display = 'none';
+      document.getElementById('viewOtp').style.display = 'none';
+      document.getElementById('viewProfile').style.display = 'block';
+
+      document.getElementById('authModalTitle').innerText = 'My Profile & Wallet';
+      document.getElementById('profileCardName').innerText = user.name || 'ZestFlick Customer';
+      document.getElementById('profileCardPhone').innerText = user.phone || '';
+      document.getElementById('profileCardEmail').innerText = user.email || '';
+      document.getElementById('profileCardWallet').innerText = user.wallet || 0;
+      document.getElementById('profileArea').value = user.area || 'Inside Dhaka';
+      document.getElementById('profileAddress').value = user.address || '';
+    }
+
+    // Step 1: Register Form Submission & Gmail OTP Generation
+    function handleSendOtp(event) {
+      event.preventDefault();
+      clearAuthAlert();
+
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const area = document.getElementById('regArea').value;
+      const address = document.getElementById('regAddress').value.trim();
+
+      // Validation 1: 11-digit Bangladeshi mobile number
+      const phoneClean = phone.replace(/[^0-9]/g, '');
+      if (phoneClean.length !== 11 || !phoneClean.startsWith('01')) {
+        showAuthAlert('⚠️ অনুগ্রহ করে সঠিক ১১-সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন (যেমন: 017XXXXXXXX)।', 'error');
+        return;
+      }
+
+      // Validation 2: Valid Gmail Address
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+      if (!emailPattern.test(email)) {
+        showAuthAlert('⚠️ অনুগ্রহ করে একটি সঠিক Gmail এড্রেস দিন (যেমন: example@gmail.com)।', 'error');
+        return;
+      }
+
+      // Validation 3: Check LocalStorage for permanent registration uniqueness
+      const existingAccounts = getRegisteredAccounts();
+      const phoneTaken = existingAccounts.some(acc => acc.phone === phoneClean);
+      const emailTaken = existingAccounts.some(acc => acc.email.toLowerCase() === email);
+
+      if (phoneTaken || emailTaken) {
+        showAuthAlert('❌ This phone number/email is already registered with ZestFlick.', 'error');
+        return;
+      }
+
+      // Generate random 4-digit code (e.g. 1000 - 9999)
+      const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+      pendingOtp = otpCode;
+      pendingRegistration = {
+        name,
+        email,
+        phone: phoneClean,
+        password,
+        area,
+        address
+      };
+
+      // EmailJS integration ready structure
+      sendGmailOtp(email, name, otpCode);
+
+      // Transition to OTP verification screen
+      document.getElementById('authTabBar').style.display = 'none';
+      document.getElementById('viewRegister').style.display = 'none';
+      document.getElementById('viewOtp').style.display = 'block';
+      document.getElementById('otpTargetEmail').innerText = email;
+      document.getElementById('simulatedOtpDisplay').innerText = otpCode;
+
+      // Clear previous OTP inputs
+      for (let i = 1; i <= 4; i++) {
+        const input = document.getElementById(`otp${i}`);
+        input.value = '';
+      }
+      setTimeout(() => document.getElementById('otp1').focus(), 150);
+
+      // Browser test notification
+      alert(`[ZestFlick Security] Your Gmail OTP Code is: ${otpCode}\n\n(Simulated for local browser testing & EmailJS ready)`);
+    }
+
+    // EmailJS Configuration Credentials
+    const EMAILJS_CONFIG = {
+      serviceId: 'service_swsa8ze',
+      templateId: 'template_mu6ehtm',
+      publicKey: 'j1SIRfDJ1hwkk72EyNhwg'
+    };
+
+    // Initialize EmailJS
+    if (window.emailjs) {
+      window.emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+    }
+
+    // EmailJS OTP Sending Function
+    function sendGmailOtp(targetEmail, userName, code) {
+      console.log(`[EmailJS] Sending OTP ${code} to ${targetEmail} for ${userName}`);
+      if (window.emailjs && window.emailjs.send) {
+        window.emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+          to_email: targetEmail,
+          to_name: userName,
+          user_email: targetEmail,
+          user_name: userName,
+          otp_code: code,
+          code: code,
+          message: `Your ZestFlick 4-digit verification code is: ${code}. It expires in 10 minutes.`,
+          subject: `[ZestFlick] Your Security Verification OTP: ${code}`
+        }, EMAILJS_CONFIG.publicKey).then(
+          res => console.log('[EmailJS] OTP sent successfully:', res),
+          err => console.warn('[EmailJS] OTP send error:', err)
+        );
+      }
+    }
+
+    // EmailJS Order Notification Function
+    function sendOrderEmailJS(orderId, customerName, customerPhone, deliveryAddress, totalAmount, paymentInfo) {
+      if (window.emailjs && window.emailjs.send) {
+        const itemsSummary = cart.map(i => `${i.title} (x${i.qty}) - ৳${i.price * i.qty}`).join(', ');
+        window.emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+          to_email: user.email || 'customer@zestflick.com',
+          to_name: customerName,
+          order_id: orderId,
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          delivery_address: deliveryAddress,
+          order_total: `৳${totalAmount}`,
+          payment_method: paymentInfo,
+          order_items: itemsSummary,
+          message: `New Order Confirmed (#${orderId})! Total: ৳${totalAmount}. Items: ${itemsSummary}`,
+          subject: `[ZestFlick] Order Confirmation - #${orderId}`
+        }, EMAILJS_CONFIG.publicKey).then(
+          res => console.log('[EmailJS] Order email sent successfully:', res),
+          err => console.warn('[EmailJS] Order email error:', err)
+        );
+      }
+    }
+
+    // OTP Input Navigation Helpers
+    function handleOtpInput(index, event) {
+      const val = event.target.value;
+      if (val && index < 4) {
+        const next = document.getElementById(`otp${index + 1}`);
+        if (next) next.focus();
+      }
+      // Auto verify when 4th digit entered
+      const fullCode = [1,2,3,4].map(i => document.getElementById(`otp${i}`).value).join('');
+      if (fullCode.length === 4) {
+        handleVerifyOtp();
+      }
+    }
+
+    function handleOtpKeydown(index, event) {
+      if (event.key === 'Backspace' && !event.target.value && index > 1) {
+        const prev = document.getElementById(`otp${index - 1}`);
+        if (prev) {
+          prev.focus();
+          prev.value = '';
+        }
+      }
+    }
+
+    function resendOtp() {
+      if (!pendingRegistration) {
+        backToRegister();
+        return;
+      }
+      const newOtp = Math.floor(1000 + Math.random() * 9000).toString();
+      pendingOtp = newOtp;
+      document.getElementById('simulatedOtpDisplay').innerText = newOtp;
+      sendGmailOtp(pendingRegistration.email, pendingRegistration.name, newOtp);
+      showAuthAlert('✓ নতুন ৪-ডিজিটের OTP পাঠানো হয়েছে।', 'info');
+      alert(`[ZestFlick Security] New OTP Code: ${newOtp}`);
+    }
+
+    function backToRegister() {
+      clearAuthAlert();
+      document.getElementById('viewOtp').style.display = 'none';
+      document.getElementById('authTabBar').style.display = 'flex';
+      document.getElementById('viewRegister').style.display = 'block';
+    }
+
+    // Step 2: Verify OTP, Claim ৳20 Wallet Bonus & Permanently Register
+    function handleVerifyOtp() {
+      clearAuthAlert();
+      const enteredOtp = [1,2,3,4].map(i => document.getElementById(`otp${i}`).value.trim()).join('');
+
+      if (enteredOtp.length !== 4) {
+        showAuthAlert('⚠️ অনুগ্রহ করে ৪-সংখ্যার সম্পূর্ণ OTP কোড প্রবেশ করান।', 'error');
+        return;
+      }
+
+      if (enteredOtp !== pendingOtp) {
+        showAuthAlert('❌ ভুল OTP কোড! আবার চেষ্টা করুন অথবা Resend বাটনে ক্লিক করুন।', 'error');
+        return;
+      }
+
+      // Success! Permanently register in LocalStorage
+      const reg = pendingRegistration;
+      const existingAccounts = getRegisteredAccounts();
+
+      const newAccountRecord = {
+        name: reg.name,
+        email: reg.email,
+        phone: reg.phone,
+        password: reg.password,
+        area: reg.area,
+        address: reg.address,
+        registeredAt: new Date().toISOString()
+      };
+
+      existingAccounts.push(newAccountRecord);
+      saveRegisteredAccounts(existingAccounts);
+
+      // Create active user profile with ৳20 Welcome Bonus
+      user = {
+        isLoggedIn: true,
+        name: reg.name,
+        email: reg.email,
+        phone: reg.phone,
+        area: reg.area,
+        address: reg.address,
+        wallet: 20, // ৳20 Welcome Bonus credited
+        bonusReceived: true
+      };
+
+      localStorage.setItem('zestflick_user', JSON.stringify(user));
+      updateUserHeader();
+
+      showAuthAlert('🎉 অভিনন্দন! ইমেইল ভেরিফিকেশন সফল! আপনার ওয়ালেটে ৳২০ ওয়েলকাম বোনাস জমা হয়েছে।', 'success');
+
+      // Auto redirect to profile dashboard
+      setTimeout(() => {
+        clearAuthAlert();
+        showProfileDashboard();
+      }, 1600);
+    }
+
+    // Step 3: Login Logic
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      clearAuthAlert();
+
+      const phone = document.getElementById('loginPhone').value.trim().replace(/[^0-9]/g, '');
+      const password = document.getElementById('loginPassword').value.trim();
+
+      const existingAccounts = getRegisteredAccounts();
+      const matched = existingAccounts.find(acc => acc.phone === phone);
+
+      if (!matched) {
+        showAuthAlert('❌ এই নম্বরে কোনো একাউন্ট পাওয়া যায়নি। অনুগ্রহ করে প্রথমে Register করুন।', 'error');
+        return;
+      }
+
+      if (matched.password !== password) {
+        showAuthAlert('❌ পাসওয়ার্ডটি সঠিক নয়। অনুগ্রহ করে পুনরায় চেষ্টা করুন।', 'error');
+        return;
+      }
+
+      // Login successful
+      // Retain existing wallet balance if previously stored
+      const savedUser = JSON.parse(localStorage.getItem('zestflick_user')) || {};
+      const currentWallet = (typeof savedUser.wallet === 'number') ? savedUser.wallet : 20;
+
+      user = {
+        isLoggedIn: true,
+        name: matched.name,
+        email: matched.email,
+        phone: matched.phone,
+        area: matched.area || savedUser.area || 'Inside Dhaka',
+        address: matched.address || savedUser.address || '',
+        wallet: currentWallet,
+        bonusReceived: true
+      };
+
+      localStorage.setItem('zestflick_user', JSON.stringify(user));
+      updateUserHeader();
+
+      showAuthAlert(`✓ স্বাগতম ${matched.name}! সফলভাবে লগইন হয়েছে।`, 'success');
+      setTimeout(() => {
+        clearAuthAlert();
+        showProfileDashboard();
+      }, 1200);
+    }
+
+    function handleSaveProfileAddress() {
+      const area = document.getElementById('profileArea').value;
+      const address = document.getElementById('profileAddress').value.trim();
+
+      user.area = area;
+      user.address = address;
+      localStorage.setItem('zestflick_user', JSON.stringify(user));
+
+      showAuthAlert('✓ আপনার ডেলিভারি ঠিকানা সফলভাবে LocalStorage-এ আপডেট করা হয়েছে!', 'success');
+      setTimeout(clearAuthAlert, 2500);
+    }
+
+    function handleUserLogout() {
+      user.isLoggedIn = false;
+      localStorage.setItem('zestflick_user', JSON.stringify(user));
+      updateUserHeader();
+      switchAuthTab('login');
+      showAuthAlert('লগআউট সম্পন্ন হয়েছে।', 'info');
+      setTimeout(clearAuthAlert, 2000);
+    }
+
+    // Checkout Handling
+    function openCheckout() {
+      if (cart.length === 0) {
+        alert('আপনার কার্ট খালি!');
+        return;
+      }
+      closeCart();
+      document.getElementById('checkoutModal').classList.add('active');
+      document.getElementById('checkoutForm').style.display = 'block';
+      document.getElementById('orderSuccess').style.display = 'none';
+
+      // Auto-fill saved address from LocalStorage
+      document.getElementById('chkName').value = user.name || '';
+      document.getElementById('chkPhone').value = user.phone || '';
+      document.getElementById('chkArea').value = user.area || 'Inside Dhaka';
+      document.getElementById('chkAddress').value = user.address || '';
+
+      updateCheckoutTotal();
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.remove('active');
+    }
+
+    function selectPay(method) {
+      selectedPayment = method;
+      document.querySelectorAll('.pay-btn').forEach(btn => btn.classList.remove('active'));
+      const trxBox = document.getElementById('trxIdBox');
+
+      if (method === 'cod') {
+        document.getElementById('payCod').classList.add('active');
+        trxBox.style.display = 'none';
+      } else if (method === 'bkash') {
+        document.getElementById('payBkash').classList.add('active');
+        document.getElementById('payNumberText').innerText = '01883418309 (bKash)';
+        trxBox.style.display = 'block';
+      } else {
+        document.getElementById('payNagad').classList.add('active');
+        document.getElementById('payNumberText').innerText = '01883418309 (Nagad)';
+        trxBox.style.display = 'block';
+      }
+    }
+
+    function updateCheckoutTotal() {
+      const area = document.getElementById('chkArea').value;
+      const delivery = area === 'Inside Dhaka' ? 60 : 120;
+      const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const discount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+      const walletDiscount = (useWallet && user.wallet > 0) ? Math.min(user.wallet, 20) : 0;
+      const total = Math.max(0, subtotal - discount - walletDiscount + delivery);
+
+      document.getElementById('chkSubtotal').innerText = subtotal;
+      document.getElementById('chkDeliveryFee').innerText = delivery;
+      document.getElementById('chkGrandTotal').innerText = total;
+    }
+
+    function confirmOrder() {
+      const name = document.getElementById('chkName').value.trim();
+      const phone = document.getElementById('chkPhone').value.trim();
+      const address = document.getElementById('chkAddress').value.trim();
+      const trxId = document.getElementById('chkTrxId').value.trim();
+
+      if (!name || !phone || !address) {
+        alert('অনুগ্রহ করে নাম, ফোন এবং সম্পূর্ণ ডেলিভারি ঠিকানা পূরণ করুন।');
+        return;
+      }
+      if ((selectedPayment === 'bkash' || selectedPayment === 'nagad') && !trxId) {
+        alert(`অনুগ্রহ করে আপনার ${selectedPayment.toUpperCase()} Transaction ID (TrxID) ইনপুট দিন।`);
+        return;
+      }
+
+      // Auto save address to LocalStorage
+      user.name = name;
+      user.phone = phone;
+      user.area = document.getElementById('chkArea').value;
+      user.address = address;
+      if (useWallet && user.wallet >= 20) {
+        user.wallet -= 20;
+      }
+      localStorage.setItem('zestflick_user', JSON.stringify(user));
+      updateUserHeader();
+
+      const orderId = 'ZF-' + Math.floor(10000 + Math.random() * 90000);
+      document.getElementById('successOrderId').innerText = orderId;
+      document.getElementById('checkoutForm').style.display = 'none';
+      document.getElementById('orderSuccess').style.display = 'block';
+
+      // Send Order Confirmation Email via EmailJS
+      const grandTotal = document.getElementById('chkGrandTotal')?.innerText || '0';
+      const paymentInfo = selectedPayment === 'cod' ? 'Cash on Delivery' : `${selectedPayment.toUpperCase()} (TrxID: ${trxId})`;
+      sendOrderEmailJS(orderId, name, phone, `${address} (${user.area})`, grandTotal, paymentInfo);
+
+      // Save order to LocalStorage for Admin Dashboard
+      try {
+        const savedOrders = JSON.parse(localStorage.getItem('zestflick_orders')) || [];
+        const newOrderObj = {
+          id: orderId,
+          date: new Date().toLocaleString(),
+          items: cart.map(i => ({ product: { title: i.title, price: i.price }, quantity: i.qty })),
+          total: Number(grandTotal) || 0,
+          paymentMethod: selectedPayment,
+          trxId: trxId || '',
+          address: { fullName: name, phone: phone, fullAddress: address, cityDivision: user.area },
+          status: 'Confirmed'
+        };
+        savedOrders.unshift(newOrderObj);
+        localStorage.setItem('zestflick_orders', JSON.stringify(savedOrders));
+      } catch (err) {
+        console.error(err);
+      }
+
+      cart = [];
+      updateCartUI();
+    }
+
+    // Bengali AI Chat Assistant
+    function toggleAiChat() {
+      const m = document.getElementById('ai-modal');
+      m.classList.toggle('active');
+    }
+
+    function sendPrompt(q) {
+      document.getElementById('chatInput').value = q;
+      sendChatMsg();
+    }
+
+    function sendChatMsg() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const body = document.getElementById('chatBody');
+      body.innerHTML += `<div class="chat-msg user">${text}</div>`;
+      input.value = '';
+      body.scrollTop = body.scrollHeight;
+
+      setTimeout(() => {
+        const reply = getBengaliAnswer(text);
+        body.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+        body.scrollTop = body.scrollHeight;
+      }, 500);
+    }
+
+    function getBengaliAnswer(q) {
+      const query = q.toLowerCase();
+      if (query.includes('ডেলিভারি') || query.includes('চার্জ') || query.includes('সময়')) {
+        return `🚚 **ডেলিভারি চার্জ ও সময়:**<br>• ঢাকার ভিতরে: মাত্র ৳৬০ (২৪-৪৮ ঘণ্টা)<br>• ঢাকার বাইরে: ৳১২০ (২-৪ দিন)<br>ক্যাশ অন ডেলিভারিতে কোনো অগ্রিম চার্জ লাগে না!`;
+      }
+      if (query.includes('পেমেন্ট') || query.includes('বিকাশ') || query.includes('নগদ') || query.includes('bkash') || query.includes('nagad')) {
+        return `💳 **পেমেন্ট নির্দেশিকা:**<br>• বিকাশ ও নগদ মার্চেন্ট/পার্সোনাল নম্বর: 01883418309 (Send Money বা Cash Out করে TrxID দিন)<br>• ক্যাশ অন ডেলিভারিতে পণ্য পাওয়ার পর সম্পূর্ণ মূল্য পরিশোধ করবেন।`;
+      }
+      if (query.includes('কুপন') || query.includes('zest20') || query.includes('ছাড়')) {
+        return `🎟️ **কুপন অফার:** কুপন বক্সে <strong>ZEST20</strong> কোড বসালে সাথে সাথে ১০% ফ্ল্যাট ডিসকাউন্ট প্রযোজ্য হবে!`;
+      }
+      if (query.includes('বোনাস') || query.includes('২০') || query.includes('ওয়ালেট')) {
+        return `🎁 **৳২০ সাইনআপ বোনাস:** একাউন্ট তৈরি করলেই ওয়ালেটে ৳২০ যোগ হয়। কার্টে 'Apply ৳20 Wallet Bonus' বক্সে টিক দিলে বিল থেকে ৳২০ কমে যাবে!`;
+      }
+      if (query.includes('রিটার্ন') || query.includes('চেঞ্জ') || query.includes('পলিসি')) {
+        return `🔄 **৭ দিনের রিটার্ন পলিসি:** পণ্যে কোনো ত্রুটি পেলে ৭ দিনের মধ্যে আমাদের হোয়াটসঅ্যাপে যোগাযোগ করে ফ্রি রিপ্লেসমেন্ট বা রিফান্ড নিতে পারেন।`;
+      }
+      return `ধন্যবাদ আপনার বার্তার জন্য! আরও দ্রুত সহায়তার জন্য সরাসরি আমাদের WhatsApp (01883418309) এ যোগাযোগ করতে পারেন। 😊`;
+    }
+
+    // ==========================================
+    // SECURE ADMIN DASHBOARD CONTROLLERS
+    // ==========================================
+    const AUTHORIZED_ADMIN_EMAIL = 'wapp7272@gmail.com';
+    let isAdminLoggedIn = false;
+
+    function openAdminModal() {
+      // Check session
+      try {
+        const session = JSON.parse(sessionStorage.getItem('zestflick_admin_session'));
+        if (session && session.email === AUTHORIZED_ADMIN_EMAIL && session.authenticated) {
+          isAdminLoggedIn = true;
+        }
+      } catch (e) {
+        isAdminLoggedIn = false;
+      }
+
+      document.getElementById('adminModal').classList.add('active');
+      const alertBox = document.getElementById('adminAuthAlert');
+      if (alertBox) alertBox.style.display = 'none';
+
+      if (isAdminLoggedIn) {
+        showAdminDashboardView();
+      } else {
+        showAdminLoginView();
+      }
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.remove('active');
+    }
+
+    function showAdminLoginView() {
+      document.getElementById('adminLoginView').style.display = 'block';
+      document.getElementById('adminPanelContent').style.display = 'none';
+      document.getElementById('adminHeaderSub').innerText = 'Restricted Access • wapp7272@gmail.com';
+    }
+
+    function showAdminDashboardView() {
+      document.getElementById('adminLoginView').style.display = 'none';
+      document.getElementById('adminPanelContent').style.display = 'block';
+      document.getElementById('adminHeaderSub').innerText = 'Authenticated • wapp7272@gmail.com';
+      document.getElementById('adminSessionEmail').innerText = AUTHORIZED_ADMIN_EMAIL;
+      renderAdminOrders();
+    }
+
+    function handleAdminLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmailInput').value.trim().toLowerCase();
+      const pass = document.getElementById('adminPassInput').value.trim();
+      const alertBox = document.getElementById('adminAuthAlert');
+      const alertMsg = document.getElementById('adminAuthAlertMsg');
+
+      // Rule 1: Allow access ONLY to wapp7272@gmail.com
+      if (email !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
+        alertBox.style.display = 'block';
+        alertMsg.innerText = 'Unauthorized Access: Access denied for ' + email + '. Only wapp7272@gmail.com is authorized.';
+        return;
+      }
+
+      // Rule 2: Password check
+      if (pass !== 'admin123') {
+        alertBox.style.display = 'block';
+        alertMsg.innerText = 'Unauthorized Access: Incorrect password.';
+        return;
+      }
+
+      // Success
+      alertBox.style.display = 'none';
+      isAdminLoggedIn = true;
+      try {
+        sessionStorage.setItem('zestflick_admin_session', JSON.stringify({
+          email: AUTHORIZED_ADMIN_EMAIL,
+          authenticated: true
+        }));
+      } catch (err) {}
+
+      document.getElementById('adminPassInput').value = '';
+      showAdminDashboardView();
+    }
+
+    function handleAdminLogoutStandalone() {
+      sessionStorage.removeItem('zestflick_admin_session');
+      isAdminLoggedIn = false;
+      showAdminLoginView();
+    }
+
+    function renderAdminOrders() {
+      let ordersList = [];
+      try {
+        ordersList = JSON.parse(localStorage.getItem('zestflick_orders')) || [];
+      } catch (e) {
+        ordersList = [];
+      }
+
+      // If empty, provide sample default orders
+      if (ordersList.length === 0) {
+        ordersList = [
+          {
+            id: 'ZF-91823',
+            date: '2026-09-19 18:32',
+            items: [{ product: { title: 'Capybara Tap-Dim Silicone Lamp', price: 950 }, quantity: 1 }],
+            total: 1010,
+            paymentMethod: 'bkash',
+            trxId: 'BKS90812391',
+            address: { fullName: 'Tanvir Hossain', phone: '01712345678', fullAddress: 'House 14, Road 5, Dhanmondi', cityDivision: 'Inside Dhaka' },
+            status: 'Confirmed'
+          }
+        ];
+      }
+
+      // Update metrics
+      const totalRev = ordersList.reduce((s, o) => s + (Number(o.total) || 0), 0);
+      const pendingCount = ordersList.filter(o => o.status === 'Processing' || o.status === 'Confirmed').length;
+
+      document.getElementById('admRev').innerText = '৳' + totalRev.toLocaleString();
+      document.getElementById('admCount').innerText = ordersList.length;
+      document.getElementById('admPending').innerText = pendingCount;
+
+      const container = document.getElementById('adminOrdersTableContainer');
+      container.innerHTML = `
+        <table style="width:100%; text-align:left; border-collapse:collapse; font-size:12px; color:#cbd5e1; background:rgba(15,23,42,0.6); border-radius:10px; overflow:hidden;">
+          <thead>
+            <tr style="background:#0f172a; color:#94a3b8; font-size:11px; text-transform:uppercase; border-bottom:1px solid #1e293b;">
+              <th style="padding:10px 12px;">Order ID & Date</th>
+              <th style="padding:10px 12px;">Customer</th>
+              <th style="padding:10px 12px;">Payment</th>
+              <th style="padding:10px 12px;">Total</th>
+              <th style="padding:10px 12px;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ordersList.map(o => `
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:10px 12px;">
+                  <strong style="color:var(--cyan-neon); font-family:monospace;">${o.id}</strong><br>
+                  <span style="font-size:10px; color:#64748b;">${o.date}</span>
+                </td>
+                <td style="padding:10px 12px;">
+                  <strong style="color:#fff;">${o.address.fullName}</strong><br>
+                  <span style="font-size:11px; color:#94a3b8;">${o.address.phone}</span><br>
+                  <span style="font-size:10px; color:#64748b;">${o.address.fullAddress}</span>
+                </td>
+                <td style="padding:10px 12px;">
+                  <span style="text-transform:uppercase; font-weight:700; color:#d8b4fe;">${o.paymentMethod}</span><br>
+                  ${o.trxId ? `<span style="font-size:10px; color:var(--cyan-neon); font-family:monospace;">Trx: ${o.trxId}</span>` : ''}
+                </td>
+                <td style="padding:10px 12px; font-weight:700; color:#fff; font-family:monospace;">
+                  ৳${o.total}
+                </td>
+                <td style="padding:10px 12px;">
+                  <span style="padding:3px 8px; border-radius:6px; font-size:11px; font-weight:600; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:var(--cyan-neon);">
+                    ${o.status}
+                  </span>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    // Start App
+    init();
+  </script>
+</body>
+</html>

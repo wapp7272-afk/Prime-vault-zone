@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #FFFFFF;
+    --brand-primary: #5B21B6;
+    --brand-primary-hover: #4C1D95;
+    --brand-lavender: #EDE9FE;
+    --text-dark: #171717;
+    --text-muted: #525252;
+    --border-light: #E5E7EB;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #171717;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display, .brand-font {
+    font-family: 'Syne', sans-serif;
+    color: #171717;
+  }
+}
+
+/* Custom Purple-Lavender Marketplace Utilities */
+.bg-brand-purple {
+  background-color: #5B21B6;
+}
+
+.hover\:bg-brand-purple-hover:hover {
+  background-color: #4C1D95;
+}
+
+.text-brand-purple {
+  color: #5B21B6;
+}
+
+.text-brand-purple-hover:hover {
+  color: #4C1D95;
+}
+
+.bg-brand-lavender {
+  background-color: #EDE9FE;
+}
+
+.text-neutral-dark {
+  color: #171717;
+}
+
+.text-neutral-gray {
+  color: #525252;
+}
+
+.border-neutral-border {
+  border-color: #E5E7EB;
+}
+
+/* Modern Card & Shadow Utilities */
+.marketplace-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.marketplace-card:hover {
+  border-color: #C4B5FD;
+  box-shadow: 0 10px 25px -5px rgba(91, 33, 182, 0.08), 0 8px 10px -6px rgba(91, 33, 182, 0.04);
+}
+
+/* Crisp Clean Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F9FAFB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5B21B6;
+}
+
+/* Subtle Shimmer for Announcement Badges */
+@keyframes purpleShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.purple-shimmer-badge {
+  background: linear-gradient(90deg, #5B21B6 0%, #7C3AED 50%, #5B21B6 100%);
+  background-size: 200% 100%;
+  animation: purpleShimmer 4s ease-in-out infinite;
+}
