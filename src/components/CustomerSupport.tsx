@@ -115,7 +115,7 @@ export const CustomerSupport: React.FC = () => {
       {/* Floating Buttons Stack - Bottom Right */}
       <div 
         id="floating-support-bar"
-        className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5"
+        className="fixed bottom-4 right-3 sm:bottom-5 sm:right-5 z-40 flex flex-col items-end gap-2.5"
       >
         {/* Social channels (collapsed/open or elegant vertical stack) */}
         <div className="flex flex-col gap-2.5 items-end">
@@ -154,12 +154,12 @@ export const CustomerSupport: React.FC = () => {
         <button
           id="open-ai-chat-btn"
           onClick={() => setIsChatOpen(!isChatOpen)}
-          className="flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-600 text-white font-bold text-xs shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:shadow-[0_0_35px_rgba(168,85,247,0.7)] hover:scale-105 active:scale-95 transition-all group"
+          className="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-600 text-white font-bold text-xs shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:shadow-[0_0_35px_rgba(168,85,247,0.7)] hover:scale-105 active:scale-95 transition-all group cursor-pointer"
           aria-label="Open AI Shop Assistant"
         >
           <div className="relative">
-            <Bot className="w-5 h-5 text-white animate-pulse" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#0a0b16] rounded-full" />
+            <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-emerald-400 border-2 border-[#0a0b16] rounded-full" />
           </div>
           <span className="tracking-wide">AI চ্যাট সহকারী</span>
           <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
@@ -170,7 +170,7 @@ export const CustomerSupport: React.FC = () => {
       {isChatOpen && (
         <div 
           id="ai-chat-modal"
-          className="fixed bottom-20 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-96 max-h-[580px] h-[520px] flex flex-col rounded-2xl glass-panel border border-cyan-500/40 shadow-2xl overflow-hidden animate-slideUp"
+          className="fixed bottom-16 sm:bottom-20 right-2 sm:right-6 z-50 w-[calc(100vw-16px)] sm:w-96 max-w-[400px] max-h-[580px] h-[520px] flex flex-col rounded-2xl glass-panel border border-cyan-500/40 shadow-2xl overflow-hidden animate-slideUp"
         >
           {/* Chat Header */}
           <div className="p-3.5 bg-gradient-to-r from-[#11142a] via-[#1a123a] to-[#11142a] border-b border-white/10 flex items-center justify-between">

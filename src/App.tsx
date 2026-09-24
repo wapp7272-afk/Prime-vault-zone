@@ -38,6 +38,7 @@ import { HeroSection } from './components/HeroSection';
 import { CategoryNavGrid } from './components/CategoryNavGrid';
 import { FlashSaleSection } from './components/FlashSaleSection';
 import { TrustValueProposition } from './components/TrustValueProposition';
+import { FeaturedYouTubeSection } from './components/FeaturedYouTubeSection';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { CheckoutModal } from './components/CheckoutModal';
@@ -80,7 +81,11 @@ export default function App() {
       helplineNumber: '01883-418309',
       heroHeadline: 'Luxury Scents & Lifestyle Vault',
       heroSubheadline: 'Bangladesh’s Premier Authentic Perfume & Lifestyle Marketplace. 100% genuine guaranteed with fast nationwide express delivery.',
-      flashSaleTag: 'UP TO 50% OFF — EXCLUSIVE',
+      flashSaleTag: 'EXCLUSIVE COLLECTION',
+      youtubeVideoUrl: 'https://www.youtube.com/watch?v=sU3FkmV9b70',
+      youtubeChannelUrl: 'https://www.youtube.com/@primevaultzone',
+      youtubeSectionTitle: 'Featured YouTube Videos',
+      youtubeSectionSubtitle: 'Watch authentic fragrance unboxings, batch code verification guides, and official product showcases directly from our channel.',
     };
   });
 
@@ -1347,6 +1352,12 @@ export default function App() {
                 </div>
               )}
             </section>
+
+            {/* ==================== FEATURED YOUTUBE VIDEOS & CHANNEL ==================== */}
+            <FeaturedYouTubeSection
+              settings={bannerSettings}
+              onOpenAdmin={handleOpenAdmin}
+            />
 
             {/* Value Proposition Highlights */}
             <section className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5">

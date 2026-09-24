@@ -189,7 +189,7 @@ export const AdminCouponsManager: React.FC<AdminCouponsManagerProps> = ({
       {/* Coupons List Table */}
       <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+          <table className="w-full text-left border-collapse text-xs min-w-[550px]">
             <thead>
               <tr className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
                 <th className="py-3 px-4">Coupon Code</th>

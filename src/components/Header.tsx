@@ -136,6 +136,15 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>Seller Center</span>
               </button>
             )}
+            <button
+              id="topbar-admin-portal-link"
+              onClick={onOpenAdmin}
+              className="hover:text-amber-300 transition-colors flex items-center gap-1 font-semibold cursor-pointer"
+              title="Open Secure Admin Portal"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-300" />
+              <span>Admin Portal</span>
+            </button>
             <a href="tel:01883418309" className="hover:text-white transition-colors flex items-center gap-1">
               <PhoneCall className="w-3 h-3" />
               <span>Helpline: {bannerSettings?.helplineNumber || '01883-418309'}</span>
@@ -282,11 +291,11 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             id="header-admin-btn"
             onClick={onOpenAdmin}
-            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-[#EDE9FE] text-[#525252] hover:text-[#5B21B6] text-xs font-semibold transition-all"
-            title="Admin Portal"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 hover:text-white text-xs font-bold transition-all border border-slate-700 shadow-xs cursor-pointer"
+            title="Secure Admin Portal"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#5B21B6]" />
-            <span>Admin</span>
+            <ShieldCheck className="w-4 h-4 text-cyan-400" />
+            <span>Admin Portal</span>
           </button>
 
           {/* Mobile Menu Toggle */}

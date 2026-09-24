@@ -145,7 +145,7 @@ export const AdminSettlementsManager: React.FC<AdminSettlementsManagerProps> = (
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/40">
-          <table className="w-full text-left text-xs text-slate-300">
+          <table className="w-full text-left text-xs text-slate-300 min-w-[600px]">
             <thead className="bg-slate-900 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
               <tr>
                 <th className="py-3 px-4">Request ID & Date</th>

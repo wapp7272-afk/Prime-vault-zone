@@ -12,6 +12,8 @@ export interface Product {
   images?: string[];
   videoUrl?: string;
   videoPoster?: string;
+  sampleVideoUrl?: string;
+  aiShowcaseVideoUrl?: string;
   description: string;
   tag?: string;
   isFeatured?: boolean;
@@ -79,6 +81,7 @@ export interface Order {
   total: number;
   paymentMethod: 'cod' | 'bkash' | 'nagad' | 'card';
   trxId?: string;
+  paymentStatus?: 'Verified' | 'Pending Verification' | 'Paid (COD on Delivery)' | 'Failed';
   address: Address;
   status: 'Pending' | 'Confirmed' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
   courierName?: string;
@@ -121,6 +124,14 @@ export interface Seller {
   verified?: boolean;
 }
 
+export interface YouTubeVideo {
+  id: string;
+  title: string;
+  urlOrId: string;
+  description?: string;
+  badge?: string;
+}
+
 export interface SystemBannerSettings {
   announcementText: string;
   announcementBadge: string;
@@ -129,6 +140,12 @@ export interface SystemBannerSettings {
   heroSubheadline: string;
   heroBannerImage?: string;
   flashSaleTag: string;
+  // YouTube Video & Channel Integration
+  youtubeVideoUrl?: string; // Featured video URL or Video ID
+  youtubeChannelUrl?: string; // Official YouTube channel URL
+  youtubeSectionTitle?: string;
+  youtubeSectionSubtitle?: string;
+  youtubePlaylist?: YouTubeVideo[];
 }
 
 export interface PayoutRequest {

@@ -191,9 +191,9 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           >
             {flashProducts.map((product) => {
               const { sold, total, percentage } = getStockData(product.id);
-              const discountPercent = product.originalPrice 
+              const discountPercent = (product.originalPrice && product.originalPrice > product.price)
                 ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-                : 20;
+                : null;
 
               return (
                 <div
@@ -211,13 +211,15 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
                         loading="lazy"
                       />
 
-                      {/* High Discount Badge */}
-                      <div className="absolute top-2 left-2 z-10">
-                        <span className="px-2 py-1 rounded-md bg-rose-600 text-white text-[11px] font-black shadow-sm flex items-center gap-0.5">
-                          <Flame className="w-3 h-3 fill-white" />
-                          -{discountPercent}% OFF
-                        </span>
-                      </div>
+                      {/* Strict Computed Discount Badge */}
+                      {discountPercent !== null && (
+                        <div className="absolute top-2 left-2 z-10">
+                          <span className="px-2 py-1 rounded-md bg-rose-600 text-white text-[11px] font-black shadow-sm flex items-center gap-0.5">
+                            <Flame className="w-3 h-3 fill-white" />
+                            -{discountPercent}% OFF
+                          </span>
+                        </div>
+                      )}
 
                       {/* Quick View Button on Image */}
                       <button
@@ -331,7 +333,7 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
                 Perfume Vault Collection
               </h3>
               <p className="text-xs text-purple-200 font-semibold">
-                Up to 40% OFF on Top Designer Fragrances
+                Original Imports & Artisanal Fragrances
               </p>
             </div>
 

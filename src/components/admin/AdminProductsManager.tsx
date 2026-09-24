@@ -18,9 +18,12 @@ import {
   Layers,
   Flame,
   Film,
-  Star
+  Star,
+  CheckCircle2,
+  Play
 } from 'lucide-react';
 import { Product } from '../../types';
+import { getYouTubeEmbedUrl } from '../../utils/youtube';
 
 interface AdminProductsManagerProps {
   products: Product[];
@@ -60,6 +63,8 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
   const [galleryImagesText, setGalleryImagesText] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [videoPoster, setVideoPoster] = useState('');
+  const [sampleVideoUrl, setSampleVideoUrl] = useState('');
+  const [aiShowcaseVideoUrl, setAiShowcaseVideoUrl] = useState('');
   const [fragranceTop, setFragranceTop] = useState('');
   const [fragranceHeart, setFragranceHeart] = useState('');
   const [fragranceBase, setFragranceBase] = useState('');
@@ -82,6 +87,8 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
     setGalleryImagesText('https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&q=80&w=800\nhttps://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&q=80&w=800');
     setVideoUrl('');
     setVideoPoster('');
+    setSampleVideoUrl('');
+    setAiShowcaseVideoUrl('');
     setFragranceTop('Sea Water, Mint, Green Notes, Lavender');
     setFragranceHeart('Sandalwood, Jasmine, Neroli, Geranium');
     setFragranceBase('Musk, Oakmoss, Cedar, Tobacco, Amber');
@@ -110,6 +117,8 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
     );
     setVideoUrl(product.videoUrl || '');
     setVideoPoster(product.videoPoster || '');
+    setSampleVideoUrl(product.sampleVideoUrl || '');
+    setAiShowcaseVideoUrl(product.aiShowcaseVideoUrl || '');
     setFragranceTop(product.fragranceNotes?.top || '');
     setFragranceHeart(product.fragranceNotes?.heart || '');
     setFragranceBase(product.fragranceNotes?.base || '');
@@ -126,8 +135,8 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      setFormError('File is larger than 2MB. Please select a smaller image or use an image URL.');
+    if (file.size > 3 * 1024 * 1024) {
+      setFormError('Image file is larger than 3MB. Please select a smaller image or use an image URL.');
       return;
     }
 
@@ -136,6 +145,38 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
       const dataUrl = event.target?.result as string;
       setImageUrl(dataUrl);
       setImagePreviewError(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle local sample video file upload
+  const handleSampleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 25 * 1024 * 1024) {
+      setFormError('Video file exceeds 25MB limit. Please provide a YouTube link or hosted video URL.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setSampleVideoUrl(dataUrl);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle local AI showcase video file upload
+  const handleAiVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 25 * 1024 * 1024) {
+      setFormError('Video file exceeds 25MB limit. Please provide a YouTube link or hosted video URL.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setAiShowcaseVideoUrl(dataUrl);
     };
     reader.readAsDataURL(file);
   };
@@ -195,6 +236,8 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
         images: finalImages,
         videoUrl: videoUrl.trim() || undefined,
         videoPoster: videoPoster.trim() || undefined,
+        sampleVideoUrl: sampleVideoUrl.trim() || undefined,
+        aiShowcaseVideoUrl: aiShowcaseVideoUrl.trim() || undefined,
         fragranceNotes,
         tag: tag.trim() || undefined,
         isFeatured,
@@ -216,6 +259,8 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
         images: finalImages,
         videoUrl: videoUrl.trim() || undefined,
         videoPoster: videoPoster.trim() || undefined,
+        sampleVideoUrl: sampleVideoUrl.trim() || undefined,
+        aiShowcaseVideoUrl: aiShowcaseVideoUrl.trim() || undefined,
         fragranceNotes,
         tag: tag.trim() || undefined,
         isFeatured,
@@ -406,23 +451,25 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col gap-1.5 shrink-0">
+              <div className="flex sm:flex-col gap-1.5 shrink-0">
                 <button
                   id={`edit-product-${product.id}`}
                   onClick={() => handleOpenEditModal(product)}
-                  className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-white/5 hover:border-cyan-500/30 transition-all"
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-white/5 hover:border-cyan-500/30 transition-all flex items-center justify-center gap-1.5 text-xs font-semibold"
                   title="Edit Product"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
+                  <Edit3 className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Edit</span>
                 </button>
 
                 <button
                   id={`delete-product-${product.id}`}
                   onClick={() => setDeleteConfirmId(product.id)}
-                  className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-white/5 hover:border-rose-500/30 transition-all"
-                  title="Delete Product"
+                  className="px-2.5 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 hover:text-rose-100 border border-rose-500/30 hover:border-rose-500/60 transition-all flex items-center justify-center gap-1.5 text-xs font-semibold cursor-pointer"
+                  title="Delete Product from store"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Delete</span>
                 </button>
               </div>
             </div>
@@ -431,36 +478,73 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
       </div>
 
       {/* Delete Confirmation Alert Modal */}
-      {deleteConfirmId && (
-        <div className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm bg-slate-900 border border-rose-500/40 rounded-2xl p-5 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-rose-400">
-              <AlertCircle className="w-6 h-6" />
-              <h3 className="text-sm font-bold text-white">Confirm Product Deletion</h3>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Are you sure you want to permanently delete this product? It will be removed from the store catalog immediately.
-            </p>
-            <div className="flex justify-end gap-2 pt-2">
-              <button
-                onClick={() => setDeleteConfirmId(null)}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  onDeleteProduct(deleteConfirmId);
-                  setDeleteConfirmId(null);
-                }}
-                className="px-4 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg"
-              >
-                Yes, Delete
-              </button>
+      {deleteConfirmId && (() => {
+        const prodToDelete = products.find((p) => p.id === deleteConfirmId);
+        return (
+          <div className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <div className="w-full max-w-md bg-slate-900 border border-rose-500/50 rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
+              <div className="flex items-center gap-3 text-rose-400 border-b border-rose-500/20 pb-3">
+                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400">
+                  <Trash2 className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Delete Product from Store</h3>
+                  <p className="text-[11px] text-slate-400">Safety Verification Confirmation</p>
+                </div>
+              </div>
+
+              {prodToDelete && (
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-950 border border-slate-800">
+                  <img
+                    src={prodToDelete.image}
+                    alt={prodToDelete.title}
+                    className="w-14 h-14 rounded-lg object-cover bg-slate-900 border border-slate-700 shrink-0"
+                  />
+                  <div className="min-w-0 flex-1 text-xs">
+                    <h4 className="font-bold text-white truncate">{prodToDelete.title}</h4>
+                    <p className="text-slate-400 text-[11px] mt-0.5">Category: {prodToDelete.category}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="font-mono font-bold text-cyan-400">৳{prodToDelete.price}</span>
+                      <span className="text-[10px] text-slate-500 font-mono">SKU: {prodToDelete.id}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-xs text-rose-300 space-y-1">
+                <p className="font-bold flex items-center gap-1.5 text-rose-200">
+                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span>Are you sure you want to permanently delete this product?</span>
+                </p>
+                <p className="text-[11px] text-slate-400 leading-relaxed pl-5">
+                  This item will immediately be removed from the storefront catalog, active buyer carts, category grids, and live search queries across all devices without needing a hard reload.
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-800">
+                <button
+                  id="admin-cancel-delete-btn"
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  id="admin-confirm-delete-btn"
+                  onClick={() => {
+                    onDeleteProduct(deleteConfirmId);
+                    setDeleteConfirmId(null);
+                  }}
+                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Yes, Delete Product</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Add / Edit Product Modal */}
       {isModalOpen && (
@@ -527,7 +611,7 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
                     type="text"
                     value={tag}
                     onChange={(e) => setTag(e.target.value)}
-                    placeholder="e.g. Bestseller, New, 20% OFF"
+                    placeholder="e.g. Bestseller, New, Trending"
                     className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -536,7 +620,10 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
               {/* Price & Original Price */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Selling Price (৳)*</label>
+                  <label className="block font-semibold text-slate-300 mb-1">
+                    Selling Price (৳)*
+                    <span className="text-[10px] font-normal text-slate-400 block">Actual price customer pays</span>
+                  </label>
                   <input
                     id="product-form-price"
                     type="number"
@@ -550,7 +637,10 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Original Price (৳) (Optional)</label>
+                  <label className="block font-semibold text-slate-300 mb-1">
+                    Original Price (৳) (Optional)
+                    <span className="text-[10px] font-normal text-slate-400 block">MRP / Regular price before discount</span>
+                  </label>
                   <input
                     id="product-form-original-price"
                     type="number"
@@ -563,6 +653,27 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
                   />
                 </div>
               </div>
+
+              {/* Dynamic Discount Calculator Preview */}
+              {parseFloat(price) > 0 && parseFloat(originalPrice) > parseFloat(price) ? (
+                <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 font-semibold">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    Computed Discount: -{Math.round(((parseFloat(originalPrice) - parseFloat(price)) / parseFloat(originalPrice)) * 100)}% OFF
+                  </span>
+                  <span className="font-mono text-emerald-200 font-bold">
+                    Saves ৳{(parseFloat(originalPrice) - parseFloat(price)).toLocaleString()}
+                  </span>
+                </div>
+              ) : originalPrice && parseFloat(originalPrice) <= parseFloat(price) ? (
+                <div className="p-2 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-300 text-[11px]">
+                  ⚠️ Note: Original Price is ≤ Sale Price. No discount badge will be displayed on this product.
+                </div>
+              ) : (
+                <p className="text-[11px] text-slate-400 px-1">
+                  💡 Discounts are strictly computed when Original Price is greater than Sale Price.
+                </p>
+              )}
 
               {/* Stock Status Selector */}
               <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
@@ -669,7 +780,30 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
                     <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
                     <span>Daraz-Style Multiple Gallery Photos (One URL per line)</span>
                   </label>
-                  <span className="text-[10px] text-cyan-400 font-mono">Multiple Angle Shots</span>
+                  <label className="text-[10px] text-cyan-400 font-mono flex items-center gap-1 cursor-pointer hover:underline">
+                    <Upload className="w-3 h-3" />
+                    <span>Upload Extra Photos</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => {
+                        const files = e.target.files;
+                        if (!files || files.length === 0) return;
+                        Array.from(files).forEach((file) => {
+                          if (file.size <= 3 * 1024 * 1024) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                              const dataUrl = event.target?.result as string;
+                              setGalleryImagesText((prev) => (prev ? `${prev}\n${dataUrl}` : dataUrl));
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        });
+                      }}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
                 <textarea
                   id="product-form-gallery-images"
@@ -681,36 +815,130 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
                 />
               </div>
 
-              {/* AI Review Video URL */}
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-cyan-500/20 space-y-2">
-                <div className="flex items-center gap-1.5 text-cyan-400 font-semibold">
-                  <Film className="w-4 h-4 text-purple-400" />
-                  <span>AI Review Video Showcase (MP4 / YouTube Embed Link)</span>
+              {/* Enhanced Media Support: Product Sample Video */}
+              <div className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-cyan-400 font-semibold text-xs">
+                    <Video className="w-4 h-4 text-cyan-400" />
+                    <span>Product Sample Video (Live Unboxing / Demonstration)</span>
+                  </div>
+                  <label className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors">
+                    <Upload className="w-3 h-3 text-cyan-400" />
+                    <span>Upload Video File</span>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleSampleVideoUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <div>
+                  <input
+                    id="product-form-sample-video-url"
+                    type="text"
+                    value={sampleVideoUrl}
+                    onChange={(e) => setSampleVideoUrl(e.target.value)}
+                    placeholder="Enter Sample Video URL (MP4, WebM or YouTube link: https://youtube.com/watch?v=...)"
+                    className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-[11px] placeholder-slate-600 focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
+
+                {/* Sample Video Live Preview */}
+                {sampleVideoUrl && (
+                  <div className="mt-2 rounded-xl overflow-hidden bg-black border border-cyan-500/20 aspect-video relative">
+                    {getYouTubeEmbedUrl(sampleVideoUrl) ? (
+                      <iframe
+                        src={getYouTubeEmbedUrl(sampleVideoUrl)}
+                        title="Sample Video Preview"
+                        className="w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        src={sampleVideoUrl}
+                        controls
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-cyan-300 text-[10px] font-bold border border-cyan-500/30">
+                      ✓ Live Sample Video Preview
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Enhanced Media Support: AI Showcase Video */}
+              <div className="p-3.5 rounded-xl bg-slate-900/90 border border-purple-500/30 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-purple-300 font-semibold text-xs">
+                    <Film className="w-4 h-4 text-purple-400" />
+                    <span>AI Showcase Video (3D CGI Render / AI Cinematic Trailer)</span>
+                  </div>
+                  <label className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 cursor-pointer flex items-center gap-1 text-[10px] font-bold transition-colors">
+                    <Upload className="w-3 h-3 text-purple-400" />
+                    <span>Upload AI Video</span>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleAiVideoUpload}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Video Stream URL</label>
+                    <label className="block text-[10px] text-slate-400 mb-1">Video Stream / YouTube Link</label>
                     <input
                       id="product-form-video-url"
-                      type="url"
-                      value={videoUrl}
-                      onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="https://example.com/video.mp4 or YouTube embed"
-                      className="w-full px-2.5 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono text-[11px] placeholder-slate-600 focus:outline-none focus:border-cyan-400"
+                      type="text"
+                      value={aiShowcaseVideoUrl || videoUrl}
+                      onChange={(e) => {
+                        setAiShowcaseVideoUrl(e.target.value);
+                        setVideoUrl(e.target.value);
+                      }}
+                      placeholder="https://example.com/ai-video.mp4 or YouTube link"
+                      className="w-full px-2.5 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono text-[11px] placeholder-slate-600 focus:outline-none focus:border-purple-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Video Thumbnail Poster (Optional)</label>
+                    <label className="block text-[10px] text-slate-400 mb-1">Video Poster Thumbnail (Optional)</label>
                     <input
                       id="product-form-video-poster"
                       type="url"
                       value={videoPoster}
                       onChange={(e) => setVideoPoster(e.target.value)}
                       placeholder="https://example.com/poster.jpg"
-                      className="w-full px-2.5 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono text-[11px] placeholder-slate-600 focus:outline-none focus:border-cyan-400"
+                      className="w-full px-2.5 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono text-[11px] placeholder-slate-600 focus:outline-none focus:border-purple-400"
                     />
                   </div>
                 </div>
+
+                {/* AI Video Live Preview */}
+                {(aiShowcaseVideoUrl || videoUrl) && (
+                  <div className="mt-2 rounded-xl overflow-hidden bg-black border border-purple-500/20 aspect-video relative">
+                    {getYouTubeEmbedUrl(aiShowcaseVideoUrl || videoUrl) ? (
+                      <iframe
+                        src={getYouTubeEmbedUrl(aiShowcaseVideoUrl || videoUrl)}
+                        title="AI Showcase Video Preview"
+                        className="w-full h-full border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        src={aiShowcaseVideoUrl || videoUrl}
+                        poster={videoPoster}
+                        controls
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-purple-300 text-[10px] font-bold border border-purple-500/30">
+                      ✓ Live AI Showcase Video Preview
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Fragrance Notes (Top, Heart, Base) */}

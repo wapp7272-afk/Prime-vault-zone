@@ -390,16 +390,16 @@ export const PublicSellerStoreView: React.FC<PublicSellerStoreViewProps> = ({
               </div>
 
               {/* Action Buttons: Follow & Contact */}
-              <div className="flex items-center gap-2.5 shrink-0 self-start sm:self-end">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 self-start sm:self-end">
                 <button
                   onClick={handleToggleFollow}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 cursor-pointer shadow-xs ${
+                  className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shadow-xs ${
                     isFollowing
                       ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100'
                       : 'bg-[#5B21B6] hover:bg-[#4C1D95] text-white'
                   }`}
                 >
-                  <Heart className={`w-4 h-4 ${isFollowing ? 'fill-emerald-600 text-emerald-600' : ''}`} />
+                  <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFollowing ? 'fill-emerald-600 text-emerald-600' : ''}`} />
                   <span>{isFollowing ? 'Following' : 'Follow Store'}</span>
                   <span className="px-1.5 py-0.5 rounded-md text-[10px] bg-black/10">
                     {followerCount.toLocaleString()}
@@ -408,9 +408,9 @@ export const PublicSellerStoreView: React.FC<PublicSellerStoreViewProps> = ({
 
                 <button
                   onClick={() => setIsContactModalOpen(true)}
-                  className="px-4 py-2.5 rounded-xl border border-purple-300 bg-[#EDE9FE]/70 hover:bg-[#EDE9FE] text-[#5B21B6] text-xs font-extrabold transition-all flex items-center gap-2 cursor-pointer shadow-2xs"
+                  className="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-purple-300 bg-[#EDE9FE]/70 hover:bg-[#EDE9FE] text-[#5B21B6] text-xs font-extrabold transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shadow-2xs"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>Contact Seller</span>
                 </button>
               </div>

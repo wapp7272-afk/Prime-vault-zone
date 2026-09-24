@@ -58,11 +58,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     return 'Prime Vault Official';
   })();
 
-  // Calculate discount percentage
-  const discountPercent = product.discount 
-    ? product.discount 
-    : (product.originalPrice && product.originalPrice > product.price)
-    ? `-${Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%`
+  // Discount is strictly calculated only when an explicit Original Price is present and greater than Sale Price
+  const hasValidDiscount = Boolean(product.originalPrice && product.originalPrice > product.price);
+  const discountPercent = hasValidDiscount
+    ? `-${Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)}%`
     : null;
 
   // Calculate or retrieve sold count

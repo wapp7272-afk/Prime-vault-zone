@@ -89,14 +89,14 @@ export const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
               <span className="text-2xl sm:text-3xl font-black text-[#f8fafc] font-mono">
                 ৳{product.price}
               </span>
-              {product.originalPrice && (
+              {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-sm text-[#94a3b8] line-through font-mono">
                   ৳{product.originalPrice}
                 </span>
               )}
-              {product.originalPrice && (
+              {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-xs font-bold text-[#fbbf24] bg-[#fbbf24]/10 border border-[#fbbf24]/30 px-2 py-0.5 rounded-full">
-                  Save ৳{product.originalPrice - product.price}
+                  -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% (Save ৳{product.originalPrice - product.price})
                 </span>
               )}
             </div>
@@ -132,65 +132,70 @@ export const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
             </div>
 
             {/* Quantity Selector & Add Button */}
-            <div className="flex items-center gap-4 pt-4 border-t border-[#1e293b]">
-              <div className="flex items-center bg-[#0b0f19] border border-[#1e293b] rounded-xl p-1">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#1e293b] text-lg font-bold"
-                >
-                  -
-                </button>
-                <span className="w-10 text-center text-sm font-bold font-mono text-[#38bdf8]">
-                  {quantity}
-                </span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#1e293b] text-lg font-bold"
-                >
-                  +
-                </button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-[#1e293b]">
+              <div className="flex items-center justify-between sm:justify-start gap-2">
+                <span className="text-xs text-slate-400 font-medium sm:hidden">পরিমাণ:</span>
+                <div className="flex items-center bg-[#0b0f19] border border-[#1e293b] rounded-xl p-1 shrink-0">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#1e293b] text-lg font-bold"
+                  >
+                    -
+                  </button>
+                  <span className="w-10 text-center text-sm font-bold font-mono text-[#38bdf8]">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#1e293b] text-lg font-bold"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                disabled={!product.inStock}
-                className={`flex-1 py-3 px-6 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-lg ${
-                  !product.inStock
-                    ? 'bg-slate-900 border border-[#1e293b] text-slate-500 cursor-not-allowed'
-                    : added
-                    ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.5)]'
-                    : 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950 font-black shadow-[0_0_20px_rgba(56,189,248,0.35)]'
-                }`}
-              >
-                {!product.inStock ? (
-                  <span>Out of Stock (স্টক শেষ)</span>
-                ) : added ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Added to Cart</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-4 h-4" />
-                    <span>Add to Cart • ৳{product.price * quantity}</span>
-                  </>
-                )}
-              </button>
-
-              {product.inStock && (
+              <div className="flex items-center gap-2 flex-1">
                 <button
-                  id="modal-buy-now-btn"
-                  onClick={handleBuyNow}
-                  className="py-3 px-5 rounded-xl font-black text-sm bg-gradient-to-r from-[#fbbf24] via-[#fcd34d] to-[#f59e0b] hover:brightness-110 text-slate-950 shadow-[0_0_20px_rgba(251,191,36,0.35)] transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shrink-0"
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock}
+                  className={`flex-1 py-3 px-3 sm:px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg ${
+                    !product.inStock
+                      ? 'bg-slate-900 border border-[#1e293b] text-slate-500 cursor-not-allowed'
+                      : added
+                      ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.5)]'
+                      : 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950 font-black shadow-[0_0_20px_rgba(56,189,248,0.35)]'
+                  }`}
                 >
-                  <Zap className="w-4 h-4 fill-current" />
-                  <span>Buy Now</span>
+                  {!product.inStock ? (
+                    <span>Out of Stock (স্টক শেষ)</span>
+                  ) : added ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Added</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-4 h-4" />
+                      <span className="truncate">Add to Cart • ৳{product.price * quantity}</span>
+                    </>
+                  )}
                 </button>
-              )}
+
+                {product.inStock && (
+                  <button
+                    id="modal-buy-now-btn"
+                    onClick={handleBuyNow}
+                    className="py-3 px-4 sm:px-5 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-[#fbbf24] via-[#fcd34d] to-[#f59e0b] hover:brightness-110 text-slate-950 shadow-[0_0_20px_rgba(251,191,36,0.35)] transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shrink-0"
+                  >
+                    <Zap className="w-4 h-4 fill-current" />
+                    <span>Buy Now</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Trust Badges */}
-            <div className="flex items-center justify-between text-[11px] text-[#94a3b8] mt-5 pt-3 border-t border-[#1e293b]">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#94a3b8] mt-5 pt-3 border-t border-[#1e293b]">
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#38bdf8]" />
                 <span>100% Original</span>

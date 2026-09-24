@@ -605,7 +605,7 @@ export const SellerCenterView: React.FC<SellerCenterViewProps> = ({
             ) : (
               <div className="rounded-3xl border border-[#E5E7EB] bg-white overflow-hidden shadow-2xs">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border-collapse">
+                  <table className="w-full min-w-[580px] text-left text-xs border-collapse">
                     <thead>
                       <tr className="bg-gray-50 border-b border-[#E5E7EB] text-[#171717]">
                         <th className="py-3 px-4 font-extrabold">Product Details</th>

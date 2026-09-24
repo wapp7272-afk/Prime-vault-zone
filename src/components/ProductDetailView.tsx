@@ -202,11 +202,13 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   // Size-adjusted pricing calculation
   const sizeMultiplier = selectedSize.includes('50ml') ? 0.85 : selectedSize.includes('150ml') ? 1.35 : 1;
   const unitPrice = Math.round(product.price * sizeMultiplier);
-  const originalPrice = product.originalPrice 
+  const originalPrice = (product.originalPrice && product.originalPrice > product.price)
     ? Math.round(product.originalPrice * sizeMultiplier)
-    : Math.round(unitPrice * 1.25);
-  const savings = Math.max(0, originalPrice - unitPrice);
-  const discountLabel = product.discount || `${Math.round(((originalPrice - unitPrice) / originalPrice) * 100)}% OFF`;
+    : null;
+  const savings = originalPrice ? Math.max(0, originalPrice - unitPrice) : 0;
+  const discountLabel = (originalPrice && originalPrice > unitPrice)
+    ? `-${Math.round(((originalPrice - unitPrice) / originalPrice) * 100)}% OFF`
+    : null;
 
   const shippingCost = deliveryLocation === 'inside' ? 60 : 120;
   const estimatedDelivery = deliveryLocation === 'inside' ? '1-2 Days (Inside Dhaka)' : '3-5 Days (Outside Dhaka)';
@@ -546,11 +548,11 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                 <span className="text-3xl sm:text-4xl font-black text-[#5B21B6]">
                   ৳{unitPrice.toLocaleString()}
                 </span>
-                {originalPrice > unitPrice && (
+                {originalPrice && originalPrice > unitPrice ? (
                   <span className="text-base text-gray-400 line-through">
                     ৳{originalPrice.toLocaleString()}
                   </span>
-                )}
+                ) : null}
                 {discountLabel && (
                   <span className="px-2.5 py-0.5 rounded-lg bg-rose-600 text-white text-xs font-black shadow-xs">
                     {discountLabel}

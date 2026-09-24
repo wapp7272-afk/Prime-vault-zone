@@ -155,7 +155,7 @@ export const CategoryNavGrid: React.FC<CategoryNavGridProps> = ({
                 key={cat.id}
                 id={`cat-card-${cat.id}`}
                 onClick={() => onSelectCategory(cat.name)}
-                className={`group relative flex flex-col items-center text-center p-3 rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden ${
+                className={`group relative flex flex-col items-center text-center p-3 rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden last:col-span-2 sm:last:col-span-1 ${
                   isSelected
                     ? 'border-[#5B21B6] bg-[#EDE9FE] shadow-md ring-2 ring-[#5B21B6]/20 -translate-y-1'
                     : 'border-[#E5E7EB] bg-[#F9FAFB] hover:bg-white hover:border-[#5B21B6]/50 hover:shadow-md hover:-translate-y-1'

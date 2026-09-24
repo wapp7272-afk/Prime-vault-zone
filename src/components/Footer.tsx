@@ -243,7 +243,7 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="text-[10px] font-semibold text-[#525252] block mb-1">
                   Delivery Logistics Partners:
                 </span>
-                <div className="flex items-center gap-2 text-[10px] text-[#525252] font-mono">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] text-[#525252] font-mono">
                   <span className="px-2 py-0.5 bg-gray-100 rounded">Pathao Courier</span>
                   <span className="px-2 py-0.5 bg-gray-100 rounded">Steadfast</span>
                   <span className="px-2 py-0.5 bg-gray-100 rounded">Paperfly</span>

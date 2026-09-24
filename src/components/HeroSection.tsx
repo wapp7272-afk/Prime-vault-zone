@@ -51,13 +51,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     category: 'Perfume',
     price: 3450,
     originalPrice: 4500,
-    discount: '23% OFF',
     rating: 4.9,
     reviewsCount: 328,
     image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800',
     images: ['https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800'],
     description: 'Authentic imported aromatic fresh fragrance with crisp mint, ocean water notes, lavender and sandalwood base.',
-    tag: '23% OFF',
+    tag: 'Trending',
     inStock: true,
     features: ['100% Original Imported', 'All-Day Crisp Sillage', 'Signature Fresh Scent', 'Instant Nationwide Delivery']
   };
@@ -295,14 +294,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       <span className="text-lg sm:text-xl font-black text-[#5B21B6]">
                         ৳{heroProduct.price.toLocaleString()}
                       </span>
-                      {heroProduct.originalPrice && (
+                      {heroProduct.originalPrice && heroProduct.originalPrice > heroProduct.price && (
                         <span className="text-xs sm:text-sm text-gray-400 line-through">
                           ৳{heroProduct.originalPrice.toLocaleString()}
                         </span>
                       )}
-                      <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[11px] font-black">
-                        {heroProduct.discount || '23% OFF'}
-                      </span>
+                      {heroProduct.originalPrice && heroProduct.originalPrice > heroProduct.price && (
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[11px] font-black">
+                          -{Math.round(((heroProduct.originalPrice - heroProduct.price) / heroProduct.originalPrice) * 100)}% OFF
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
