@@ -24,7 +24,8 @@ import {
   Smartphone,
   ChevronRight,
   Zap,
-  Bookmark
+  Bookmark,
+  Gift
 } from 'lucide-react';
 import { CartItem, UserProfile, Order, Coupon, Address } from '../types';
 import { sendOrderEmail } from '../lib/emailService';
@@ -63,7 +64,7 @@ interface CheckoutModalProps {
   user: UserProfile;
   subtotal: number;
   couponDiscount: number;
-  walletDeducted: number;
+  walletDeducted?: number;
   couponCode?: string;
   isCouponApplied?: boolean;
   appliedCoupon?: Coupon | null;
@@ -72,6 +73,8 @@ interface CheckoutModalProps {
   onPlaceOrder: (order: Order) => void;
   onClearCart: () => void;
   onViewOrders?: () => void;
+  onVerifyPhoneSuccess?: (phone: string) => void;
+  onOpenAuth?: () => void;
 }
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -81,7 +84,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   user,
   subtotal,
   couponDiscount,
-  walletDeducted,
+  walletDeducted = 0,
   couponCode = '',
   isCouponApplied = false,
   appliedCoupon = null,
@@ -90,6 +93,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onPlaceOrder,
   onClearCart,
   onViewOrders,
+  onVerifyPhoneSuccess,
+  onOpenAuth,
 }) => {
   // Step 1: Address Book & Quick Entry State
   const [addressMode, setAddressMode] = useState<'saved' | 'new'>('saved');
@@ -134,12 +139,30 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [couponFeedback, setCouponFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [copiedNumber, setCopiedNumber] = useState<string | null>(null);
   const [copiedOrderId, setCopiedOrderId] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  // In-checkout Phone Verification Engine States
+  const [isPhoneVerifiedLocally, setIsPhoneVerifiedLocally] = useState<boolean>(user.isPhoneVerified ?? false);
+  const [showPhoneVerifyBox, setShowPhoneVerifyBox] = useState(false);
+  const [checkoutOtp, setCheckoutOtp] = useState('');
+  const [checkoutOtpDigits, setCheckoutOtpDigits] = useState(['', '', '', '']);
+  const [checkoutSmsToast, setCheckoutSmsToast] = useState<{ code: string; phone: string } | null>(null);
+  const [checkoutVerifySuccess, setCheckoutVerifySuccess] = useState<string | null>(null);
+
+  // Interactive Dynamic Wallet Bonus toggle
+  const [useWalletBonus, setUseWalletBonus] = useState(true);
 
   // Completed order state
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Synchronize when saved addresses or user changes
+  useEffect(() => {
+    if (user.isPhoneVerified) {
+      setIsPhoneVerifiedLocally(true);
+    }
+  }, [user.isPhoneVerified]);
+
   useEffect(() => {
     if (savedAddressesList.length > 0 && addressMode === 'saved') {
       const active = savedAddressesList[selectedSavedIndex] || savedAddressesList[0];
@@ -201,7 +224,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Dynamic Shipping Fee: ৳60 Inside Dhaka, ৳120 Outside Dhaka
   const deliveryFee = cityDivision === 'Inside Dhaka' ? 60 : 120;
-  const grandTotal = Math.max(0, subtotal - couponDiscount - walletDeducted + deliveryFee);
+
+  // Dynamic Wallet Bonus Calculation & Grand Total
+  const activeUserBalance = (user.walletBalance || 0) + (isPhoneVerifiedLocally && !user.hasReceivedBonus ? 20 : 0);
+  const maxWalletBonusDeductible = Math.min(activeUserBalance, 20);
+  const effectiveWalletDeduction = useWalletBonus && subtotal > 0 ? maxWalletBonusDeductible : 0;
+  const grandTotal = Math.max(0, subtotal - couponDiscount - effectiveWalletDeduction + deliveryFee);
 
   const bkashNumber = '01883418309';
   const nagadNumber = '01883418309';
@@ -216,6 +244,44 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     navigator.clipboard.writeText(id);
     setCopiedOrderId(true);
     setTimeout(() => setCopiedOrderId(false), 2000);
+  };
+
+  // Trigger Phone Verification Code inside Checkout
+  const handleTriggerCheckoutOtp = () => {
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    if (cleanPhone.length !== 11 || !cleanPhone.startsWith('01')) {
+      setFormError('⚠️ অনুগ্রহ করে সঠিক ১১-সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন (যেমন: 017XXXXXXXX)।');
+      return;
+    }
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    setCheckoutOtp(code);
+    setCheckoutOtpDigits(['', '', '', '']);
+    setCheckoutSmsToast({ code, phone: cleanPhone });
+    setShowPhoneVerifyBox(true);
+    setFormError(null);
+  };
+
+  const handleVerifyCheckoutOtp = () => {
+    setFormError(null);
+    const entered = checkoutOtpDigits.join('');
+    if (entered.length !== 4) {
+      setFormError('⚠️ অনুগ্রহ করে ৪-সংখ্যার সম্পূর্ণ ভেরিফিকেশন কোড লিখুন।');
+      return;
+    }
+    if (entered !== checkoutOtp) {
+      setFormError('❌ ভুল OTP কোড! অনুগ্রহ করে আবার চেষ্টা করুন।');
+      return;
+    }
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    setIsPhoneVerifiedLocally(true);
+    setShowPhoneVerifyBox(false);
+    setCheckoutSmsToast(null);
+    setUseWalletBonus(true);
+    setCheckoutVerifySuccess('🎉 মোবাইল নম্বর সফলভাবে ভেরিফাইড! ৳২০ ওয়েলকাম বোনাস চেকআউটে সরাসরি যোগ ও মাইনাস হয়েছে।');
+    if (onVerifyPhoneSuccess) {
+      onVerifyPhoneSuccess(cleanPhone);
+    }
+    setTimeout(() => setCheckoutVerifySuccess(null), 4000);
   };
 
   // Handle Coupon Apply
@@ -255,35 +321,36 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
 
     if (!fullName.trim()) {
-      alert('অনুগ্রহ করে আপনার পূর্ণ নাম প্রদান করুন।');
+      setFormError('⚠️ অনুগ্রহ করে আপনার পূর্ণ নাম প্রদান করুন।');
       return;
     }
 
     const cleanPhone = phone.trim().replace(/[-+\s]/g, '');
     if (!cleanPhone || cleanPhone.length < 10) {
-      alert('অনুগ্রহ করে সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন: 01XXXXXXXXX)।');
+      setFormError('⚠️ অনুগ্রহ করে সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (যেমন: 01XXXXXXXXX)।');
       return;
     }
 
     if (!fullAddress.trim() || fullAddress.trim().length < 6) {
-      alert('অনুগ্রহ করে পূর্ণ ডেলিভারি ঠিকানা প্রদান করুন (বাড়ি নং, রোড নং, এলাকা / থানা)।');
+      setFormError('⚠️ অনুগ্রহ করে পূর্ণ ডেলিভারি ঠিকানা প্রদান করুন (বাড়ি নং, রোড নং, এলাকা / থানা)।');
       return;
     }
 
     if ((paymentMethod === 'bkash' || paymentMethod === 'nagad') && !trxId.trim()) {
-      alert(`অনুগ্রহ করে আপনার ${paymentMethod === 'bkash' ? 'bKash' : 'Nagad'} Transaction ID (TrxID) ইনপুট দিন।`);
+      setFormError(`⚠️ অনুগ্রহ করে আপনার ${paymentMethod === 'bkash' ? 'bKash' : 'Nagad'} Transaction ID (TrxID) ইনপুট দিন।`);
       return;
     }
 
     if (paymentMethod === 'card') {
       if (!cardInfo.cardNumber.trim() || cardInfo.cardNumber.replace(/\s/g, '').length < 16) {
-        alert('অনুগ্রহ করে আপনার ১৬ ডিজিটের কার্ড নম্বর দিন।');
+        setFormError('⚠️ অনুগ্রহ করে আপনার ১৬ ডিজিটের কার্ড নম্বর দিন।');
         return;
       }
       if (!cardInfo.expiry.trim() || !cardInfo.cvv.trim()) {
-        alert('অনুগ্রহ করে কার্ডের মেয়াদ (MM/YY) এবং CVV প্রদান করুন।');
+        setFormError('⚠️ অনুগ্রহ করে কার্ডের মেয়াদ (MM/YY) এবং CVV প্রদান করুন।');
         return;
       }
     }
@@ -301,7 +368,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       items: [...items],
       subtotal,
       discount: couponDiscount,
-      walletDeducted,
+      walletDeducted: effectiveWalletDeduction,
       deliveryFee,
       total: grandTotal,
       paymentMethod,
@@ -504,6 +571,37 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
 
             <form onSubmit={handleOrderSubmit}>
+              {/* Alert Feedback Messages */}
+              {formError && (
+                <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
+
+              {checkoutVerifySuccess && (
+                <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{checkoutVerifySuccess}</span>
+                </div>
+              )}
+
+              {/* Simulated SMS Alert Toast */}
+              {checkoutSmsToast && (
+                <div className="mb-4 p-3 rounded-xl bg-purple-950 text-white text-xs border border-purple-400 shadow-lg flex items-center justify-between gap-3 animate-slideDown">
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-amber-300" />
+                    <span>
+                      💬 Simulated SMS to <strong>{checkoutSmsToast.phone}</strong>: Security Code is{' '}
+                      <span className="font-mono font-black text-amber-300 tracking-wider text-sm px-1.5 py-0.5 rounded bg-purple-900 border border-purple-400">
+                        {checkoutSmsToast.code}
+                      </span>
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-purple-200">Valid 5m</span>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
                 
                 {/* ========================================================
@@ -607,9 +705,26 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       </div>
 
                       <div>
-                        <label className="text-xs font-bold text-[#171717] block mb-1">
-                          Mobile Phone (মোবাইল নম্বর) *
-                        </label>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-xs font-bold text-[#171717]">
+                            Mobile Phone (মোবাইল নম্বর) *
+                          </label>
+                          {isPhoneVerifiedLocally || user.isPhoneVerified ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                              <span>Verified (+৳20 Active)</span>
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={handleTriggerCheckoutOtp}
+                              className="text-[10px] font-bold text-[#5B21B6] hover:text-[#4C1D95] bg-[#EDE9FE] hover:bg-purple-200 px-2 py-0.5 rounded border border-purple-200 cursor-pointer flex items-center gap-1"
+                            >
+                              <Sparkles className="w-3 h-3 text-[#5B21B6]" />
+                              <span>Verify Phone (+৳20 Bonus)</span>
+                            </button>
+                          )}
+                        </div>
                         <div className="relative">
                           <Phone className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
                           <input
@@ -617,10 +732,65 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                             required
                             placeholder="01XXXXXXXXX"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => {
+                              setPhone(e.target.value);
+                              if (isPhoneVerifiedLocally && e.target.value !== user.phone) {
+                                setIsPhoneVerifiedLocally(false);
+                              }
+                            }}
                             className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-300 text-xs text-[#171717] focus:outline-none focus:border-[#5B21B6] focus:ring-1 focus:ring-[#5B21B6] bg-white font-mono"
                           />
                         </div>
+
+                        {/* Inline Phone Verification OTP Box */}
+                        {showPhoneVerifyBox && !isPhoneVerifiedLocally && (
+                          <div className="mt-2.5 p-3 rounded-xl bg-purple-50 border border-purple-200 space-y-2">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="font-bold text-[#5B21B6] flex items-center gap-1">
+                                <Smartphone className="w-3.5 h-3.5" />
+                                <span>Enter 4-Digit SMS Code sent to {phone}</span>
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => setShowPhoneVerifyBox(false)}
+                                className="text-gray-400 hover:text-gray-600"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              {checkoutOtpDigits.map((digit, idx) => (
+                                <input
+                                  key={idx}
+                                  id={`checkout-otp-${idx}`}
+                                  type="text"
+                                  maxLength={1}
+                                  value={digit}
+                                  onChange={(e) => {
+                                    const next = [...checkoutOtpDigits];
+                                    next[idx] = e.target.value.slice(-1);
+                                    setCheckoutOtpDigits(next);
+                                    if (e.target.value && idx < 3) {
+                                      document.getElementById(`checkout-otp-${idx + 1}`)?.focus();
+                                    }
+                                  }}
+                                  className="w-9 h-10 text-center font-bold text-base font-mono rounded-lg border border-purple-300 bg-white focus:outline-none focus:border-[#5B21B6]"
+                                />
+                              ))}
+                              <button
+                                type="button"
+                                onClick={handleVerifyCheckoutOtp}
+                                className="flex-1 py-2 px-3 rounded-lg bg-[#5B21B6] hover:bg-[#4C1D95] text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
+                              >
+                                Verify & Apply ৳20
+                              </button>
+                            </div>
+                            <p className="text-[10px] text-gray-500">
+                              Verification unlocks ৳20 welcome bonus that instantly deducts from your grand total.
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       <div className="sm:col-span-2">
@@ -1009,6 +1179,51 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       )}
                     </div>
 
+                    {/* Interactive Wallet Bonus Deduction Card */}
+                    <div className="pt-2 border-t border-gray-200">
+                      {activeUserBalance > 0 ? (
+                        <div className="p-3 rounded-xl bg-[#EDE9FE]/70 border border-purple-200 space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-[#5B21B6]">
+                              <Gift className="w-4 h-4 text-[#5B21B6]" />
+                              <span>Prime Vault Wallet Bonus</span>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={useWalletBonus}
+                                onChange={(e) => setUseWalletBonus(e.target.checked)}
+                                className="sr-only peer"
+                              />
+                              <div className="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#5B21B6]"></div>
+                            </label>
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-gray-600">
+                            <span>Available balance: <strong>৳{activeUserBalance}</strong></span>
+                            <span className="font-bold text-purple-700">
+                              {useWalletBonus ? `-৳${effectiveWalletDeduction} Applied` : 'Not applied'}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-2.5 rounded-xl bg-gray-100 border border-gray-200 text-xs text-gray-600 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            <Gift className="w-4 h-4 text-purple-600" />
+                            <span className="text-[11px]">Verify mobile above or sign in to get <strong>৳20 Wallet Bonus</strong>!</span>
+                          </div>
+                          {onOpenAuth && (
+                            <button
+                              type="button"
+                              onClick={onOpenAuth}
+                              className="text-[10px] font-bold text-[#5B21B6] hover:underline cursor-pointer"
+                            >
+                              Sign In
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                     {/* Financial Calculations */}
                     <div className="pt-2 border-t border-gray-200 space-y-1.5 text-xs text-[#525252]">
                       <div className="flex justify-between">
@@ -1023,10 +1238,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         </div>
                       )}
 
-                      {walletDeducted > 0 && (
+                      {effectiveWalletDeduction > 0 && (
                         <div className="flex justify-between text-purple-700 font-semibold">
-                          <span>Wallet Bonus Used</span>
-                          <span>-৳{walletDeducted.toLocaleString()}</span>
+                          <span>Prime Vault Wallet Bonus Used</span>
+                          <span>-৳{effectiveWalletDeduction.toLocaleString()}</span>
                         </div>
                       )}
 

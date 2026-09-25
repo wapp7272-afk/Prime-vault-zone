@@ -59,7 +59,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
       ];
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [activeMediaTab, setActiveMediaTab] = useState<'photos' | 'video'>('photos');
+  const [activeMediaTab, setActiveMediaTab] = useState<'photos' | 'video' | 'sampleVideo'>('photos');
   const [infoTab, setInfoTab] = useState<'specs' | 'fragrance' | 'reviews'>('specs');
 
   // Variant (Size) selection
@@ -86,16 +86,22 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 
   // Reliable video source fallback
   const fallbackVideo = 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-setting-41710-large.mp4';
-  const videoSource = product.videoUrl || fallbackVideo;
+  const activeVideoUrl = activeMediaTab === 'sampleVideo'
+    ? (product.sampleVideoUrl || fallbackVideo)
+    : (product.aiShowcaseVideoUrl || product.videoUrl || fallbackVideo);
 
-  const youtubeEmbedUrl = React.useMemo(() => {
-    if (!product.videoUrl) return null;
+  const getYoutubeEmbed = (url?: string) => {
+    if (!url) return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = product.videoUrl.match(regExp);
+    const match = url.match(regExp);
     return match && match[2].length === 11
       ? `https://www.youtube.com/embed/${match[2]}?autoplay=1&mute=1&loop=1&playlist=${match[2]}`
       : null;
-  }, [product.videoUrl]);
+  };
+
+  const youtubeEmbedUrl = React.useMemo(() => {
+    return getYoutubeEmbed(activeVideoUrl);
+  }, [activeVideoUrl]);
 
   // Scroll to top on mount
   useEffect(() => {
@@ -104,7 +110,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 
   // Video autoplay policy handling
   useEffect(() => {
-    if (activeMediaTab !== 'video') return;
+    if (activeMediaTab === 'photos') return;
     const video = videoRef.current;
     if (!video) return;
 
@@ -115,7 +121,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
         .then(() => setIsPlaying(true))
         .catch(() => setIsPlaying(false));
     }
-  }, [activeMediaTab, videoSource]);
+  }, [activeMediaTab, activeVideoUrl]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -271,11 +277,11 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
               ======================================================== */}
           <div className="lg:col-span-6 space-y-4">
             
-            {/* Media Mode Tabs: Photos vs AI Video Review */}
-            <div className="flex items-center gap-2 p-1 rounded-xl bg-gray-100 border border-[#E5E7EB] w-fit">
+            {/* Media Mode Tabs: Photos vs Sample Video vs AI Video Review */}
+            <div className="flex flex-wrap items-center gap-2 p-1 rounded-xl bg-gray-100 border border-[#E5E7EB] w-fit">
               <button
                 onClick={() => setActiveMediaTab('photos')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeMediaTab === 'photos'
                     ? 'bg-[#5B21B6] text-white shadow-xs'
                     : 'text-[#525252] hover:text-[#171717]'
@@ -284,16 +290,31 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                 <span>Product Photos ({images.length})</span>
               </button>
 
+              {product.sampleVideoUrl && (
+                <button
+                  onClick={() => setActiveMediaTab('sampleVideo')}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    activeMediaTab === 'sampleVideo'
+                      ? 'bg-cyan-600 text-white shadow-xs'
+                      : 'text-[#525252] hover:text-cyan-700'
+                  }`}
+                >
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Sample Video</span>
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                </button>
+              )}
+
               <button
                 onClick={() => setActiveMediaTab('video')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeMediaTab === 'video'
                     ? 'bg-amber-500 text-white shadow-xs'
                     : 'text-[#525252] hover:text-amber-600'
                 }`}
               >
                 <Video className="w-3.5 h-3.5" />
-                <span>AI Video Review</span>
+                <span>AI Showcase Video</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </button>
             </div>
@@ -358,7 +379,9 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">
-                      AI Ultra HD Video Review • 360° Showcase
+                      {activeMediaTab === 'sampleVideo'
+                        ? 'Product Sample Unboxing & Live Demo'
+                        : 'AI Ultra HD Video Review • 360° Showcase'}
                     </span>
                   </div>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-gray-800 text-purple-300 border border-purple-800">
@@ -380,7 +403,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <>
                       <video
                         ref={videoRef}
-                        src={videoSource}
+                        src={activeVideoUrl}
                         poster={product.videoPoster || product.image}
                         autoPlay
                         muted={isMuted}

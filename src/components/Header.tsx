@@ -113,44 +113,44 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white border-b border-[#E5E7EB] transition-all shadow-xs">
-      {/* 1. High-Converting Top Announcement Bar */}
-      <div className="bg-[#5B21B6] text-white px-4 py-2 text-xs font-medium">
+    <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 transition-all shadow-2xs">
+      {/* 1. Slim Announcement Topbar */}
+      <div className="bg-[#0F172A] text-slate-300 px-4 py-1.5 text-xs font-medium">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
-            <span className="inline-flex items-center gap-1.5 bg-[#4C1D95] px-2.5 py-0.5 rounded-full text-[11px] font-bold text-amber-300">
+            <span className="inline-flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded text-[11px] font-semibold text-[#F59E0B]">
               {bannerSettings?.announcementBadge || '⚡ Flash Offer'}
             </span>
-            <span className="text-white/95 text-xs">
-              {bannerSettings?.announcementText || 'Free Delivery on orders over ৳2000 in Dhaka! | 🇧🇩 100% Genuine Guaranteed'}
+            <span className="text-slate-200 text-xs">
+              {bannerSettings?.announcementText || 'Free Delivery on orders over ৳2000 in Dhaka | 🇧🇩 100% Genuine Guaranteed'}
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-4 text-[11px] text-purple-100">
+          <div className="hidden md:flex items-center gap-4 text-[11px] text-slate-400">
             {onOpenSellerCenter && (
               <button 
                 onClick={onOpenSellerCenter}
-                className="hover:text-white transition-colors flex items-center gap-1 font-semibold cursor-pointer"
+                className="hover:text-white transition-colors flex items-center gap-1 font-medium cursor-pointer"
               >
-                <Store className="w-3.5 h-3.5 text-amber-300" />
+                <Store className="w-3.5 h-3.5 text-[#F59E0B]" />
                 <span>Seller Center</span>
               </button>
             )}
             <button
               id="topbar-admin-portal-link"
               onClick={onOpenAdmin}
-              className="hover:text-amber-300 transition-colors flex items-center gap-1 font-semibold cursor-pointer"
+              className="hover:text-[#F59E0B] transition-colors flex items-center gap-1 font-medium cursor-pointer"
               title="Open Secure Admin Portal"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-300" />
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
               <span>Admin Portal</span>
             </button>
             <a href="tel:01883418309" className="hover:text-white transition-colors flex items-center gap-1">
               <PhoneCall className="w-3 h-3" />
               <span>Helpline: {bannerSettings?.helplineNumber || '01883-418309'}</span>
             </a>
-            <span className="text-purple-300">|</span>
-            <span className="bg-[#4C1D95] px-2 py-0.5 rounded text-amber-200 font-mono font-bold">
+            <span className="text-slate-600">|</span>
+            <span className="bg-slate-800 px-2 py-0.5 rounded text-[#F59E0B] font-mono text-[11px] font-semibold">
               Code: VAULT10 (10% OFF)
             </span>
           </div>
@@ -158,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* 2. Main Search & Brand Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3 sm:gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-3 sm:gap-6 bg-white">
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
           <button 
@@ -170,32 +170,32 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        {/* Prominent Search Bar with Deep Purple Accent */}
+        {/* Clean Search Bar */}
         <div className="flex-1 max-w-xl hidden md:block">
           <div className="relative flex items-center">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#525252]">
-              <Search className="w-4 h-4 text-[#5B21B6]" />
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Search className="w-4 h-4 text-slate-400" />
             </div>
             <input
               id="header-search-input-desktop"
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search products, brands & categories..."
-              className="w-full pl-10 pr-24 py-2.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl text-xs sm:text-sm text-[#171717] placeholder-[#525252] focus:outline-none focus:border-[#5B21B6] focus:ring-2 focus:ring-[#5B21B6]/20 transition-all shadow-2xs"
+              placeholder="Search perfumes, lifestyle, brands & categories..."
+              className="w-full pl-10 pr-24 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm text-[#0F172A] placeholder-slate-400 focus:outline-none focus:border-[#4F46E5] focus:bg-white focus:ring-1 focus:ring-[#4F46E5] transition-all"
             />
             {searchQuery ? (
               <button
                 onClick={() => onSearchChange('')}
-                className="absolute right-16 p-1 text-[#525252] hover:text-[#171717]"
+                className="absolute right-18 p-1 text-slate-400 hover:text-slate-600"
                 aria-label="Clear search"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             ) : null}
             <button
               onClick={() => {}}
-              className="absolute right-1.5 px-3 py-1.5 bg-[#5B21B6] hover:bg-[#4C1D95] text-white rounded-lg text-xs font-bold transition-all shadow-xs"
+              className="absolute right-1.5 px-3 py-1 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-md text-xs font-semibold transition-colors"
             >
               Search
             </button>
@@ -203,19 +203,19 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right Action Icons Cluster */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Wishlist Button */}
           {onOpenWishlist && (
             <button
               id="header-wishlist-btn"
               onClick={onOpenWishlist}
-              className="relative p-2.5 rounded-xl text-[#525252] hover:text-[#5B21B6] hover:bg-[#EDE9FE] transition-colors cursor-pointer"
+              className="relative p-2 rounded-lg text-slate-600 hover:text-[#4F46E5] hover:bg-slate-50 transition-colors cursor-pointer"
               title="Saved Wishlist"
               aria-label="Wishlist"
             >
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 min-w-[18px] h-4 px-1 bg-[#5B21B6] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-1 right-1 min-w-[17px] h-4 px-1 bg-[#4F46E5] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
@@ -226,11 +226,20 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             id="header-wallet-btn"
             onClick={onOpenAuth}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#EDE9FE] hover:bg-purple-200 border border-purple-200 text-[#5B21B6] text-xs font-bold transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 text-[#4F46E5] text-xs font-semibold transition-colors cursor-pointer active:scale-98"
             title="Prime Vault Wallet Balance"
           >
-            <Wallet className="w-4 h-4 text-[#5B21B6]" />
-            <span className="font-mono">৳{user.walletBalance}</span>
+            <Wallet className="w-3.5 h-3.5 text-[#4F46E5]" />
+            <span className="font-mono text-xs font-bold">৳{user.walletBalance}</span>
+            {user.walletBalance > 0 ? (
+              <span className="hidden xs:inline-block text-[9px] px-1 bg-emerald-100 text-emerald-800 font-semibold rounded">
+                Active
+              </span>
+            ) : (
+              <span className="hidden xs:inline-block text-[9px] px-1 bg-[#F59E0B] text-slate-900 font-bold rounded">
+                +৳20
+              </span>
+            )}
           </button>
 
           {/* Orders Tracking Button */}
@@ -238,13 +247,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="header-orders-btn"
               onClick={onOpenOrders}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-[#171717] hover:text-[#5B21B6] hover:bg-[#EDE9FE] border border-transparent hover:border-purple-200 text-xs font-semibold transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-700 hover:text-[#4F46E5] hover:bg-slate-50 border border-transparent text-xs font-medium transition-colors cursor-pointer"
               title="My Orders & Live Tracking"
             >
-              <Package className="w-4 h-4 text-[#5B21B6]" />
+              <Package className="w-4 h-4 text-slate-500" />
               <span className="hidden lg:inline">Orders</span>
               {ordersCount > 0 && (
-                <span className="min-w-[18px] h-4.5 px-1.5 bg-[#EDE9FE] text-[#5B21B6] border border-purple-200 rounded-full text-[10px] font-mono font-bold flex items-center justify-center">
+                <span className="min-w-[18px] h-4.5 px-1.5 bg-slate-100 text-slate-700 rounded-full text-[10px] font-mono font-bold flex items-center justify-center">
                   {ordersCount}
                 </span>
               )}
@@ -255,33 +264,33 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             id="header-profile-btn"
             onClick={onOpenAuth}
-            className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-xl text-[#171717] hover:bg-[#EDE9FE] border border-[#E5E7EB] hover:border-[#5B21B6]/40 text-xs font-medium transition-all cursor-pointer"
+            className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-lg text-[#0F172A] hover:bg-slate-50 border border-slate-200 text-xs font-medium transition-colors cursor-pointer"
             title="Account & Profile Settings"
           >
-            <div className="w-7 h-7 rounded-full bg-[#5B21B6] text-white flex items-center justify-center text-xs font-bold shadow-xs">
-              {user.isLoggedIn ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4 text-white" />}
+            <div className="w-7 h-7 rounded-full bg-[#4F46E5] text-white flex items-center justify-center text-xs font-bold">
+              {user.isLoggedIn ? user.name.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 text-white" />}
             </div>
             <div className="hidden lg:flex flex-col text-left">
-              <span className="text-[10px] text-[#525252] leading-none">
+              <span className="text-[10px] text-slate-400 leading-none">
                 {user.isLoggedIn ? 'Hello,' : 'Sign in'}
               </span>
-              <span className="font-bold text-xs text-[#171717] truncate max-w-[85px] leading-tight">
+              <span className="font-semibold text-xs text-[#0F172A] truncate max-w-[85px] leading-tight">
                 {user.isLoggedIn ? user.name : 'Account'}
               </span>
             </div>
           </button>
 
-          {/* Cart Icon with Vibrant Deep Purple Badge */}
+          {/* Cart Button */}
           <button
             id="header-cart-btn"
             onClick={onOpenCart}
-            className="relative p-2.5 rounded-xl bg-[#5B21B6] hover:bg-[#4C1D95] text-white transition-all shadow-sm hover:shadow-md cursor-pointer flex items-center gap-2"
+            className="relative px-3 py-1.5 rounded-lg bg-[#4F46E5] hover:bg-[#4338CA] text-white transition-colors cursor-pointer flex items-center gap-2"
             aria-label="View Shopping Cart"
           >
-            <ShoppingBag className="w-5 h-5 text-white" />
-            <span className="hidden sm:inline text-xs font-bold">Cart</span>
+            <ShoppingBag className="w-4 h-4 text-white" />
+            <span className="hidden sm:inline text-xs font-semibold">Cart</span>
             {cartCount > 0 && (
-              <span className="min-w-[20px] h-5 px-1.5 bg-amber-400 text-[#171717] text-[11px] font-black rounded-full flex items-center justify-center shadow-xs">
+              <span className="min-w-[18px] h-4.5 px-1 bg-[#F59E0B] text-[#0F172A] text-[10px] font-black rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -291,41 +300,41 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             id="header-admin-btn"
             onClick={onOpenAdmin}
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 hover:text-white text-xs font-bold transition-all border border-slate-700 shadow-xs cursor-pointer"
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-[#F59E0B] hover:text-white text-xs font-medium transition-colors border border-slate-800 cursor-pointer"
             title="Secure Admin Portal"
           >
-            <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <span>Admin Portal</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Admin</span>
           </button>
 
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 md:hidden text-[#525252] hover:text-[#171717] rounded-lg hover:bg-gray-100"
+            className="p-2 md:hidden text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
             aria-label="Toggle mobile menu"
           >
-            <Menu className="w-6 h-6" />
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5 text-slate-700" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Search Bar */}
-      <div className="md:hidden px-4 pb-3">
+      <div className="md:hidden px-4 pb-2.5 bg-white border-b border-slate-100">
         <div className="relative flex items-center">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#525252]">
-            <Search className="w-4 h-4 text-[#5B21B6]" />
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+            <Search className="w-4 h-4 text-slate-400" />
           </div>
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search products, brands..."
-            className="w-full pl-9 pr-8 py-2 bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl text-xs text-[#171717] placeholder-[#525252] focus:outline-none focus:border-[#5B21B6]"
+            className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:border-[#4F46E5] focus:bg-white"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-2 p-1 text-[#525252]"
+              className="absolute right-2 p-1 text-slate-400"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -333,24 +342,21 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 3. Secondary Navigation Bar (Prompt 02 requirement) */}
-      <div className="border-t border-[#E5E7EB] bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-xs font-semibold text-[#525252]">
-          <div className="flex items-center gap-1 sm:gap-6 overflow-x-auto py-2">
+      {/* 3. Secondary Navigation Bar */}
+      <div className="border-t border-slate-100 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-xs font-medium text-slate-600">
+          <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto py-2 scrollbar-none">
             {/* 1. Home */}
             <button
               id="nav-link-home"
               onClick={handleLogoOrHomeClick}
-              className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer ${
+              className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer ${
                 activeNav === 'Home' && activeFilterTab === 'All'
-                  ? 'text-[#5B21B6] font-extrabold bg-[#EDE9FE]'
-                  : 'hover:text-[#5B21B6] hover:bg-gray-50'
+                  ? 'text-[#4F46E5] font-semibold bg-indigo-50/80'
+                  : 'hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span>Home</span>
-              {activeNav === 'Home' && activeFilterTab === 'All' && (
-                <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#5B21B6] rounded-full" />
-              )}
             </button>
 
             {/* 2. All Categories Dropdown Trigger */}
@@ -358,21 +364,21 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 id="nav-link-categories-dropdown"
                 onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
-                className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
                   categoriesDropdownOpen
-                    ? 'text-[#5B21B6] font-bold bg-[#EDE9FE]'
-                    : 'hover:text-[#5B21B6] hover:bg-gray-50'
+                    ? 'text-[#4F46E5] font-semibold bg-indigo-50/80'
+                    : 'hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
-                <Layers className="w-3.5 h-3.5 text-[#5B21B6]" />
+                <Layers className="w-3.5 h-3.5 text-slate-500" />
                 <span>All Categories</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${categoriesDropdownOpen ? 'rotate-180 text-[#5B21B6]' : 'text-gray-400'}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${categoriesDropdownOpen ? 'rotate-180 text-[#4F46E5]' : 'text-slate-400'}`} />
               </button>
 
               {/* Categories Dropdown Menu */}
               {categoriesDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#E5E7EB] p-2 z-50 animate-fadeIn">
-                  <div className="px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[#5B21B6] border-b border-gray-100 mb-1">
+                <div className="absolute top-full left-0 mt-1.5 w-64 bg-white rounded-lg shadow-lg border border-slate-200 p-1.5 z-50 animate-fadeIn">
+                  <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1">
                     Marketplace Categories
                   </div>
                   {CATEGORY_DROPDOWN_ITEMS.map((item) => (
@@ -383,23 +389,23 @@ export const Header: React.FC<HeaderProps> = ({
                         if (onSelectCategory) onSelectCategory(item.name);
                         setCategoriesDropdownOpen(false);
                       }}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-xs text-[#171717] hover:bg-[#EDE9FE] hover:text-[#5B21B6] transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between px-3 py-1.5 rounded-md text-left text-xs text-slate-700 hover:bg-indigo-50 hover:text-[#4F46E5] transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-sm">{item.icon}</span>
-                        <span className="font-semibold">{item.name}</span>
+                        <span className="font-medium">{item.name}</span>
                       </div>
-                      <span className="text-[10px] text-[#525252] font-mono">{item.count}</span>
+                      <span className="text-[10px] text-slate-400 font-mono">{item.count}</span>
                     </button>
                   ))}
-                  <div className="border-t border-gray-100 mt-1 pt-1">
+                  <div className="border-t border-slate-100 mt-1 pt-1">
                     <button
                       onClick={() => {
                         if (onGoHome) onGoHome();
                         if (onSelectCategory) onSelectCategory('All');
                         setCategoriesDropdownOpen(false);
                       }}
-                      className="w-full text-center py-1.5 text-[11px] font-bold text-[#5B21B6] hover:underline cursor-pointer"
+                      className="w-full text-center py-1 text-[11px] font-semibold text-[#4F46E5] hover:underline cursor-pointer"
                     >
                       View All Products
                     </button>
@@ -408,97 +414,87 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* 3. Flash Sale ⚡ */}
+            {/* 3. Flash Sale */}
             <button
               id="nav-link-flash-sale"
               onClick={() => {
                 if (onGoHome) onGoHome();
                 if (onSelectFilterTab) onSelectFilterTab('Flash Sale');
               }}
-              className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+              className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1 ${
                 activeFilterTab === 'Flash Sale'
-                  ? 'text-[#5B21B6] font-extrabold bg-[#EDE9FE]'
-                  : 'hover:text-[#5B21B6] hover:bg-gray-50'
+                  ? 'text-[#4F46E5] font-semibold bg-indigo-50/80'
+                  : 'hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span>Flash Sale</span>
-              <span className="text-amber-500">⚡</span>
-              {activeFilterTab === 'Flash Sale' && (
-                <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#5B21B6] rounded-full" />
-              )}
+              <span className="text-[#F59E0B]">⚡</span>
             </button>
 
-            {/* 4. Best Deals 🏷️ */}
+            {/* 4. Best Deals */}
             <button
               id="nav-link-best-deals"
               onClick={() => {
                 if (onGoHome) onGoHome();
                 if (onSelectFilterTab) onSelectFilterTab('Best Deals');
               }}
-              className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+              className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1 ${
                 activeFilterTab === 'Best Deals'
-                  ? 'text-[#5B21B6] font-extrabold bg-[#EDE9FE]'
-                  : 'hover:text-[#5B21B6] hover:bg-gray-50'
+                  ? 'text-[#4F46E5] font-semibold bg-indigo-50/80'
+                  : 'hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span>Best Deals</span>
               <span>🏷️</span>
-              {activeFilterTab === 'Best Deals' && (
-                <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#5B21B6] rounded-full" />
-              )}
             </button>
 
-            {/* 5. New Arrivals ✨ */}
+            {/* 5. New Arrivals */}
             <button
               id="nav-link-new-arrivals"
               onClick={() => {
                 if (onGoHome) onGoHome();
                 if (onSelectFilterTab) onSelectFilterTab('New Arrivals');
               }}
-              className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+              className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1 ${
                 activeFilterTab === 'New Arrivals'
-                  ? 'text-[#5B21B6] font-extrabold bg-[#EDE9FE]'
-                  : 'hover:text-[#5B21B6] hover:bg-gray-50'
+                  ? 'text-[#4F46E5] font-semibold bg-indigo-50/80'
+                  : 'hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span>New Arrivals</span>
-              <span className="text-purple-500">✨</span>
-              {activeFilterTab === 'New Arrivals' && (
-                <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#5B21B6] rounded-full" />
-              )}
+              <span>✨</span>
             </button>
 
-            {/* 6. Brand Stores 🏬 */}
+            {/* 6. Brand Stores */}
             {onOpenSellerStore && (
               <button
                 id="nav-link-brand-store"
                 onClick={() => onOpenSellerStore('perfume-vault-bd')}
-                className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 font-bold ${
+                className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 font-medium ${
                   activeNav === 'Store'
-                    ? 'text-white bg-[#5B21B6]'
-                    : 'text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200'
+                    ? 'text-white bg-[#4F46E5]'
+                    : 'text-slate-700 bg-slate-100 hover:bg-slate-200'
                 }`}
                 title="Browse Verified Brand Storefronts"
               >
-                <Store className="w-3.5 h-3.5 text-[#5B21B6]" />
+                <Store className="w-3.5 h-3.5 text-slate-500" />
                 <span>Brand Store</span>
               </button>
             )}
 
-            {/* 7. Become a Seller 🏪 (Links directly to SellerCenter view) */}
+            {/* 7. Become a Seller */}
             {onOpenSellerCenter && (
               <button
                 id="nav-link-become-seller"
                 onClick={onOpenSellerCenter}
-                className={`relative px-3 py-1.5 rounded-lg transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 font-bold ${
+                className={`relative px-3 py-1.5 rounded-md transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 font-medium ${
                   activeNav === 'SellerCenter'
-                    ? 'text-white bg-[#5B21B6]'
-                    : 'text-[#5B21B6] bg-[#EDE9FE] hover:bg-purple-200 border border-purple-200'
+                    ? 'text-white bg-[#4F46E5]'
+                    : 'text-[#4F46E5] bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/60'
                 }`}
               >
                 <Store className="w-3.5 h-3.5" />
                 <span>Seller Center</span>
-                <span>🏪</span>
               </button>
             )}
           </div>
@@ -507,15 +503,203 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="hidden lg:flex items-center gap-3">
             <button
               onClick={handleDownloadClick}
-              className="text-[11px] font-medium text-[#525252] hover:text-[#5B21B6] flex items-center gap-1 cursor-pointer"
+              className="text-[11px] font-medium text-slate-500 hover:text-slate-900 flex items-center gap-1 cursor-pointer"
               title="Download Standalone Single-File HTML"
             >
-              <Code2 className="w-3.5 h-3.5 text-[#5B21B6]" />
+              <Code2 className="w-3.5 h-3.5 text-slate-400" />
               <span>{downloadSuccess ? 'HTML Saved!' : 'Export HTML'}</span>
             </button>
           </div>
         </div>
       </div>
+
+      {/* 4. Responsive Mobile Drawer / Navigation Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-200 bg-white shadow-lg max-h-[80vh] overflow-y-auto animate-fadeIn">
+          {/* Mobile User & Wallet Summary Bar */}
+          <div className="p-4 bg-slate-50 border-b border-slate-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-[#4F46E5] text-white flex items-center justify-center font-bold text-sm">
+                  {user.isLoggedIn ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4 text-white" />}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-[#0F172A]">
+                    {user.isLoggedIn ? user.name : 'Welcome to Prime Vault'}
+                  </p>
+                  <p className="text-[10px] text-slate-500 font-mono">
+                    {user.isLoggedIn ? (user.phone || user.email) : 'Sign in to unlock ৳20 bonus'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAuth();
+                }}
+                className="px-3 py-1.5 rounded-md bg-[#4F46E5] text-white text-[11px] font-semibold hover:bg-[#4338CA] transition-colors cursor-pointer"
+              >
+                {user.isLoggedIn ? 'Profile' : 'Sign In'}
+              </button>
+            </div>
+
+            {/* Mobile Wallet Bonus Highlight Card */}
+            <div 
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAuth();
+              }}
+              className="p-3 rounded-lg bg-white border border-slate-200 flex items-center justify-between cursor-pointer hover:border-slate-300 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-md bg-indigo-50 text-[#4F46E5]">
+                  <Wallet className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold block">
+                    Prime Vault Wallet
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base font-bold font-mono text-[#0F172A]">
+                      ৳{user.walletBalance}
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">
+                      {user.isPhoneVerified ? '✓ Phone Verified' : '+৳20 on Verification'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <span className="text-xs text-[#4F46E5] font-semibold">View →</span>
+            </div>
+          </div>
+
+          {/* Mobile Links List */}
+          <div className="p-3 space-y-1 text-xs font-medium text-slate-700">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onGoHome) onGoHome();
+                if (onSelectFilterTab) onSelectFilterTab('All');
+                if (onSelectCategory) onSelectCategory('All');
+              }}
+              className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left"
+            >
+              <span>Home (প্রধান পাতা)</span>
+              <span>🏠</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onGoHome) onGoHome();
+                if (onSelectFilterTab) onSelectFilterTab('Flash Sale');
+              }}
+              className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left text-amber-700"
+            >
+              <span>Flash Sale ⚡ (ফ্ল্যাশ সেল)</span>
+              <span>⚡</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onGoHome) onGoHome();
+                if (onSelectFilterTab) onSelectFilterTab('Best Deals');
+              }}
+              className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left"
+            >
+              <span>Best Deals 🏷️ (সেরা অফার)</span>
+              <span>🏷️</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onGoHome) onGoHome();
+                if (onSelectFilterTab) onSelectFilterTab('New Arrivals');
+              }}
+              className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left"
+            >
+              <span>New Arrivals ✨ (নতুন কালেকশন)</span>
+              <span>✨</span>
+            </button>
+
+            {onOpenSellerStore && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenSellerStore('perfume-vault-bd');
+                }}
+                className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left text-slate-800"
+              >
+                <span>Brand Stores 🏬 (ব্র্যান্ড স্টোর)</span>
+                <span>🏬</span>
+              </button>
+            )}
+
+            {onOpenOrders && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenOrders();
+                }}
+                className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left"
+              >
+                <span>My Orders & Tracking 📦 (আমার অর্ডার)</span>
+                {ordersCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px]">
+                    {ordersCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {onOpenWishlist && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenWishlist();
+                }}
+                className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-slate-50 transition-colors text-left"
+              >
+                <span>Saved Wishlist ❤️ (পছন্দের তালিকা)</span>
+                {wishlistCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px]">
+                    {wishlistCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {onOpenSellerCenter && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenSellerCenter();
+                }}
+                className="w-full flex items-center justify-between py-2 px-3 rounded-md bg-indigo-50/70 text-[#4F46E5] hover:bg-indigo-100 transition-colors text-left font-semibold"
+              >
+                <span>Seller Center 🏪 (মার্চেন্ট পোর্টাল)</span>
+                <span>🏪</span>
+              </button>
+            )}
+
+            {onOpenAdmin && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin();
+                }}
+                className="w-full flex items-center justify-between py-2 px-3 rounded-md bg-slate-900 text-amber-300 hover:text-white transition-colors text-left font-semibold"
+              >
+                <span>Admin Portal 🛡️ (এডমিন ড্যাশবোর্ড)</span>
+                <span>🛡️</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };

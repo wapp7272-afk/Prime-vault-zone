@@ -59,6 +59,14 @@ export interface Address {
   notes?: string;
 }
 
+export interface WalletTransaction {
+  id: string;
+  date: string;
+  amount: number;
+  type: 'credit' | 'debit';
+  description: string;
+}
+
 export interface UserProfile {
   isLoggedIn: boolean;
   name: string;
@@ -66,8 +74,12 @@ export interface UserProfile {
   phone: string;
   walletBalance: number;
   hasReceivedBonus: boolean;
+  isPhoneVerified?: boolean;
+  authProvider?: 'google' | 'phone' | 'email';
+  avatar?: string;
   address: Address;
   savedAddresses?: Address[];
+  walletHistory?: WalletTransaction[];
 }
 
 export interface Order {

@@ -154,15 +154,15 @@ export const CustomerSupport: React.FC = () => {
         <button
           id="open-ai-chat-btn"
           onClick={() => setIsChatOpen(!isChatOpen)}
-          className="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-600 text-white font-bold text-xs shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:shadow-[0_0_35px_rgba(168,85,247,0.7)] hover:scale-105 active:scale-95 transition-all group cursor-pointer"
+          className="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-full bg-[#4F46E5] hover:bg-[#4338CA] text-white font-semibold text-xs shadow-md transition-all group cursor-pointer active:scale-95"
           aria-label="Open AI Shop Assistant"
         >
           <div className="relative">
-            <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-emerald-400 border-2 border-[#0a0b16] rounded-full" />
+            <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-emerald-400 border-2 border-[#4F46E5] rounded-full" />
           </div>
           <span className="tracking-wide">AI চ্যাট সহকারী</span>
-          <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
+          <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
         </button>
       </div>
 
@@ -170,23 +170,21 @@ export const CustomerSupport: React.FC = () => {
       {isChatOpen && (
         <div 
           id="ai-chat-modal"
-          className="fixed bottom-16 sm:bottom-20 right-2 sm:right-6 z-50 w-[calc(100vw-16px)] sm:w-96 max-w-[400px] max-h-[580px] h-[520px] flex flex-col rounded-2xl glass-panel border border-cyan-500/40 shadow-2xl overflow-hidden animate-slideUp"
+          className="fixed bottom-16 sm:bottom-20 right-2 sm:right-6 z-50 w-[calc(100vw-16px)] sm:w-96 max-w-[400px] max-h-[580px] h-[520px] flex flex-col rounded-xl bg-white border border-slate-200 shadow-xl overflow-hidden animate-slideUp"
         >
           {/* Chat Header */}
-          <div className="p-3.5 bg-gradient-to-r from-[#11142a] via-[#1a123a] to-[#11142a] border-b border-white/10 flex items-center justify-between">
+          <div className="p-3.5 bg-[#0F172A] text-white border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="relative">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 p-[1px] shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-                  <div className="w-full h-full bg-[#0d0f22] rounded-[11px] flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-cyan-400" />
-                  </div>
+                <div className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700">
+                  <Bot className="w-5 h-5 text-[#F59E0B]" />
                 </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#0d0f22] rounded-full" />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#0F172A] rounded-full" />
               </div>
               <div>
                 <h3 className="text-xs font-bold text-white flex items-center gap-1.5">
-                  PRIME VAULT ZONE AI সহকারী
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30">
+                  PRIME VAULT ZONE AI
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-medium">
                     বাংলা
                   </span>
                 </h3>
@@ -199,29 +197,29 @@ export const CustomerSupport: React.FC = () => {
 
             <button
               onClick={() => setIsChatOpen(false)}
-              className="p-1.5 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+              className="p-1.5 rounded-md bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Messages Body */}
-          <div className="flex-1 overflow-y-auto p-3.5 space-y-3 bg-[#080913]/90">
+          <div className="flex-1 overflow-y-auto p-3.5 space-y-3 bg-[#F9FAFB]">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
+                  className={`max-w-[85%] rounded-lg px-3.5 py-2.5 text-xs leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-tr-none shadow-md'
-                      : 'bg-slate-900/90 text-slate-200 border border-white/10 rounded-tl-none shadow'
+                      ? 'bg-[#4F46E5] text-white rounded-tr-none shadow-2xs'
+                      : 'bg-white text-slate-800 border border-slate-200 rounded-tl-none shadow-2xs'
                   }`}
                 >
                   <p className="whitespace-pre-line">{msg.text}</p>
                 </div>
-                <span className="text-[9px] text-slate-500 mt-1 px-1">{msg.time}</span>
+                <span className="text-[9px] text-slate-400 mt-1 px-1">{msg.time}</span>
 
                 {/* Quick Option Suggestion Chips */}
                 {msg.quickOptions && (
@@ -230,7 +228,7 @@ export const CustomerSupport: React.FC = () => {
                       <button
                         key={idx}
                         onClick={() => handleSendMessage(opt)}
-                        className="text-[10px] text-left px-2.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-cyan-950/60 border border-cyan-500/30 hover:border-cyan-400 text-cyan-200 hover:text-white transition-all shadow-sm"
+                        className="text-[10px] text-left px-2.5 py-1.5 rounded-md bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 text-slate-700 hover:text-[#4F46E5] transition-colors cursor-pointer"
                       >
                         {opt}
                       </button>
@@ -241,10 +239,10 @@ export const CustomerSupport: React.FC = () => {
             ))}
 
             {isTyping && (
-              <div className="flex items-center gap-1.5 p-2.5 rounded-xl bg-slate-900/80 border border-white/5 w-20">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" />
-                <span className="w-2 h-2 rounded-full bg-purple-400 animate-bounce [animation-delay:0.2s]" />
-                <span className="w-2 h-2 rounded-full bg-pink-400 animate-bounce [animation-delay:0.4s]" />
+              <div className="flex items-center gap-1.5 p-2 rounded-md bg-white border border-slate-200 w-16">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] animate-bounce" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] animate-bounce [animation-delay:0.2s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] animate-bounce [animation-delay:0.4s]" />
               </div>
             )}
             <div ref={chatBottomRef} />
@@ -256,7 +254,7 @@ export const CustomerSupport: React.FC = () => {
               e.preventDefault();
               handleSendMessage();
             }}
-            className="p-2.5 bg-[#0d0f22] border-t border-white/10 flex items-center gap-2"
+            className="p-2.5 bg-white border-t border-slate-200 flex items-center gap-2"
           >
             <input
               id="ai-chat-input"
@@ -264,13 +262,13 @@ export const CustomerSupport: React.FC = () => {
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               placeholder="বাংলা বা ইংরেজিতে প্রশ্ন লিখুন..."
-              className="flex-1 px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+              className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:border-[#4F46E5]"
             />
             <button
               id="ai-chat-send-btn"
               type="submit"
               disabled={!inputVal.trim()}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white disabled:opacity-40 transition-all"
+              className="p-2.5 rounded-lg bg-[#4F46E5] hover:bg-[#4338CA] text-white disabled:opacity-40 transition-colors cursor-pointer"
             >
               <Send className="w-4 h-4" />
             </button>

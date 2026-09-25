@@ -74,31 +74,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     <div
       id={`product-card-${product.id}`}
       onClick={() => onQuickView(product)}
-      className="group relative flex flex-col justify-between rounded-2xl overflow-hidden bg-white border border-[#E5E7EB] hover:border-purple-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+      className="group relative flex flex-col justify-between rounded-lg overflow-hidden bg-white border border-slate-200 hover:border-slate-300 transition-all duration-200 hover:shadow-xs cursor-pointer"
     >
       {/* ================= Product Image Container ================= */}
-      <div className="relative w-full aspect-square overflow-hidden bg-[#F9FAFB]">
+      <div className="relative w-full aspect-square overflow-hidden bg-slate-50">
         <img
           src={product.image}
           alt={product.title}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
           loading="lazy"
         />
 
-        {/* Top-Left: Discount Badge */}
+        {/* Top-Left: Subtle Discount or Stock Badge */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
-          {discountPercent ? (
-            <span className="px-2 py-0.5 text-[10px] sm:text-[11px] font-black uppercase rounded-md bg-rose-600 text-white shadow-xs">
+          {discountPercent && (
+            <span className="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded bg-rose-600 text-white tracking-tight">
               {discountPercent}
-            </span>
-          ) : (
-            <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-[#EDE9FE] text-[#5B21B6] border border-purple-200 shadow-xs">
-              {product.category}
             </span>
           )}
 
           {product.inStock === false && (
-            <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-gray-900 text-white shadow-xs">
+            <span className="px-1.5 py-0.5 text-[10px] font-medium uppercase rounded bg-slate-900/90 text-white">
               Out of Stock
             </span>
           )}
@@ -108,107 +104,110 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {onToggleWishlist && (
           <button
             onClick={handleWishlist}
-            className={`absolute top-2.5 right-2.5 p-2 rounded-full backdrop-blur-md transition-all z-10 shadow-xs cursor-pointer ${
+            className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-xs border border-slate-200/80 transition-colors z-10 flex items-center justify-center cursor-pointer ${
               isWishlisted
-                ? 'bg-white text-rose-500 scale-105'
-                : 'bg-white/80 hover:bg-white text-gray-500 hover:text-rose-500'
+                ? 'text-rose-500'
+                : 'text-slate-400 hover:text-rose-500'
             }`}
             title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
             aria-label="Wishlist"
           >
-            <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
+            <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
           </button>
         )}
 
-        {/* Floating Quick View Eye on Hover */}
-        <div className="absolute inset-0 m-auto w-10 h-10 rounded-full bg-white/95 text-[#5B21B6] hidden sm:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-110 shadow-md pointer-events-none">
-          <Eye className="w-4 h-4" />
+        {/* Floating Quick View on Hover */}
+        <div className="absolute inset-0 m-auto w-8 h-8 rounded-full bg-white text-slate-700 hidden sm:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-150 shadow-xs pointer-events-none border border-slate-200">
+          <Eye className="w-3.5 h-3.5" />
         </div>
       </div>
 
       {/* ================= Product Information ================= */}
-      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between gap-2.5">
+      <div className="p-3 sm:p-3.5 flex flex-col flex-1 justify-between gap-2">
         <div>
-          {/* Seller / Store Badge */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onOpenSellerStore) {
-                onOpenSellerStore(storeName);
-              }
-            }}
-            className="flex items-center gap-1 text-[11px] font-bold text-[#5B21B6] hover:text-[#4C1D95] hover:underline mb-1 cursor-pointer group/store text-left"
-            title={`Visit ${storeName} Storefront`}
-          >
-            <Store className="w-3 h-3 shrink-0 text-[#5B21B6] group-hover/store:scale-110 transition-transform" />
-            <span className="truncate max-w-[170px]">{storeName}</span>
-          </button>
+          {/* Category & Store Meta */}
+          <div className="flex items-center justify-between gap-1 text-[11px] text-slate-500 mb-1">
+            <span className="truncate uppercase tracking-wider text-[10px] font-semibold text-slate-400">
+              {product.category}
+            </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onOpenSellerStore) {
+                  onOpenSellerStore(storeName);
+                }
+              }}
+              className="hover:text-[#4F46E5] truncate max-w-[120px] transition-colors cursor-pointer text-right text-[10px]"
+              title={`Visit ${storeName} Storefront`}
+            >
+              {storeName}
+            </button>
+          </div>
 
-          {/* Product Title (Truncated to 2 lines max) */}
-          <h3 className="text-xs sm:text-sm font-bold text-[#171717] line-clamp-2 leading-snug group-hover:text-[#5B21B6] transition-colors min-h-[34px] sm:min-h-[38px]">
+          {/* Product Title */}
+          <h3 className="text-xs sm:text-sm font-semibold text-[#0F172A] line-clamp-2 leading-snug group-hover:text-[#4F46E5] transition-colors min-h-[34px] sm:min-h-[38px]">
             {product.title}
           </h3>
 
-          {/* Rating, Reviews Count, and Sold Quantity Badge */}
-          <div className="flex items-center justify-between text-[11px] mt-1.5 pt-1 border-t border-gray-100">
-            <div className="flex items-center gap-1 text-amber-500 font-bold">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-              <span>{product.rating ? product.rating.toFixed(1) : '4.9'}</span>
-              <span className="text-gray-400 font-normal">({product.reviewsCount || 120})</span>
+          {/* Rating & Sold Count */}
+          <div className="flex items-center justify-between text-[11px] mt-1 text-slate-500">
+            <div className="flex items-center gap-1 font-medium text-slate-700">
+              <Star className="w-3 h-3 fill-[#F59E0B] text-[#F59E0B]" />
+              <span className="font-semibold text-xs">{product.rating ? product.rating.toFixed(1) : '4.9'}</span>
+              <span className="text-slate-400">({product.reviewsCount || 120})</span>
             </div>
 
-            {/* Sold Quantity Badge */}
-            <span className="text-gray-500 font-medium text-[10px] sm:text-[11px] bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200">
-              {soldCount} Sold
+            <span className="text-slate-400 text-[10px] tabular-nums">
+              {soldCount} sold
             </span>
           </div>
         </div>
 
-        {/* ================= Pricing & Quick Action Buttons ================= */}
-        <div className="pt-2 border-t border-[#E5E7EB]/80 space-y-2">
+        {/* ================= Pricing & Action Buttons ================= */}
+        <div className="pt-2 border-t border-slate-100 space-y-2">
           {/* Dynamic Pricing */}
           <div className="flex items-baseline justify-between">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-sm sm:text-base font-black text-[#5B21B6]">
+              <span className="text-sm sm:text-base font-bold text-[#0F172A] font-mono tabular-nums">
                 ৳{product.price.toLocaleString()}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-[11px] sm:text-xs text-gray-400 line-through">
+                <span className="text-[11px] text-slate-400 line-through tabular-nums">
                   ৳{product.originalPrice.toLocaleString()}
                 </span>
               )}
             </div>
 
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded hidden sm:inline">
-                Save ৳{(product.originalPrice - product.price).toLocaleString()}
+              <span className="text-[10px] font-medium text-emerald-600">
+                -৳{(product.originalPrice - product.price).toLocaleString()}
               </span>
             )}
           </div>
 
-          {/* Quick Action Buttons: Add to Cart & Buy Now */}
-          <div className="grid grid-cols-2 gap-1.5 pt-0.5">
+          {/* Quick Action Buttons */}
+          <div className="grid grid-cols-2 gap-1.5">
             <button
               onClick={handleAdd}
               disabled={product.inStock === false}
-              className={`w-full py-1.5 sm:py-2 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+              className={`w-full py-1.5 px-2 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1 cursor-pointer ${
                 product.inStock === false
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                   : isAdded
-                  ? 'bg-emerald-100 text-emerald-800'
-                  : 'bg-[#EDE9FE] hover:bg-purple-200 text-[#5B21B6] border border-purple-200 active:scale-95'
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 active:scale-98'
               }`}
               title="Add to Cart"
             >
               {isAdded ? (
                 <>
-                  <Check className="w-3.5 h-3.5" />
+                  <Check className="w-3 h-3" />
                   <span className="truncate">Added</span>
                 </>
               ) : (
                 <>
-                  <ShoppingCart className="w-3.5 h-3.5" />
+                  <ShoppingCart className="w-3 h-3" />
                   <span className="truncate">Cart</span>
                 </>
               )}
@@ -217,15 +216,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <button
               onClick={handleBuyNow}
               disabled={product.inStock === false}
-              className={`w-full py-1.5 sm:py-2 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-xs active:scale-95 ${
+              className={`w-full py-1.5 px-2 rounded-md text-xs font-semibold transition-colors flex items-center justify-center gap-1 cursor-pointer shadow-none active:scale-98 ${
                 product.inStock === false
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-[#5B21B6] hover:bg-[#4C1D95] text-white'
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-[#4F46E5] hover:bg-[#4338CA] text-white'
               }`}
               title="Buy Now"
             >
-              <Zap className="w-3 h-3 text-amber-300 fill-amber-300" />
-              <span className="truncate">Buy Now</span>
+              <Zap className="w-3 h-3 text-[#F59E0B] fill-[#F59E0B]" />
+              <span className="truncate">Buy</span>
             </button>
           </div>
         </div>

@@ -108,24 +108,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#EDE9FE]/50 via-white to-white border-b border-[#E5E7EB] pt-6 pb-12 lg:pt-10 lg:pb-16">
+    <section className="relative overflow-hidden bg-[#F9FAFB] border-b border-slate-200 pt-6 pb-12 lg:pt-10 lg:pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Header Tag */}
-        <div className="flex items-center justify-between gap-4 mb-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE] border border-purple-200 text-[#5B21B6] text-xs font-bold tracking-wide">
-            <Sparkles className="w-3.5 h-3.5 text-[#5B21B6]" />
+        <div className="flex items-center justify-between gap-4 mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-50 border border-indigo-200/80 text-[#4F46E5] text-xs font-semibold tracking-wide">
+            <Sparkles className="w-3.5 h-3.5 text-[#4F46E5]" />
             <span>AUTHENTIC LUXURY & LIFESTYLE MARKETPLACE</span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-4 text-xs text-[#525252]">
+          <div className="hidden sm:flex items-center gap-4 text-xs text-slate-500">
             <span className="flex items-center gap-1">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               100% Genuine Verified
             </span>
-            <span className="text-gray-300">•</span>
+            <span className="text-slate-300">•</span>
             <span className="flex items-center gap-1">
-              <Truck className="w-4 h-4 text-[#5B21B6]" />
+              <Truck className="w-4 h-4 text-[#4F46E5]" />
               Express 64 Districts Delivery
             </span>
           </div>
@@ -138,7 +138,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="lg:col-span-6 flex flex-col">
             <div 
               ref={containerRef}
-              className="relative w-full aspect-4/3 sm:aspect-16/10 lg:aspect-auto lg:h-[460px] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#171717] border border-[#E5E7EB] shadow-lg group"
+              className="relative w-full aspect-4/3 sm:aspect-16/10 lg:aspect-auto lg:h-[460px] rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-xs group"
             >
               {/* HTML5 Autoplay Video Player */}
               <video
@@ -158,13 +158,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               {/* Top High-Converting Overlay Text Badge */}
               <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-10">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-extrabold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                  <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                  <span>⚡ AI Product Spotlight</span>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-xs border border-white/20 text-white text-xs font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-[#F59E0B] animate-ping" />
+                  <Zap className="w-3.5 h-3.5 text-[#F59E0B] fill-[#F59E0B]" />
+                  <span>AI Product Spotlight</span>
                 </div>
 
-                <div className="px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md text-[11px] font-semibold text-white/90 border border-white/10">
+                <div className="px-2.5 py-1 rounded-md bg-black/50 backdrop-blur-xs text-[11px] font-medium text-white/90 border border-white/10">
                   Featured Brand
                 </div>
               </div>
@@ -172,21 +172,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {/* Center Play/Pause Watermark on Hover */}
               <button
                 onClick={togglePlay}
-                className="absolute inset-0 m-auto w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110 active:scale-95 cursor-pointer z-10"
+                className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-white/20 backdrop-blur-xs border border-white/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-105 active:scale-95 cursor-pointer z-10"
                 aria-label={isPlaying ? 'Pause video' : 'Play video'}
               >
-                {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-1" />}
+                {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
               </button>
 
               {/* Bottom Video Information & Controls Overlay */}
               <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 z-10 flex flex-col gap-2">
                 <div className="flex items-center justify-between text-white">
                   <div>
-                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-0.5">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#F59E0B] uppercase tracking-wider mb-0.5">
                       <Flame className="w-3.5 h-3.5 fill-current" />
                       <span>Signature Collection 2026</span>
                     </div>
-                    <h4 className="text-sm sm:text-base font-bold text-white drop-shadow-sm">
+                    <h4 className="text-sm sm:text-base font-semibold text-white drop-shadow-xs">
                       Sensory Luxury Fragrance Film
                     </h4>
                   </div>
@@ -195,19 +195,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={toggleSound}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+                      className="p-2 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-xs border border-white/20 text-white transition-colors cursor-pointer"
                       title={isMuted ? 'Unmute Sound' : 'Mute Sound'}
                     >
                       {isMuted ? (
-                        <VolumeX className="w-4 h-4 text-gray-300" />
+                        <VolumeX className="w-4 h-4 text-slate-300" />
                       ) : (
-                        <Volume2 className="w-4 h-4 text-amber-300" />
+                        <Volume2 className="w-4 h-4 text-[#F59E0B]" />
                       )}
                     </button>
 
                     <button
                       onClick={toggleFullscreen}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-md"
+                      className="p-2 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-xs border border-white/20 text-white transition-colors cursor-pointer"
                       title="Fullscreen View"
                     >
                       <Maximize2 className="w-4 h-4 text-white" />
@@ -217,43 +217,40 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
                 {/* Progress Visualizer Bar */}
                 <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-[#5B21B6] to-amber-400 w-3/4 rounded-full" />
+                  <div className="h-full bg-gradient-to-r from-[#4F46E5] to-[#F59E0B] w-3/4 rounded-full" />
                 </div>
               </div>
             </div>
           </div>
 
           {/* ================= RIGHT COLUMN: Featured Showcase & Call to Action ================= */}
-          <div className="lg:col-span-6 flex flex-col justify-between p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-[#E5E7EB] shadow-md relative overflow-hidden">
-            {/* Subtle background lavender accent */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#EDE9FE]/50 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
-
+          <div className="lg:col-span-6 flex flex-col justify-between p-6 sm:p-7 rounded-xl bg-white border border-slate-200 shadow-2xs relative overflow-hidden">
             <div className="space-y-4 relative z-10">
               {/* Featured Badge */}
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EDE9FE] border border-purple-200 text-[#5B21B6] text-xs font-black tracking-wide">
-                  <Star className="w-3.5 h-3.5 fill-[#5B21B6]" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-50 border border-indigo-200/80 text-[#4F46E5] text-xs font-semibold tracking-wide">
+                  <Star className="w-3.5 h-3.5 fill-[#4F46E5]" />
                   PRIME VAULT EXCLUSIVE
                 </span>
-                <span className="text-xs text-amber-600 font-bold flex items-center gap-1">
-                  <Flame className="w-3.5 h-3.5 fill-current" />
+                <span className="text-xs text-amber-700 font-medium flex items-center gap-1">
+                  <Flame className="w-3.5 h-3.5 fill-current text-[#F59E0B]" />
                   Limited Time Offer
                 </span>
               </div>
 
               {/* Title & Subtitle */}
               <div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#171717] tracking-tight leading-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0F172A] tracking-tight leading-tight">
                   {bannerSettings?.heroHeadline ? (
                     <span>{bannerSettings.heroHeadline}</span>
                   ) : (
                     <>
                       Luxury Scents For Every You —{' '}
-                      <span className="text-[#5B21B6]">Exclusive Perfume Vault</span>
+                      <span className="text-[#4F46E5]">Exclusive Perfume Vault</span>
                     </>
                   )}
                 </h1>
-                <p className="mt-2.5 text-xs sm:text-sm text-[#525252] leading-relaxed">
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {bannerSettings?.heroSubheadline ||
                     'প্রতিটি মুহূর্তকে করে তুলুন অনন্য। ১০০% অরিজিনাল ফ্রেগ্রেন্স, সিগনেচার সিল্যাজ ও বিশেষ ডিসকাউন্টে সরাসরি আপনার দরজায়। Authentic imports with long-lasting notes & certified batch codes.'}
                 </p>
@@ -262,45 +259,45 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {/* Featured Product Preview Card */}
               <div 
                 onClick={() => onSelectProduct(heroProduct)}
-                className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-purple-50/70 to-white border border-purple-200 hover:border-[#5B21B6] transition-all cursor-pointer shadow-xs group"
+                className="p-3.5 sm:p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-xl overflow-hidden bg-white border border-[#E5E7EB] shrink-0">
+                  <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-lg overflow-hidden bg-white border border-slate-200 shrink-0">
                     <img 
                       src={heroProduct.image} 
                       alt={heroProduct.title}
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform" 
+                      className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300" 
                     />
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#5B21B6] bg-[#EDE9FE] px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#4F46E5] bg-indigo-50 px-2 py-0.5 rounded">
                         {heroProduct.category}
                       </span>
-                      <div className="flex items-center text-amber-500 text-xs font-bold gap-0.5">
+                      <div className="flex items-center text-[#F59E0B] text-xs font-semibold gap-0.5">
                         <Star className="w-3.5 h-3.5 fill-current" />
                         <span>{heroProduct.rating || 4.9}</span>
-                        <span className="text-gray-400 text-[10px]">({heroProduct.reviewsCount || 320})</span>
+                        <span className="text-slate-400 text-[10px]">({heroProduct.reviewsCount || 320})</span>
                       </div>
                     </div>
 
-                    <h3 className="text-sm sm:text-base font-extrabold text-[#171717] group-hover:text-[#5B21B6] transition-colors truncate">
+                    <h3 className="text-sm sm:text-base font-semibold text-[#0F172A] group-hover:text-[#4F46E5] transition-colors truncate">
                       {heroProduct.title}
                     </h3>
 
                     {/* Price & Discount Display */}
                     <div className="flex items-baseline gap-2 mt-1">
-                      <span className="text-lg sm:text-xl font-black text-[#5B21B6]">
+                      <span className="text-lg sm:text-xl font-bold text-[#0F172A] font-mono tabular-nums">
                         ৳{heroProduct.price.toLocaleString()}
                       </span>
                       {heroProduct.originalPrice && heroProduct.originalPrice > heroProduct.price && (
-                        <span className="text-xs sm:text-sm text-gray-400 line-through">
+                        <span className="text-xs sm:text-sm text-slate-400 line-through tabular-nums">
                           ৳{heroProduct.originalPrice.toLocaleString()}
                         </span>
                       )}
                       {heroProduct.originalPrice && heroProduct.originalPrice > heroProduct.price && (
-                        <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[11px] font-black">
+                        <span className="px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900 text-[10px] font-bold">
                           -{Math.round(((heroProduct.originalPrice - heroProduct.price) / heroProduct.originalPrice) * 100)}% OFF
                         </span>
                       )}
@@ -311,15 +308,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               {/* Benefit Pills */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
-                <div className="flex items-center gap-1.5 text-xs text-[#171717] font-semibold bg-gray-50 px-2.5 py-1.5 rounded-xl border border-gray-200">
+                <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-50 px-2.5 py-1.5 rounded-md border border-slate-200">
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span className="truncate">100% Genuine</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-[#171717] font-semibold bg-gray-50 px-2.5 py-1.5 rounded-xl border border-gray-200">
+                <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-50 px-2.5 py-1.5 rounded-md border border-slate-200">
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span className="truncate">Express Shipping</span>
                 </div>
-                <div className="col-span-2 sm:col-span-1 flex items-center gap-1.5 text-xs text-[#171717] font-semibold bg-gray-50 px-2.5 py-1.5 rounded-xl border border-gray-200">
+                <div className="col-span-2 sm:col-span-1 flex items-center gap-1.5 text-xs text-slate-700 font-medium bg-slate-50 px-2.5 py-1.5 rounded-md border border-slate-200">
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span className="truncate">Cash on Delivery</span>
                 </div>
@@ -327,21 +324,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="pt-6 mt-4 border-t border-[#E5E7EB] flex flex-col sm:flex-row items-center gap-3 relative z-10">
-              {/* Primary Gold/Purple Button */}
+            <div className="pt-5 mt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center gap-3 relative z-10">
+              {/* Primary Indigo Button */}
               <button
                 onClick={() => onBuyNow(heroProduct)}
-                className="w-full sm:flex-1 py-3.5 px-6 rounded-xl font-bold text-white bg-[#5B21B6] hover:bg-[#4C1D95] shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
+                className="w-full sm:flex-1 py-3 px-5 rounded-lg font-semibold text-white bg-[#4F46E5] hover:bg-[#4338CA] transition-colors flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
               >
-                <Zap className="w-4 h-4 text-amber-300 fill-amber-300" />
+                <Zap className="w-4 h-4 text-[#F59E0B] fill-[#F59E0B]" />
                 <span>Shop Featured Product Now</span>
-                <ArrowRight className="w-4 h-4 text-amber-300 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-[#F59E0B] group-hover:translate-x-1 transition-transform" />
               </button>
 
               {/* Secondary Button: Explore All Deals */}
               <button
                 onClick={onExploreDeals}
-                className="w-full sm:w-auto py-3.5 px-6 rounded-xl font-bold text-[#5B21B6] bg-[#EDE9FE] hover:bg-purple-200 border border-purple-200 transition-all text-center cursor-pointer shadow-xs active:scale-98"
+                className="w-full sm:w-auto py-3 px-5 rounded-lg font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors text-center cursor-pointer active:scale-98"
               >
                 Explore All Deals
               </button>

@@ -114,27 +114,27 @@ export const CategoryNavGrid: React.FC<CategoryNavGridProps> = ({
   onSelectCategory,
 }) => {
   return (
-    <section className="py-8 bg-white" id="categories-section">
+    <section className="py-8 bg-white border-b border-slate-100" id="categories-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex items-end justify-between mb-6">
+        <div className="flex items-end justify-between mb-5">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#5B21B6]" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#5B21B6]">
+              <span className="w-2 h-2 rounded-full bg-[#4F46E5]" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#4F46E5]">
                 Marketplace Explorer
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-[#171717] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">
               Featured Categories
             </h2>
           </div>
           <button
             onClick={() => onSelectCategory('All')}
-            className={`text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer ${
+            className={`text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer ${
               selectedCategory === 'All'
-                ? 'text-[#5B21B6]'
-                : 'text-[#525252] hover:text-[#5B21B6]'
+                ? 'text-[#4F46E5]'
+                : 'text-slate-500 hover:text-[#4F46E5]'
             }`}
           >
             <span>{selectedCategory === 'All' ? 'Showing All' : 'Reset to All'}</span>
@@ -142,8 +142,8 @@ export const CategoryNavGrid: React.FC<CategoryNavGridProps> = ({
           </button>
         </div>
 
-        {/* Categories Grid (Daraz & Modern E-Commerce Style) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+        {/* Categories Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2.5 sm:gap-3.5">
           {MARKETPLACE_CATEGORIES.map((cat) => {
             const isSelected =
               selectedCategory === cat.name ||
@@ -155,51 +155,51 @@ export const CategoryNavGrid: React.FC<CategoryNavGridProps> = ({
                 key={cat.id}
                 id={`cat-card-${cat.id}`}
                 onClick={() => onSelectCategory(cat.name)}
-                className={`group relative flex flex-col items-center text-center p-3 rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden last:col-span-2 sm:last:col-span-1 ${
+                className={`group relative flex flex-col items-center text-center p-3 rounded-lg border transition-colors cursor-pointer overflow-hidden last:col-span-2 sm:last:col-span-1 ${
                   isSelected
-                    ? 'border-[#5B21B6] bg-[#EDE9FE] shadow-md ring-2 ring-[#5B21B6]/20 -translate-y-1'
-                    : 'border-[#E5E7EB] bg-[#F9FAFB] hover:bg-white hover:border-[#5B21B6]/50 hover:shadow-md hover:-translate-y-1'
+                    ? 'border-[#4F46E5] bg-indigo-50/50 shadow-2xs'
+                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {/* Badge */}
                 {cat.badge && (
-                  <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shadow-2xs ${
+                  <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
                     isSelected
-                      ? 'bg-[#5B21B6] text-white'
-                      : 'bg-white text-[#5B21B6] border border-purple-200'
+                      ? 'bg-[#4F46E5] text-white'
+                      : 'bg-slate-100 text-slate-700 border border-slate-200'
                   }`}>
                     {cat.badge}
                   </span>
                 )}
 
-                {/* Circular Category Image with Soft Shadow */}
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden mb-3 p-0.5 bg-white shadow-xs group-hover:scale-105 transition-transform duration-300">
+                {/* Circular / Rounded Category Image */}
+                <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-lg overflow-hidden mb-2.5 bg-slate-50 border border-slate-100">
                   <img
                     src={cat.image}
                     alt={cat.name}
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl ${
-                    isSelected ? 'ring-2 ring-[#5B21B6]' : ''
-                  }`} />
+                  {isSelected && (
+                    <div className="absolute inset-0 ring-1 ring-inset ring-[#4F46E5]/40 rounded-lg pointer-events-none" />
+                  )}
                 </div>
 
                 {/* Category Titles */}
-                <h3 className={`text-xs sm:text-sm font-bold leading-tight mb-1 transition-colors ${
-                  isSelected ? 'text-[#5B21B6]' : 'text-[#171717] group-hover:text-[#5B21B6]'
+                <h3 className={`text-xs font-semibold leading-tight mb-1 transition-colors ${
+                  isSelected ? 'text-[#4F46E5]' : 'text-[#0F172A] group-hover:text-[#4F46E5]'
                 }`}>
                   {cat.name}
                 </h3>
 
                 {/* Item Count */}
-                <span className="text-[10px] sm:text-[11px] text-[#525252] font-medium">
+                <span className="text-[10px] text-slate-500 font-medium">
                   {cat.itemCount}
                 </span>
 
                 {/* Active Indicator Bar */}
                 {isSelected && (
-                  <div className="w-8 h-1 bg-[#5B21B6] rounded-full mt-2" />
+                  <div className="w-6 h-0.5 bg-[#4F46E5] rounded-full mt-2" />
                 )}
               </button>
             );

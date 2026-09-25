@@ -50,27 +50,27 @@ export const VaultLogo: React.FC<VaultLogoProps> = ({
         onClick ? 'cursor-pointer' : ''
       } ${className}`}
     >
-      {/* Modern Hexagonal SVG Vault Logo with Deep Purple Marketplace Palette */}
-      <div className={`relative ${sizeConfig.svgSize} shrink-0 transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_12px_rgba(91,33,182,0.25)]`}>
+      {/* Modern Hexagonal SVG Vault Logo with Deep Indigo/Purple Brand Palette */}
+      <div className={`relative ${sizeConfig.svgSize} shrink-0 transition-transform duration-300 group-hover:scale-105`}>
         <svg
           viewBox="0 0 100 100"
-          className="w-full h-full filter drop-shadow-[0_2px_6px_rgba(91,33,182,0.15)]"
+          className="w-full h-full filter drop-shadow-xs"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
             <linearGradient id="vaultGradientOuter" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#5B21B6" />
-              <stop offset="50%" stopColor="#7C3AED" />
-              <stop offset="100%" stopColor="#4C1D95" />
+              <stop offset="0%" stopColor="#4F46E5" />
+              <stop offset="50%" stopColor="#6366F1" />
+              <stop offset="100%" stopColor="#4338CA" />
             </linearGradient>
             <linearGradient id="vaultGradientInner" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#7C3AED" />
-              <stop offset="100%" stopColor="#5B21B6" />
+              <stop offset="0%" stopColor="#6366F1" />
+              <stop offset="100%" stopColor="#4F46E5" />
             </linearGradient>
             <radialGradient id="vaultCenterGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#EDE9FE" stopOpacity="0.9" />
-              <stop offset="70%" stopColor="#EDE9FE" stopOpacity="0.3" />
+              <stop offset="0%" stopColor="#EEF2FF" stopOpacity="0.9" />
+              <stop offset="70%" stopColor="#EEF2FF" stopOpacity="0.3" />
               <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
             </radialGradient>
           </defs>
@@ -91,12 +91,12 @@ export const VaultLogo: React.FC<VaultLogoProps> = ({
           />
 
           {/* Outer Hexagon Tech Corner Notches */}
-          <circle cx="50" cy="6" r="2.5" fill="#5B21B6" />
-          <circle cx="90" cy="27" r="2.5" fill="#7C3AED" />
-          <circle cx="90" cy="73" r="2.5" fill="#4C1D95" />
-          <circle cx="50" cy="94" r="2.5" fill="#5B21B6" />
-          <circle cx="10" cy="73" r="2.5" fill="#4C1D95" />
-          <circle cx="10" cy="27" r="2.5" fill="#7C3AED" />
+          <circle cx="50" cy="6" r="2.5" fill="#4F46E5" />
+          <circle cx="90" cy="27" r="2.5" fill="#6366F1" />
+          <circle cx="90" cy="73" r="2.5" fill="#4338CA" />
+          <circle cx="50" cy="94" r="2.5" fill="#4F46E5" />
+          <circle cx="10" cy="73" r="2.5" fill="#4338CA" />
+          <circle cx="10" cy="27" r="2.5" fill="#6366F1" />
 
           {/* Inner Geometric Shield Hexagon */}
           <polygon
@@ -104,7 +104,7 @@ export const VaultLogo: React.FC<VaultLogoProps> = ({
             stroke="url(#vaultGradientInner)"
             strokeWidth="1.8"
             strokeDasharray="4 2"
-            fill="#EDE9FE"
+            fill="#EEF2FF"
             fillOpacity="0.7"
           />
 
@@ -119,12 +119,12 @@ export const VaultLogo: React.FC<VaultLogoProps> = ({
           />
 
           {/* Vault Locking Spoke Bolts (6 directions) */}
-          <line x1="50" y1="34" x2="50" y2="24" stroke="#5B21B6" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="50" y1="66" x2="50" y2="76" stroke="#4C1D95" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="36" y1="42" x2="27" y2="37" stroke="#7C3AED" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="64" y1="58" x2="73" y2="63" stroke="#5B21B6" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="36" y1="58" x2="27" y2="63" stroke="#4C1D95" strokeWidth="2.5" strokeLinecap="round" />
-          <line x1="64" y1="42" x2="73" y2="37" stroke="#7C3AED" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="50" y1="34" x2="50" y2="24" stroke="#4F46E5" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="50" y1="66" x2="50" y2="76" stroke="#4338CA" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="36" y1="42" x2="27" y2="37" stroke="#6366F1" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="64" y1="58" x2="73" y2="63" stroke="#4F46E5" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="36" y1="58" x2="27" y2="63" stroke="#4338CA" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="64" y1="42" x2="73" y2="37" stroke="#6366F1" strokeWidth="2.5" strokeLinecap="round" />
 
           {/* Core Vault Diamond Keyhole */}
           <polygon
@@ -140,14 +140,14 @@ export const VaultLogo: React.FC<VaultLogoProps> = ({
         <div className="flex flex-col justify-center">
           <div className="flex items-center gap-1.5">
             <span
-              className={`${sizeConfig.textSize} tracking-wide text-[#171717] uppercase leading-tight font-black`}
+              className={`${sizeConfig.textSize} tracking-wide text-[#0F172A] uppercase leading-tight font-black`}
             >
-              PRIME <span className="text-[#5B21B6]">VAULT</span> ZONE
+              PRIME <span className="text-[#4F46E5]">VAULT</span> ZONE
             </span>
           </div>
           {tagline && (
             <p
-              className={`${sizeConfig.taglineSize} text-[#525252] uppercase font-mono font-bold block mt-0.5`}
+              className={`${sizeConfig.taglineSize} text-slate-500 uppercase font-mono font-medium block mt-0.5`}
             >
               {tagline}
             </p>

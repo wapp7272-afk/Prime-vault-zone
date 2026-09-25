@@ -98,28 +98,28 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
   };
 
   return (
-    <section className="py-10 lg:py-14 bg-white border-b border-[#E5E7EB]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section className="py-8 lg:py-12 bg-white border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* ================= 1. FLASH SALE HEADER & TICKING COUNTDOWN TIMER ================= */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#EDE9FE]/70 border border-purple-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+        <div className="p-4 sm:p-5 rounded-xl bg-[#0F172A] text-white border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs">
           {/* Left: Flash Title & Badge */}
           <div className="flex flex-wrap items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#5B21B6] text-white flex items-center justify-center shadow-md">
-              <Zap className="w-6 h-6 text-amber-300 fill-amber-300 animate-pulse" />
+            <div className="w-9 h-9 rounded-lg bg-slate-800 text-[#F59E0B] flex items-center justify-center border border-slate-700">
+              <Zap className="w-5 h-5 text-[#F59E0B] fill-[#F59E0B] animate-pulse" />
             </div>
 
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl sm:text-2xl font-black text-[#5B21B6] tracking-tight">
+                <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
                   Flash Sale
                 </h2>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[11px] font-black uppercase tracking-wider">
-                  <Flame className="w-3 h-3 fill-rose-600" />
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-rose-300 bg-rose-950/80 border border-rose-800 text-[10px] font-bold uppercase tracking-wider">
+                  <Flame className="w-3 h-3 fill-rose-400" />
                   Limited Stock
                 </span>
               </div>
-              <p className="text-xs text-[#525252] mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 বিশেষ মূল্যে সীমিত সময়ের সেরা ডিলসমূহ — স্টক শেষ হওয়ার আগেই অর্ডার করুন!
               </p>
             </div>
@@ -128,25 +128,25 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           {/* Center/Right: Live Ticking Countdown Box & View All Link */}
           <div className="flex flex-wrap items-center justify-between md:justify-end gap-3 sm:gap-4">
             {/* Live Ticking Countdown Timer */}
-            <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-purple-200 shadow-xs">
-              <Clock className="w-4 h-4 text-[#5B21B6]" />
-              <span className="text-xs font-bold text-[#171717] hidden sm:inline">Ending in:</span>
+            <div className="flex items-center gap-2 bg-slate-800/90 px-3 py-1.5 rounded-lg border border-slate-700">
+              <Clock className="w-4 h-4 text-[#F59E0B]" />
+              <span className="text-xs text-slate-300 hidden sm:inline font-medium">Ending in:</span>
               
-              <div className="flex items-center gap-1 font-mono text-xs font-black">
+              <div className="flex items-center gap-1 font-mono text-xs font-bold">
                 {/* Hours Box */}
-                <div className="bg-[#5B21B6] text-white px-2 py-1 rounded-md min-w-[28px] text-center shadow-xs">
+                <div className="bg-slate-900 text-[#F59E0B] px-1.5 py-0.5 rounded min-w-[24px] text-center border border-slate-700">
                   {format2(timeLeft.hours)}
                 </div>
-                <span className="text-[#5B21B6] font-bold">:</span>
+                <span className="text-slate-500 font-bold">:</span>
                 
                 {/* Minutes Box */}
-                <div className="bg-[#5B21B6] text-white px-2 py-1 rounded-md min-w-[28px] text-center shadow-xs">
+                <div className="bg-slate-900 text-[#F59E0B] px-1.5 py-0.5 rounded min-w-[24px] text-center border border-slate-700">
                   {format2(timeLeft.minutes)}
                 </div>
-                <span className="text-[#5B21B6] font-bold">:</span>
+                <span className="text-slate-500 font-bold">:</span>
                 
                 {/* Seconds Box */}
-                <div className="bg-[#5B21B6] text-white px-2 py-1 rounded-md min-w-[28px] text-center shadow-xs animate-pulse">
+                <div className="bg-slate-900 text-[#F59E0B] px-1.5 py-0.5 rounded min-w-[24px] text-center border border-slate-700 animate-pulse">
                   {format2(timeLeft.seconds)}
                 </div>
               </div>
@@ -155,10 +155,10 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
             {/* Shop More Deals Link */}
             <button
               onClick={onViewMoreDeals}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#5B21B6] hover:text-[#4C1D95] bg-white hover:bg-purple-50 px-3.5 py-2 rounded-xl border border-purple-200 transition-all cursor-pointer shadow-xs group"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#4F46E5] hover:bg-[#4338CA] px-3.5 py-2 rounded-lg transition-colors cursor-pointer group"
             >
               <span>Shop More Deals</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
         </div>
@@ -166,17 +166,17 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
         {/* ================= 2. FLASH SALE PRODUCT CAROUSEL / GRID ================= */}
         <div className="relative">
           {/* Navigation Arrows (Desktop) */}
-          <div className="hidden sm:flex items-center gap-2 absolute -top-14 right-0 z-10">
+          <div className="hidden sm:flex items-center gap-1.5 absolute -top-12 right-0 z-10">
             <button
               onClick={() => handleScroll('left')}
-              className="w-8 h-8 rounded-full bg-white border border-[#E5E7EB] hover:border-[#5B21B6] text-[#171717] hover:text-[#5B21B6] flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+              className="w-7 h-7 rounded-md bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-[#0F172A] flex items-center justify-center transition-colors cursor-pointer"
               aria-label="Previous Flash Products"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => handleScroll('right')}
-              className="w-8 h-8 rounded-full bg-white border border-[#E5E7EB] hover:border-[#5B21B6] text-[#171717] hover:text-[#5B21B6] flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+              className="w-7 h-7 rounded-md bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-[#0F172A] flex items-center justify-center transition-colors cursor-pointer"
               aria-label="Next Flash Products"
             >
               <ChevronRight className="w-4 h-4" />
@@ -186,7 +186,7 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           {/* Horizontal Scrollable Flash Products Carousel */}
           <div
             ref={scrollRef}
-            className="flex items-stretch gap-4 overflow-x-auto pb-3 pt-1 scroll-smooth scrollbar-none"
+            className="flex items-stretch gap-3 overflow-x-auto pb-2 pt-1 scroll-smooth scrollbar-none"
             style={{ scrollSnapType: 'x mandatory' }}
           >
             {flashProducts.map((product) => {
@@ -198,25 +198,25 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
               return (
                 <div
                   key={product.id}
-                  className="w-[240px] sm:w-[260px] shrink-0 bg-white rounded-2xl border border-[#E5E7EB] hover:border-purple-300 p-3 flex flex-col justify-between hover:shadow-lg transition-all duration-300 group relative"
+                  className="w-[220px] sm:w-[240px] shrink-0 bg-white rounded-lg border border-slate-200 hover:border-slate-300 p-3 flex flex-col justify-between transition-colors shadow-2xs group relative"
                   style={{ scrollSnapAlign: 'start' }}
                 >
                   {/* Top Image Container with Discount Badge */}
                   <div>
-                    <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-50 border border-gray-100 mb-3">
+                    <div className="relative w-full aspect-square rounded-md overflow-hidden bg-slate-50 border border-slate-100 mb-2.5">
                       <img
                         src={product.image}
                         alt={product.title}
-                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
                         loading="lazy"
                       />
 
-                      {/* Strict Computed Discount Badge */}
+                      {/* Computed Discount Badge */}
                       {discountPercent !== null && (
                         <div className="absolute top-2 left-2 z-10">
-                          <span className="px-2 py-1 rounded-md bg-rose-600 text-white text-[11px] font-black shadow-sm flex items-center gap-0.5">
+                          <span className="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold flex items-center gap-0.5">
                             <Flame className="w-3 h-3 fill-white" />
-                            -{discountPercent}% OFF
+                            -{discountPercent}%
                           </span>
                         </div>
                       )}
@@ -224,59 +224,59 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
                       {/* Quick View Button on Image */}
                       <button
                         onClick={() => onSelectProduct(product)}
-                        className="absolute inset-0 m-auto w-10 h-10 rounded-full bg-white/90 text-[#5B21B6] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:scale-110 shadow-md cursor-pointer"
+                        className="absolute inset-0 m-auto w-8 h-8 rounded-full bg-white/95 text-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-slate-200 shadow-xs cursor-pointer"
                         title="Quick View Details"
                       >
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
                     {/* Category & Rating */}
                     <div className="flex items-center justify-between text-[11px] mb-1">
-                      <span className="text-[#5B21B6] font-extrabold uppercase tracking-wider truncate max-w-[120px]">
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider truncate max-w-[110px] text-[10px]">
                         {product.category}
                       </span>
-                      <div className="flex items-center text-amber-500 font-bold gap-0.5">
+                      <div className="flex items-center text-[#F59E0B] font-semibold gap-0.5">
                         <Star className="w-3 h-3 fill-current" />
-                        <span>{product.rating || 4.8}</span>
+                        <span className="text-slate-700 text-xs">{product.rating || 4.8}</span>
                       </div>
                     </div>
 
                     {/* Product Title */}
                     <h3 
                       onClick={() => onSelectProduct(product)}
-                      className="text-xs sm:text-sm font-bold text-[#171717] hover:text-[#5B21B6] line-clamp-2 leading-snug cursor-pointer transition-colors mb-2 min-h-[36px]"
+                      className="text-xs sm:text-sm font-semibold text-[#0F172A] hover:text-[#4F46E5] line-clamp-2 leading-snug cursor-pointer transition-colors mb-2 min-h-[34px]"
                     >
                       {product.title}
                     </h3>
 
                     {/* Price Display */}
-                    <div className="flex items-baseline gap-2 mb-3">
-                      <span className="text-base sm:text-lg font-black text-[#5B21B6]">
+                    <div className="flex items-baseline gap-1.5 mb-2.5">
+                      <span className="text-sm sm:text-base font-bold text-[#0F172A] font-mono tabular-nums">
                         ৳{product.price.toLocaleString()}
                       </span>
                       {product.originalPrice && (
-                        <span className="text-xs text-gray-400 line-through">
+                        <span className="text-[11px] text-slate-400 line-through tabular-nums">
                           ৳{product.originalPrice.toLocaleString()}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Stock Limit Progress Bar & Urgent Purchase Status */}
-                  <div className="space-y-2 pt-2 border-t border-gray-100">
-                    <div className="flex items-center justify-between text-[11px] text-[#525252]">
-                      <span className="font-semibold text-rose-600 flex items-center gap-1">
-                        <Flame className="w-3 h-3 fill-rose-600" />
+                  {/* Stock Limit Progress Bar */}
+                  <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-[10px] text-slate-500">
+                      <span className="font-semibold text-rose-600 flex items-center gap-0.5">
+                        <Flame className="w-2.5 h-2.5 fill-rose-600" />
                         {percentage}% Claimed
                       </span>
-                      <span className="text-gray-400 font-medium">{sold}/{total} Sold</span>
+                      <span className="text-slate-400 tabular-nums">{sold}/{total} Sold</span>
                     </div>
 
                     {/* Visual Progress Bar */}
-                    <div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-rose-500 to-[#5B21B6] rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-rose-500 to-[#4F46E5] rounded-full transition-all duration-300"
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -285,20 +285,20 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => onAddToCart(product)}
-                        className="py-1.5 px-2 rounded-lg bg-[#EDE9FE] hover:bg-purple-200 text-[#5B21B6] text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer active:scale-95"
+                        className="py-1.5 px-2 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors flex items-center justify-center gap-1 cursor-pointer active:scale-98"
                         title="Add to Cart"
                       >
-                        <ShoppingCart className="w-3.5 h-3.5" />
-                        <span className="truncate">Add Cart</span>
+                        <ShoppingCart className="w-3 h-3" />
+                        <span className="truncate">Cart</span>
                       </button>
 
                       <button
                         onClick={() => onBuyNow(product)}
-                        className="py-1.5 px-2 rounded-lg bg-[#5B21B6] hover:bg-[#4C1D95] text-white text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer shadow-xs active:scale-95"
+                        className="py-1.5 px-2 rounded-md bg-[#4F46E5] hover:bg-[#4338CA] text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1 cursor-pointer active:scale-98"
                         title="Buy Now"
                       >
-                        <Zap className="w-3 h-3 fill-amber-300 text-amber-300" />
-                        <span className="truncate">Buy Now</span>
+                        <Zap className="w-3 h-3 fill-[#F59E0B] text-[#F59E0B]" />
+                        <span className="truncate">Buy</span>
                       </button>
                     </div>
                   </div>
@@ -309,36 +309,36 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
         </div>
 
         {/* ================= 3. PROMOTIONAL GRID BANNERS (3 COLUMNS) ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 pt-1">
           {/* Banner 1: Perfume Vault Collection */}
           <div 
             onClick={() => onSelectCategory('Perfume & Fragrances')}
-            className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-900 to-[#5B21B6] text-white p-6 sm:p-7 flex flex-col justify-between h-[210px] cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 border border-purple-800"
+            className="group relative rounded-xl overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-6 flex flex-col justify-between h-[190px] cursor-pointer border border-slate-800 hover:border-slate-700 transition-colors shadow-2xs"
           >
             {/* Background Decorative Graphic */}
-            <div className="absolute right-0 bottom-0 w-36 h-36 opacity-30 group-hover:scale-110 group-hover:opacity-40 transition-all duration-500 pointer-events-none">
+            <div className="absolute right-0 bottom-0 w-32 h-32 opacity-25 group-hover:scale-105 group-hover:opacity-35 transition-all duration-300 pointer-events-none">
               <img
                 src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&q=80&w=400"
                 alt="Perfume Deco"
-                className="w-full h-full object-cover rounded-tl-3xl mix-blend-screen"
+                className="w-full h-full object-cover mix-blend-screen"
               />
             </div>
 
             <div className="relative z-10 space-y-1">
-              <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-amber-300 bg-black/30 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#F59E0B] bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
                 <Sparkles className="w-3 h-3" />
                 Royal Luxury Notes
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">
                 Perfume Vault Collection
               </h3>
-              <p className="text-xs text-purple-200 font-semibold">
+              <p className="text-xs text-slate-300">
                 Original Imports & Artisanal Fragrances
               </p>
             </div>
 
             <div className="relative z-10">
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-white bg-white/20 hover:bg-white hover:text-[#5B21B6] px-3.5 py-1.5 rounded-xl backdrop-blur-md transition-all group-hover:translate-x-1">
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-white bg-[#4F46E5] hover:bg-[#4338CA] px-3 py-1.5 rounded-md transition-colors">
                 Shop Scents <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </div>
@@ -347,32 +347,32 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           {/* Banner 2: Trending Gadgets & Tech */}
           <div 
             onClick={() => onSelectCategory('Electronics & Gadgets')}
-            className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#1E1B4B] to-purple-950 text-white p-6 sm:p-7 flex flex-col justify-between h-[210px] cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 border border-indigo-900"
+            className="group relative rounded-xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-5 sm:p-6 flex flex-col justify-between h-[190px] cursor-pointer border border-slate-800 hover:border-slate-700 transition-colors shadow-2xs"
           >
             {/* Background Decorative Graphic */}
-            <div className="absolute right-0 bottom-0 w-36 h-36 opacity-30 group-hover:scale-110 group-hover:opacity-40 transition-all duration-500 pointer-events-none">
+            <div className="absolute right-0 bottom-0 w-32 h-32 opacity-25 group-hover:scale-105 group-hover:opacity-35 transition-all duration-300 pointer-events-none">
               <img
                 src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&q=80&w=400"
                 alt="Gadgets Deco"
-                className="w-full h-full object-cover rounded-tl-3xl mix-blend-screen"
+                className="w-full h-full object-cover mix-blend-screen"
               />
             </div>
 
             <div className="relative z-10 space-y-1">
-              <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-cyan-300 bg-black/30 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-cyan-300 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
                 <Zap className="w-3 h-3 fill-current" />
                 Smart Lifestyle
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">
                 Trending Gadgets & Tech
               </h3>
-              <p className="text-xs text-indigo-200 font-semibold">
-                Free Delivery Inside Dhaka on all tech orders
+              <p className="text-xs text-slate-300">
+                Free Delivery Inside Dhaka on tech orders
               </p>
             </div>
 
             <div className="relative z-10">
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-white bg-white/20 hover:bg-white hover:text-indigo-950 px-3.5 py-1.5 rounded-xl backdrop-blur-md transition-all group-hover:translate-x-1">
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-white bg-[#4F46E5] hover:bg-[#4338CA] px-3 py-1.5 rounded-md transition-colors">
                 Explore Tech <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </div>
@@ -381,32 +381,32 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           {/* Banner 3: New Arrivals in Fashion */}
           <div 
             onClick={() => onSelectCategory('Fashion & Lifestyle')}
-            className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-amber-600 via-rose-600 to-purple-700 text-white p-6 sm:p-7 flex flex-col justify-between h-[210px] cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 border border-rose-500"
+            className="group relative rounded-xl overflow-hidden bg-gradient-to-br from-[#1E1B4B] via-slate-900 to-[#0F172A] text-white p-5 sm:p-6 flex flex-col justify-between h-[190px] cursor-pointer border border-slate-800 hover:border-slate-700 transition-colors shadow-2xs"
           >
             {/* Background Decorative Graphic */}
-            <div className="absolute right-0 bottom-0 w-36 h-36 opacity-30 group-hover:scale-110 group-hover:opacity-40 transition-all duration-500 pointer-events-none">
+            <div className="absolute right-0 bottom-0 w-32 h-32 opacity-25 group-hover:scale-105 group-hover:opacity-35 transition-all duration-300 pointer-events-none">
               <img
                 src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&q=80&w=400"
                 alt="Fashion Deco"
-                className="w-full h-full object-cover rounded-tl-3xl mix-blend-screen"
+                className="w-full h-full object-cover mix-blend-screen"
               />
             </div>
 
             <div className="relative z-10 space-y-1">
-              <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-amber-200 bg-black/30 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#F59E0B] bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
                 <Tag className="w-3 h-3" />
                 Wardrobe Essentials
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">
                 New Arrivals in Fashion
               </h3>
-              <p className="text-xs text-amber-100 font-semibold">
-                Buy 1 Get 1 Deals on Selected Seasonal Outfits
+              <p className="text-xs text-slate-300">
+                Selected Seasonal Outfits & Accessories
               </p>
             </div>
 
             <div className="relative z-10">
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-white bg-white/20 hover:bg-white hover:text-rose-900 px-3.5 py-1.5 rounded-xl backdrop-blur-md transition-all group-hover:translate-x-1">
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-white bg-[#4F46E5] hover:bg-[#4338CA] px-3 py-1.5 rounded-md transition-colors">
                 Claim Offer <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </div>

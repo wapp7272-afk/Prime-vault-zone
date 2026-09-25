@@ -616,34 +616,58 @@ export const AdminOrdersManager: React.FC<AdminOrdersManagerProps> = ({
                           </div>
                         </div>
 
-                        {/* Payment Verification Status Toggle */}
-                        <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] text-slate-400">Payment Status:</span>
+                        {/* Payment Verification Status Selector */}
+                        <div className="pt-2.5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] text-slate-400 font-semibold">Payment Status:</span>
                             <span
-                              className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                                order.paymentStatus === 'Verified' || order.status === 'Delivered'
-                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold ${
+                                order.paymentStatus === 'Verified' || order.paymentStatus === 'Paid (COD on Delivery)' || order.status === 'Delivered'
+                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                  : order.paymentStatus === 'Failed'
+                                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                                   : order.paymentMethod === 'cod'
-                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                  : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                  : 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
                               }`}
                             >
-                              {order.paymentStatus || (order.paymentMethod === 'cod' ? 'Pay upon Delivery' : 'Pending Verification')}
+                              {order.paymentStatus || (order.paymentMethod === 'cod' ? 'Pending Collection (COD)' : 'Pending Verification')}
                             </span>
                           </div>
 
-                          {onUpdateOrderPaymentStatus && order.paymentMethod !== 'cod' && (
-                            <button
-                              onClick={() => {
-                                const nextStatus = order.paymentStatus === 'Verified' ? 'Pending Verification' : 'Verified';
-                                onUpdateOrderPaymentStatus(order.id, nextStatus);
-                                showToast(`Order ${order.id} payment set to: ${nextStatus}`);
-                              }}
-                              className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[10px] font-bold transition-all"
-                            >
-                              {order.paymentStatus === 'Verified' ? 'Mark as Pending' : 'Mark as Verified ✓'}
-                            </button>
+                          {onUpdateOrderPaymentStatus && (
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[10px] text-slate-500">Update Status:</span>
+                              <select
+                                id={`order-payment-status-select-${order.id}`}
+                                value={
+                                  order.paymentStatus ||
+                                  (order.paymentMethod === 'cod' ? 'Pending Verification' : 'Pending Verification')
+                                }
+                                onChange={(e) => {
+                                  const nextStatus = e.target.value as Order['paymentStatus'];
+                                  if (nextStatus) {
+                                    onUpdateOrderPaymentStatus(order.id, nextStatus);
+                                    showToast(`✓ Order #${order.id} payment status set to: ${nextStatus}`);
+                                  }
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-xs font-semibold text-slate-200 focus:outline-none focus:border-cyan-400 cursor-pointer"
+                              >
+                                {order.paymentMethod === 'cod' ? (
+                                  <>
+                                    <option value="Pending Verification">Pending Collection (COD)</option>
+                                    <option value="Paid (COD on Delivery)">Paid (COD on Delivery) ✓</option>
+                                    <option value="Failed">Payment Failed</option>
+                                  </>
+                                ) : (
+                                  <>
+                                    <option value="Pending Verification">Pending Verification</option>
+                                    <option value="Verified">Verified ✓</option>
+                                    <option value="Failed">Failed / Invalid Trx</option>
+                                  </>
+                                )}
+                              </select>
+                            </div>
                           )}
                         </div>
                       </div>

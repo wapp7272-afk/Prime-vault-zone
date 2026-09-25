@@ -50,57 +50,57 @@ export const TrustValueProposition: React.FC<TrustValuePropositionProps> = () =>
   ];
 
   return (
-    <section className="py-8 bg-[#F9FAFB] border-y border-[#E5E7EB]" id="trust-section">
+    <section className="py-10 bg-[#F9FAFB] border-y border-slate-200" id="trust-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EDE9FE] border border-purple-200 text-[#5B21B6] text-xs font-bold mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-indigo-50 border border-indigo-200/80 text-[#4F46E5] text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Why Millions Trust Prime Vault Zone</span>
+            <span>Why Customers Trust Prime Vault Zone</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#171717] tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A] tracking-tight">
             The Safe, Premium Bangladeshi Marketplace
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-[#525252]">
+          <p className="mt-1.5 text-xs sm:text-sm text-slate-600">
             Enjoy seamless shopping with customer protection, authenticated inventories, and door-to-door fulfillment.
           </p>
         </div>
 
-        {/* 4-Column Feature Banner using Soft Lavender (#EDE9FE) Background Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* 4-Column Feature Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.id}
                 id={`trust-card-${idx}`}
-                className="group relative p-5 sm:p-6 rounded-2xl bg-[#EDE9FE] border border-purple-200/80 hover:border-[#5B21B6] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                className="group relative p-4 sm:p-5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 transition-colors flex flex-col justify-between shadow-2xs"
               >
                 <div>
                   {/* Top Icon and Badge */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-white text-[#5B21B6] flex items-center justify-center shadow-xs group-hover:scale-110 group-hover:bg-[#5B21B6] group-hover:text-white transition-all duration-300">
-                      <Icon className="w-6 h-6" />
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-9 h-9 rounded-md bg-indigo-50 text-[#4F46E5] flex items-center justify-center border border-indigo-100">
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${feature.badgeColor}`}>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${feature.badgeColor}`}>
                       {feature.highlight}
                     </span>
                   </div>
 
                   {/* Feature Title */}
-                  <h3 className="text-base font-bold text-[#171717] mb-2 leading-snug group-hover:text-[#5B21B6] transition-colors">
+                  <h3 className="text-sm font-semibold text-[#0F172A] mb-1.5 leading-snug group-hover:text-[#4F46E5] transition-colors">
                     {feature.title}
                   </h3>
 
                   {/* Feature Description */}
-                  <p className="text-xs sm:text-[13px] text-[#525252] leading-relaxed">
+                  <p className="text-xs text-slate-500 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
 
-                {/* Subtle Trust Assurance Tick */}
-                <div className="mt-4 pt-3 border-t border-purple-200/60 flex items-center gap-1.5 text-[11px] font-semibold text-[#5B21B6]">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                {/* Trust Assurance Tick */}
+                <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex items-center gap-1.5 text-[11px] font-medium text-slate-600">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#4F46E5]" />
                   <span>Verified Prime Guarantee</span>
                 </div>
               </div>

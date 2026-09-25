@@ -222,6 +222,11 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
           }
         : undefined;
 
+    const computedDiscount =
+      parsedOriginalPrice && parsedOriginalPrice > parsedPrice
+        ? `-${Math.round(((parsedOriginalPrice - parsedPrice) / parsedOriginalPrice) * 100)}%`
+        : undefined;
+
     if (editingProduct) {
       // Update
       const updated: Product = {
@@ -230,6 +235,7 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
         description: description.trim(),
         price: parsedPrice,
         originalPrice: parsedOriginalPrice,
+        discount: computedDiscount,
         category,
         inStock,
         image: imageUrl.trim(),
@@ -251,6 +257,7 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
         description: description.trim(),
         price: parsedPrice,
         originalPrice: parsedOriginalPrice,
+        discount: computedDiscount,
         category,
         rating: 4.9,
         reviewsCount: 1,
@@ -398,6 +405,23 @@ export const AdminProductsManager: React.FC<AdminProductsManagerProps> = ({
                   {product.tag && (
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-pink-950/60 text-pink-300 border border-pink-500/30">
                       {product.tag}
+                    </span>
+                  )}
+                  {product.originalPrice && product.originalPrice > product.price && (
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-950/80 text-rose-300 border border-rose-500/30 font-mono">
+                      -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                    </span>
+                  )}
+                  {product.sampleVideoUrl && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+                      <Video className="w-2.5 h-2.5" />
+                      <span>Sample Video</span>
+                    </span>
+                  )}
+                  {(product.aiShowcaseVideoUrl || product.videoUrl) && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-purple-950/80 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                      <Film className="w-2.5 h-2.5" />
+                      <span>AI Showcase</span>
                     </span>
                   )}
                 </div>

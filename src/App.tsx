@@ -22,7 +22,7 @@ import {
   ChevronRight,
   RotateCcw
 } from 'lucide-react';
-import { Product, CartItem, UserProfile, Address, Order, Coupon, ActivePage, Seller, SystemBannerSettings, PayoutRequest } from './types';
+import { Product, CartItem, UserProfile, Address, Order, Coupon, ActivePage, Seller, SystemBannerSettings, PayoutRequest, WalletTransaction } from './types';
 import { PRODUCTS, CATEGORIES } from './data/products';
 import { INITIAL_COUPONS } from './data/coupons';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -264,7 +264,27 @@ export default function App() {
   const [user, setUser] = useState<UserProfile>(() => {
     try {
       const saved = localStorage.getItem('primevault_user') || localStorage.getItem('zestflick_user');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          isLoggedIn: parsed.isLoggedIn ?? false,
+          name: parsed.name || '',
+          email: parsed.email || '',
+          phone: parsed.phone || '',
+          walletBalance: parsed.walletBalance ?? 0,
+          hasReceivedBonus: parsed.hasReceivedBonus ?? false,
+          isPhoneVerified: parsed.isPhoneVerified ?? false,
+          authProvider: parsed.authProvider || 'google',
+          avatar: parsed.avatar,
+          walletHistory: parsed.walletHistory || [],
+          address: parsed.address || {
+            fullName: '',
+            phone: '',
+            cityDivision: 'Inside Dhaka',
+            fullAddress: '',
+          }
+        };
+      }
     } catch (e) {
       console.error(e);
     }
@@ -275,6 +295,9 @@ export default function App() {
       phone: '',
       walletBalance: 0,
       hasReceivedBonus: false,
+      isPhoneVerified: false,
+      authProvider: 'google',
+      walletHistory: [],
       address: {
         fullName: '',
         phone: '',
@@ -450,6 +473,9 @@ export default function App() {
     if (quickViewProduct?.id === updatedProduct.id) {
       setQuickViewProduct(updatedProduct);
     }
+    if (selectedProductDetail?.id === updatedProduct.id) {
+      setSelectedProductDetail(updatedProduct);
+    }
     showToast(`✓ Product "${updatedProduct.title}" updated!`);
   };
 
@@ -458,6 +484,10 @@ export default function App() {
     setCart((prev) => prev.filter((item) => item.product.id !== productId));
     if (quickViewProduct?.id === productId) {
       setQuickViewProduct(null);
+    }
+    if (selectedProductDetail?.id === productId) {
+      setSelectedProductDetail(null);
+      setActivePage('Home');
     }
     showToast('✓ Product deleted from store.');
   };
@@ -695,35 +725,171 @@ export default function App() {
   };
 
   // User Profile Authentication Handlers
-  const handleLogin = (phone: string, name: string) => {
-    setUser((prev) => ({
-      ...prev,
+  const handleLogin = (
+    name: string,
+    email: string,
+    phone: string,
+    isPhoneVerified?: boolean,
+    authProvider?: 'google' | 'phone' | 'email',
+    avatar?: string
+  ) => {
+    // Lookup stored account in registered accounts
+    const accounts = (() => {
+      try {
+        const stored = localStorage.getItem('primevault_registered_accounts');
+        return stored ? JSON.parse(stored) : [];
+      } catch {
+        return [];
+      }
+    })();
+    const cleanPhone = (phone || '').replace(/[^0-9]/g, '');
+    const matched = accounts.find((a: any) => 
+      (cleanPhone && a.phone === cleanPhone) || 
+      (email && a.email?.toLowerCase() === email?.toLowerCase())
+    );
+
+    const balance = matched?.walletBalance ?? (user.walletBalance > 0 ? user.walletBalance : 20);
+    const verified = isPhoneVerified ?? matched?.isPhoneVerified ?? true;
+    const history: WalletTransaction[] = matched?.walletHistory || user.walletHistory || [
+      {
+        id: `tx-welcome-${Date.now()}`,
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        amount: 20,
+        type: 'credit',
+        description: 'Welcome Sign-up & Phone Verification Bonus'
+      }
+    ];
+
+    const updatedUser: UserProfile = {
       isLoggedIn: true,
-      name: name || 'Valued Customer',
-      phone,
-    }));
+      name: name || matched?.name || 'Prime Member',
+      email: email || matched?.email || '',
+      phone: cleanPhone || matched?.phone || '',
+      walletBalance: balance,
+      hasReceivedBonus: true,
+      isPhoneVerified: verified,
+      authProvider: authProvider || matched?.authProvider || 'google',
+      avatar: avatar || matched?.avatar,
+      walletHistory: history,
+      address: matched?.address ? { ...matched.address } : user.address
+    };
+
+    setUser(updatedUser);
     setIsAuthOpen(false);
-    showToast(`Welcome back, ${name || 'Customer'}!`);
+    showToast(`✓ Welcome back, ${updatedUser.name}! Live Wallet: ৳${updatedUser.walletBalance}`);
   };
 
-  const handleSignup = (name: string, email: string, phone: string) => {
-    const bonus = user.hasReceivedBonus ? 0 : 20;
-    setUser({
+  const handleSignup = (
+    name: string,
+    email: string,
+    phone: string,
+    address: Address,
+    isPhoneVerified?: boolean,
+    authProvider?: 'google' | 'phone' | 'email',
+    avatar?: string
+  ) => {
+    const bonus = 20;
+    const cleanPhone = (phone || '').replace(/[^0-9]/g, '');
+    const welcomeTx: WalletTransaction = {
+      id: `tx-${Date.now()}`,
+      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      amount: bonus,
+      type: 'credit',
+      description: 'Welcome Sign-up & Phone Verification Bonus'
+    };
+
+    const newUser: UserProfile = {
       isLoggedIn: true,
-      name,
-      email,
-      phone,
-      walletBalance: user.walletBalance + bonus,
+      name: name || 'Prime Member',
+      email: email || '',
+      phone: cleanPhone,
+      walletBalance: bonus,
       hasReceivedBonus: true,
-      address: {
+      isPhoneVerified: isPhoneVerified ?? true,
+      authProvider: authProvider || 'google',
+      avatar: avatar,
+      walletHistory: [welcomeTx],
+      address: address || {
         fullName: name,
-        phone,
+        phone: cleanPhone,
         cityDivision: 'Inside Dhaka',
-        fullAddress: '',
+        fullAddress: ''
       }
-    });
+    };
+
+    // Also persist to registered accounts
+    try {
+      const accounts = (() => {
+        const stored = localStorage.getItem('primevault_registered_accounts');
+        return stored ? JSON.parse(stored) : [];
+      })();
+      const idx = accounts.findIndex((a: any) => 
+        (cleanPhone && a.phone === cleanPhone) || 
+        (email && a.email?.toLowerCase() === email?.toLowerCase())
+      );
+      if (idx >= 0) {
+        accounts[idx] = { ...accounts[idx], ...newUser };
+      } else {
+        accounts.push(newUser);
+      }
+      localStorage.setItem('primevault_registered_accounts', JSON.stringify(accounts));
+    } catch (e) {
+      console.error(e);
+    }
+
+    setUser(newUser);
     setIsAuthOpen(false);
-    showToast(bonus > 0 ? '🎉 Congratulations! ৳20 Welcome Bonus credited to your wallet!' : `Welcome, ${name}!`);
+    showToast(`🎉 Welcome ${name || 'Member'}! ৳20 Welcome Bonus credited to your wallet!`);
+  };
+
+  const handleVerifyPhoneSuccess = (verifiedPhone: string) => {
+    const cleanPhone = (verifiedPhone || '').replace(/[^0-9]/g, '');
+    setUser((prev) => {
+      const hasBonus = prev.hasReceivedBonus && prev.walletBalance >= 20;
+      const newBalance = hasBonus ? prev.walletBalance : prev.walletBalance + 20;
+      const newHistory = prev.walletHistory ? [...prev.walletHistory] : [];
+      if (!hasBonus) {
+        newHistory.push({
+          id: `tx-verify-${Date.now()}`,
+          date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+          amount: 20,
+          type: 'credit',
+          description: 'Phone Verification Bonus'
+        });
+      }
+      const updated: UserProfile = {
+        ...prev,
+        isLoggedIn: true,
+        phone: cleanPhone,
+        isPhoneVerified: true,
+        hasReceivedBonus: true,
+        walletBalance: newBalance,
+        walletHistory: newHistory
+      };
+
+      // Update registered accounts
+      try {
+        const accounts = (() => {
+          const stored = localStorage.getItem('primevault_registered_accounts');
+          return stored ? JSON.parse(stored) : [];
+        })();
+        const idx = accounts.findIndex((a: any) => 
+          (cleanPhone && a.phone === cleanPhone) || 
+          (prev.email && a.email?.toLowerCase() === prev.email?.toLowerCase())
+        );
+        if (idx >= 0) {
+          accounts[idx] = { ...accounts[idx], ...updated };
+        } else {
+          accounts.push(updated);
+        }
+        localStorage.setItem('primevault_registered_accounts', JSON.stringify(accounts));
+      } catch (e) {
+        console.error(e);
+      }
+
+      return updated;
+    });
+    showToast(`📱 Mobile ${cleanPhone} verified! ৳20 Wallet Bonus active!`);
   };
 
   const handleUpdateAddress = (newAddress: Address) => {
@@ -742,6 +908,9 @@ export default function App() {
       phone: '',
       walletBalance: 0,
       hasReceivedBonus: false,
+      isPhoneVerified: false,
+      authProvider: 'google',
+      walletHistory: [],
       address: {
         fullName: '',
         phone: '',
@@ -758,10 +927,42 @@ export default function App() {
     setCart([]);
     setIsCheckoutOpen(false);
     if (order.walletDeducted > 0) {
-      setUser((prev) => ({
-        ...prev,
-        walletBalance: Math.max(0, prev.walletBalance - order.walletDeducted),
-      }));
+      setUser((prev) => {
+        const remaining = Math.max(0, prev.walletBalance - order.walletDeducted);
+        const debitTx: WalletTransaction = {
+          id: `tx-order-${Date.now()}`,
+          date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+          amount: order.walletDeducted,
+          type: 'debit',
+          description: `Applied to Order ${order.id}`
+        };
+        const updatedHistory = prev.walletHistory ? [debitTx, ...prev.walletHistory] : [debitTx];
+        const updatedUser: UserProfile = {
+          ...prev,
+          walletBalance: remaining,
+          walletHistory: updatedHistory,
+        };
+
+        // Update stored registered accounts
+        try {
+          const accounts = (() => {
+            const stored = localStorage.getItem('primevault_registered_accounts');
+            return stored ? JSON.parse(stored) : [];
+          })();
+          const idx = accounts.findIndex((a: any) => 
+            (prev.phone && a.phone === prev.phone) || 
+            (prev.email && a.email?.toLowerCase() === prev.email?.toLowerCase())
+          );
+          if (idx >= 0) {
+            accounts[idx] = { ...accounts[idx], walletBalance: remaining, walletHistory: updatedHistory };
+            localStorage.setItem('primevault_registered_accounts', JSON.stringify(accounts));
+          }
+        } catch (e) {
+          console.error(e);
+        }
+
+        return updatedUser;
+      });
     }
     showToast(`🎉 Order Placed Successfully! ID: ${order.id}`);
   };
@@ -771,6 +972,20 @@ export default function App() {
       prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
     );
     showToast(`✓ Order #${orderId} status updated: ${newStatus}`);
+  };
+
+  const handleUpdateOrderPaymentStatus = (orderId: string, newPaymentStatus: Order['paymentStatus']) => {
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, paymentStatus: newPaymentStatus } : o))
+    );
+    showToast(`✓ Order #${orderId} payment status set to: ${newPaymentStatus}`);
+  };
+
+  const handleUpdateOrderTracking = (orderId: string, courierName: string, trackingNumber: string) => {
+    setOrders((prev) =>
+      prev.map((o) => (o.id === orderId ? { ...o, courierName, trackingNumber } : o))
+    );
+    showToast(`✓ Tracking assigned for #${orderId}: ${courierName} (${trackingNumber})`);
   };
 
   // Download Standalone Single-File HTML
@@ -905,7 +1120,7 @@ export default function App() {
   }, [products]);
 
   return (
-    <div className="min-h-screen bg-white text-[#171717] font-sans selection:bg-[#5B21B6] selection:text-white relative">
+    <div className="min-h-screen bg-[#F9FAFB] text-[#0F172A] font-sans selection:bg-[#4F46E5] selection:text-white relative">
       {/* Animated Loading Screen */}
       <LoadingScreen />
 
@@ -1051,50 +1266,50 @@ export default function App() {
           <TrustValueProposition />
 
           {/* ==================== POPULAR PRODUCTS GRID ==================== */}
-          <section id="popular" className="py-14 lg:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-[#E5E7EB]">
-            <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-              <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#5B21B6] font-extrabold">
-                <Sparkles className="w-3.5 h-3.5 text-[#5B21B6]" />
+          <section id="popular" className="py-12 lg:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-slate-200">
+            <div className="text-center max-w-2xl mx-auto mb-8 space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#4F46E5] font-bold">
+                <Sparkles className="w-3.5 h-3.5 text-[#4F46E5]" />
                 <span>TOP TRENDING FRAGRANCES</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717]">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A]">
                 Best Selling Perfumes in Bangladesh
               </h2>
-              <p className="text-xs sm:text-sm text-[#525252]">
+              <p className="text-xs sm:text-sm text-slate-500">
                 যে ৫টি পারফিউম এখন সবার মধ্যে সবচেয়ে বেশি জনপ্রিয় ও প্রশংসিত
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {popularPerfumes.map((product) => {
                 const isAdded = cart.some((item) => item.product.id === product.id);
                 const isWishlisted = wishlist.includes(product.id);
                 return (
                   <div
                     key={product.id}
-                    className="group bg-white rounded-xl border border-[#E5E7EB] hover:border-[#C4B5FD] overflow-hidden flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                    className="group bg-white rounded-lg border border-slate-200 hover:border-slate-300 overflow-hidden flex flex-col justify-between transition-colors shadow-2xs"
                   >
                     {/* Uniform Square Ratio */}
                     <div 
-                      className="relative aspect-square w-full overflow-hidden bg-[#F9FAFB] cursor-pointer"
+                      className="relative aspect-square w-full overflow-hidden bg-slate-50 cursor-pointer"
                       onClick={() => handleSelectProductDetail(product)}
                     >
                       <img
                         src={product.image}
                         alt={product.title}
-                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
                         loading="lazy"
                       />
 
                       <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
-                        <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="px-1.5 py-0.5 text-[10px] font-bold uppercase rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
                           In Stock
                         </span>
                       </div>
 
                       {product.discount && (
                         <div className="absolute top-2 right-2 z-10">
-                          <span className="bg-[#5B21B6] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
+                          <span className="bg-rose-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                             {product.discount}
                           </span>
                         </div>
@@ -1105,8 +1320,8 @@ export default function App() {
                           e.stopPropagation();
                           handleToggleWishlist(product.id);
                         }}
-                        className={`absolute bottom-2 right-2 p-1.5 rounded-lg bg-white/90 backdrop-blur-md border border-[#E5E7EB] shadow-xs opacity-0 group-hover:opacity-100 transition-opacity ${
-                          isWishlisted ? 'text-rose-500' : 'text-[#525252] hover:text-[#5B21B6]'
+                        className={`absolute bottom-2 right-2 p-1.5 rounded-md bg-white/90 backdrop-blur-xs border border-slate-200 shadow-2xs opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${
+                          isWishlisted ? 'text-rose-500' : 'text-slate-400 hover:text-rose-500'
                         }`}
                         title="Wishlist"
                       >
@@ -1115,26 +1330,26 @@ export default function App() {
                     </div>
 
                     {/* Product Info & Actions */}
-                    <div className="p-3.5 flex-1 flex flex-col justify-between space-y-2.5">
+                    <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
                       <div 
                         className="cursor-pointer"
                         onClick={() => handleSelectProductDetail(product)}
                       >
-                        <span className="text-[10px] text-[#5B21B6] uppercase tracking-wider font-extrabold block">
+                        <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">
                           {product.category}
                         </span>
-                        <h3 className="text-xs sm:text-sm font-bold text-[#171717] group-hover:text-[#5B21B6] transition-colors line-clamp-1">
+                        <h3 className="text-xs sm:text-sm font-semibold text-[#0F172A] group-hover:text-[#4F46E5] transition-colors line-clamp-1">
                           {product.title}
                         </h3>
                       </div>
 
                       <div>
                         <div className="flex items-baseline gap-1.5">
-                          <span className="text-sm sm:text-base font-extrabold text-[#5B21B6]">
+                          <span className="text-sm sm:text-base font-bold text-[#0F172A] font-mono tabular-nums">
                             ৳{product.price.toLocaleString()}
                           </span>
                           {product.originalPrice && (
-                            <span className="text-[11px] text-gray-400 line-through">
+                            <span className="text-[11px] text-slate-400 line-through tabular-nums">
                               ৳{product.originalPrice.toLocaleString()}
                             </span>
                           )}
@@ -1142,13 +1357,13 @@ export default function App() {
                       </div>
 
                       {/* Dual Action Buttons */}
-                      <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-[#E5E7EB]">
+                      <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-slate-100">
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className={`py-1.5 px-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                          className={`py-1.5 px-2 rounded-md font-medium text-xs flex items-center justify-center gap-1 transition-colors cursor-pointer ${
                             isAdded
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-[#EDE9FE] hover:bg-purple-200 text-[#5B21B6] border border-purple-200'
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-700 active:scale-98'
                           }`}
                         >
                           {isAdded ? (
@@ -1166,9 +1381,9 @@ export default function App() {
 
                         <button
                           onClick={() => handleBuyNow(product)}
-                          className="py-1.5 px-2 rounded-lg font-bold text-xs bg-[#5B21B6] hover:bg-[#4C1D95] text-white shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
+                          className="py-1.5 px-2 rounded-md font-semibold text-xs bg-[#4F46E5] hover:bg-[#4338CA] text-white transition-colors flex items-center justify-center gap-1 cursor-pointer active:scale-98"
                         >
-                          <Zap className="w-3 h-3 text-amber-300 fill-amber-300" />
+                          <Zap className="w-3 h-3 text-[#F59E0B] fill-[#F59E0B]" />
                           <span>Buy</span>
                         </button>
                       </div>
@@ -1180,28 +1395,28 @@ export default function App() {
           </section>
 
           {/* ==================== CATEGORIES & VAULT CATALOG ==================== */}
-          <main id="explore" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
+          <main id="explore" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
             {/* Category Navigation Pills */}
             <section className="mb-6">
-              <div className="flex items-center justify-between gap-4 mb-4">
-                <h2 className="text-lg font-bold text-[#171717] flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-[#5B21B6]" />
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <h2 className="text-base sm:text-lg font-bold text-[#0F172A] flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-[#F59E0B]" />
                   <span>Explore Marketplace Categories</span>
                 </h2>
-                <span className="text-xs text-[#525252] font-semibold">
+                <span className="text-xs text-slate-500 font-medium">
                   Showing {filteredProducts.length} items
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-2 cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
                       selectedCategory === cat
-                        ? 'bg-[#5B21B6] text-white shadow-sm'
-                        : 'bg-white hover:bg-purple-50 text-[#525252] hover:text-[#5B21B6] border border-[#E5E7EB]'
+                        ? 'bg-[#4F46E5] text-white shadow-2xs'
+                        : 'bg-white hover:bg-slate-100 text-slate-600 border border-slate-200'
                     }`}
                   >
                     <span>{cat}</span>
@@ -1210,9 +1425,9 @@ export default function App() {
               </div>
             </section>
 
-            {/* ==================== HOMEPAGE MULTI-CATEGORY CATALOG TABS (Prompt 05) ==================== */}
-            <section className="mb-8">
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-gray-200">
+            {/* ==================== HOMEPAGE MULTI-CATEGORY CATALOG TABS ==================== */}
+            <section className="mb-6">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-slate-200">
                 {[
                   { id: 'recommended', label: 'Recommended For You', icon: '🌟' },
                   { id: 'bestsellers', label: 'Best Sellers', icon: '🔥' },
@@ -1229,16 +1444,16 @@ export default function App() {
                         if (tab.id === 'perfumes') setSelectedCategory('Perfume & Fragrances');
                         else if (tab.id === 'tech') setSelectedCategory('Electronics & Gadgets');
                       }}
-                      className={`pb-3 px-4 text-xs sm:text-sm font-extrabold whitespace-nowrap transition-all relative cursor-pointer flex items-center gap-1.5 ${
+                      className={`pb-2.5 px-3 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors relative cursor-pointer flex items-center gap-1.5 ${
                         isActive
-                          ? 'text-[#5B21B6]'
-                          : 'text-[#525252] hover:text-[#171717]'
+                          ? 'text-[#4F46E5]'
+                          : 'text-slate-500 hover:text-[#0F172A]'
                       }`}
                     >
                       <span>{tab.icon}</span>
                       <span>{tab.label}</span>
                       {isActive && (
-                        <div className="absolute bottom-0 inset-x-0 h-0.5 bg-[#5B21B6] rounded-full" />
+                        <div className="absolute bottom-0 inset-x-0 h-0.5 bg-[#4F46E5] rounded-full" />
                       )}
                     </button>
                   );
@@ -1248,11 +1463,11 @@ export default function App() {
 
             {/* Active Search / Category / Filter Tab feedback */}
             {(searchQuery || selectedCategory !== 'All' || activeFilterTab !== 'All' || catalogTab !== 'recommended') && (
-              <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-xs text-[#525252] bg-purple-50/70 p-3.5 rounded-xl border border-purple-200">
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-semibold text-gray-500">Active Filters:</span>
+                  <span className="font-medium text-slate-400">Active Filters:</span>
                   {catalogTab !== 'recommended' && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100 text-[#5B21B6] border border-purple-300 text-[11px] font-bold">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 text-[#4F46E5] border border-indigo-200 text-[11px] font-medium">
                       Tab: {catalogTab}
                       <button 
                         onClick={() => setCatalogTab('recommended')}
@@ -1264,7 +1479,7 @@ export default function App() {
                     </span>
                   )}
                   {activeFilterTab !== 'All' && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#5B21B6] text-white text-[11px] font-bold">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#4F46E5] text-white text-[11px] font-medium">
                       Badge: {activeFilterTab}
                       <button 
                         onClick={() => setActiveFilterTab('All')}
@@ -1276,7 +1491,7 @@ export default function App() {
                     </span>
                   )}
                   {selectedCategory !== 'All' && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EDE9FE] text-[#5B21B6] border border-purple-200 text-[11px] font-bold">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 text-[#4F46E5] border border-indigo-200 text-[11px] font-medium">
                       Category: {selectedCategory}
                       <button 
                         onClick={() => setSelectedCategory('All')}
@@ -1288,7 +1503,7 @@ export default function App() {
                     </span>
                   )}
                   {searchQuery && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-[#171717] border border-gray-200 text-[11px] font-bold">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white text-[#0F172A] border border-slate-200 text-[11px] font-medium">
                       Search: &quot;{searchQuery}&quot;
                       <button 
                         onClick={() => setSearchQuery('')}
@@ -1307,20 +1522,20 @@ export default function App() {
                     setActiveFilterTab('All');
                     setCatalogTab('recommended');
                   }}
-                  className="text-[#5B21B6] hover:text-[#4C1D95] font-bold hover:underline cursor-pointer text-xs"
+                  className="text-[#4F46E5] hover:text-[#4338CA] font-medium hover:underline cursor-pointer text-xs"
                 >
                   Reset All Filters
                 </button>
               </div>
             )}
 
-            {/* Products Grid (Prompt 05: Responsive 2-Col Mobile, 3-Col Tablet, 4/5-Col Desktop) */}
+            {/* Products Grid */}
             <section>
               {filteredProducts.length === 0 ? (
-                <div className="text-center py-20 bg-gray-50 rounded-2xl border border-[#E5E7EB]">
-                  <ShoppingBag className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <h3 className="text-lg font-bold text-[#171717] mb-1">কোনো পণ্য খুঁজে পাওয়া যায়নি</h3>
-                  <p className="text-xs text-[#525252] mb-5">
+                <div className="text-center py-16 bg-white rounded-lg border border-slate-200">
+                  <ShoppingBag className="w-10 h-10 text-slate-300 mx-auto mb-2.5" />
+                  <h3 className="text-base font-semibold text-[#0F172A] mb-1">কোনো পণ্য খুঁজে পাওয়া যায়নি</h3>
+                  <p className="text-xs text-slate-500 mb-4">
                     অনুগ্রহ করে অন্য কোনো কি-ওয়ার্ড দিয়ে সার্চ করুন অথবা ফিল্টার পরিবর্তন করুন।
                   </p>
                   <button
@@ -1330,13 +1545,13 @@ export default function App() {
                       setActiveFilterTab('All');
                       setCatalogTab('recommended');
                     }}
-                    className="px-4 py-2 rounded-xl bg-[#5B21B6] hover:bg-[#4C1D95] text-white text-xs font-bold shadow-xs cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-md bg-[#4F46E5] hover:bg-[#4338CA] text-white text-xs font-semibold cursor-pointer"
                   >
                     সব পণ্য দেখুন
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-3.5 md:gap-4">
                   {filteredProducts.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1360,39 +1575,39 @@ export default function App() {
             />
 
             {/* Value Proposition Highlights */}
-            <section className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5">
-              <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-[#C4B5FD] transition-all shadow-xs flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-[#EDE9FE] text-[#5B21B6] border border-purple-200 shrink-0">
-                  <ShieldCheck className="w-6 h-6" />
+            <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-5 rounded-lg bg-white border border-slate-200 transition-colors shadow-2xs flex items-start gap-3.5">
+                <div className="p-2.5 rounded-md bg-indigo-50 text-[#4F46E5] border border-indigo-100 shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#171717] mb-1">১০০% অথেনটিক কোয়ালিটি</h4>
-                  <p className="text-xs text-[#525252] leading-relaxed">
+                  <h4 className="text-sm font-semibold text-[#0F172A] mb-1">১০০% অথেনটিক কোয়ালিটি</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     অরিজিনাল ব্র্যান্ডের পারফিউম, খাঁটি প্রাকৃতিক আতর ও বিশ্বস্ত সেলার নিশ্চয়তা।
                   </p>
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-[#C4B5FD] transition-all shadow-xs flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-[#EDE9FE] text-[#5B21B6] border border-purple-200 shrink-0">
-                  <Truck className="w-6 h-6" />
+              <div className="p-5 rounded-lg bg-white border border-slate-200 transition-colors shadow-2xs flex items-start gap-3.5">
+                <div className="p-2.5 rounded-md bg-indigo-50 text-[#4F46E5] border border-indigo-100 shrink-0">
+                  <Truck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#171717] mb-1">সারা বাংলাদেশে ফাস্ট হোম ডেলিভারি</h4>
-                  <p className="text-xs text-[#525252] leading-relaxed">
+                  <h4 className="text-sm font-semibold text-[#0F172A] mb-1">সারা বাংলাদেশে ফাস্ট হোম ডেলিভারি</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     ঢাকার ভিতরে মাত্র ৳৬০ এবং বাইরে ৳১২০ তে ক্যাশ অন ডেলিভারিতে সরাসরি পৌঁছানো হয়।
                   </p>
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-[#C4B5FD] transition-all shadow-xs flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-[#EDE9FE] text-[#5B21B6] border border-purple-200 shrink-0">
-                  <Gift className="w-6 h-6" />
+              <div className="p-5 rounded-lg bg-white border border-slate-200 transition-colors shadow-2xs flex items-start gap-3.5">
+                <div className="p-2.5 rounded-md bg-indigo-50 text-[#4F46E5] border border-indigo-100 shrink-0">
+                  <Gift className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#171717] mb-1">ইনস্ট্যান্ট ওয়ালেট বোনাস ও ছাড়</h4>
-                  <p className="text-xs text-[#525252] leading-relaxed">
-                    সাইনআপ করলেই ওয়ালেটে ৳২০ বোনাস এবং <strong className="text-[#5B21B6]">VAULT10</strong> কোডে ১০% ছাড়।
+                  <h4 className="text-sm font-semibold text-[#0F172A] mb-1">ইনস্ট্যান্ট ওয়ালেট বোনাস ও ছাড়</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    সাইনআপ করলেই ওয়ালেটে ৳২০ বোনাস এবং <strong className="text-[#4F46E5]">VAULT10</strong> কোডে ১০% ছাড়।
                   </p>
                 </div>
               </div>
@@ -1458,6 +1673,7 @@ export default function App() {
         user={user}
         onLogin={handleLogin}
         onSignup={handleSignup}
+        onVerifyPhoneSuccess={handleVerifyPhoneSuccess}
         onUpdateAddress={handleUpdateAddress}
         onLogout={handleLogout}
       />
@@ -1479,6 +1695,8 @@ export default function App() {
         onPlaceOrder={handleCreateOrder}
         onClearCart={() => setCart([])}
         onViewOrders={handleOpenOrders}
+        onVerifyPhoneSuccess={handleVerifyPhoneSuccess}
+        onOpenAuth={() => setIsAuthOpen(true)}
       />
 
       {/* Admin Dashboard */}
@@ -1487,6 +1705,8 @@ export default function App() {
         onClose={() => setIsAdminOpen(false)}
         orders={orders}
         onUpdateOrderStatus={handleUpdateOrderStatus}
+        onUpdateOrderPaymentStatus={handleUpdateOrderPaymentStatus}
+        onUpdateOrderTracking={handleUpdateOrderTracking}
         products={products}
         onAddProduct={handleAddProduct}
         onUpdateProduct={handleUpdateProduct}
